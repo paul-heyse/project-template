@@ -1,0 +1,33 @@
+---
+name: pin-check
+description: Change or re-verify a dependency or tool pin ({% if with_rust %}Rust workspace dependencies and toolchain, {% endif %}{% if with_python %}Python dev tools, {% endif %}Python version, dev tools). Use before editing any version in {% if with_rust %}Cargo.toml, rust-toolchain.toml, {% endif %}{% if with_python %}pyproject.toml, {% endif %}.python-version or docs/pins.md, and when a claim about "what version we use" needs checking.
+---
+
+# Pin check
+
+Pins are recorded in `docs/pins.md`{% if with_docs_site %}; documentation binary pins live only in
+`docs/site.toml` (linked from the pins page){% endif %}.
+
+1. **Read the primary source in this session** — the package's own manifest{% if with_rust %} (for a crate,
+   its `Cargo.toml` in `~/.cargo/registry/src` or `~/.cargo/git/checkouts`){% endif %}, the upstream
+   tag, or the tool's own `--version`. Context7 and memory are leads, not evidence. Never report
+   a version you did not read in this session.
+2. Check the matching library skill's pinned profile (`.claude/skills/<library>/SKILL.md`), if
+   there is one. If the new pin leaves that profile, say so: the skill's evidence no longer
+   transfers.
+{%- if with_rust %}
+3. For product dependencies or toolchain pins, change the pin, then run `just deps` (exact pins,
+   single-version families, cargo-deny) and the tests the change affects; `just test-all` at the
+   end of the scope. Use `cargo update -p <crate>`, never a bare `cargo update`.
+{%- else %}
+3. Change the pin, then run the checks the change affects; `just test-all` at the end of the scope.
+{%- endif %}
+{%- if with_docs_site %}
+   For documentation-only binaries in `docs/site.toml`, verify installed versions, then run
+   `just docs-test` and `just docs-check`; no product gate is required.
+{%- endif %}
+4. Add or update the row in `docs/pins.md` with today's date and the command that verified it.
+5. If a pin is governed by a §B decision, moving it is an ADR (`just adr supersede …`). A
+   dev-tool bump needs only the pins row.
+
+A contradiction between a documented claim and what you read is a finding: stop and report it.

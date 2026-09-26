@@ -1,0 +1,48 @@
+---
+id: ADR-0002
+title: Review architecture through change scenarios and a repository-owned design standard
+status: accepted
+date: {{ '%Y-%m-%d' | strftime }}
+supersedes: []
+superseded-by: null
+design: [§2]
+evidence: Implemented
+revisit: Reviews miss concrete change-propagation or isolated-testing defects, prescribe abstractions without a credible consumer, or duplicate current finding status across artifacts.
+---
+
+## Context
+
+Correct local slices can accumulate architectural problems without a system-level decision. The
+template carries library-context's layered design standard (core 3.0, library-context ADR-0040):
+six foundations, three architectural judgments and correctness/fidelity gates, applied through a
+repository binding that owns review cadence and finding disposition.
+
+## Options
+
+1. **Ad-hoc review**: cheapest, but depth and cadence drift and findings lose their owner.
+2. **A shared standard synchronized across repositories**: no canonical upstream or update
+   contract exists.
+3. **Own a copy of the standard here, bound to this repository** (chosen); template updates
+   arrive through `copier update` as reviewed diffs.
+
+## Decision
+
+- This repository owns core 3.0 and the review template; `standard.toml` declares versions,
+  paths, profiles and the binding.
+- FP-01–FP-06 organize assessment. A1–A3 judge change locality, structural meaning and
+  composition independently of the DP/G gates{% if with_ci_profile %} and the code-intelligence profile's CI gates{% endif %}.
+- A concrete expected change exposing duplicated decisions, unrelated internals or inseparable
+  tests can require revision even when behavior is correct.
+- The binding owns cadence: design/target reviews before substantial stages or §B changes,
+  change/conformance reviews for bounded slices, design/target at integrated stage ends. Effort
+  follows risk. Reviews run through a fresh `design-reviewer` subagent, so the author of a change
+  is not its reviewer.
+- Reviews preserve dated findings. One active plan table owns current execution disposition;
+  unscheduled deferrals stay in the source review with a trigger. An accepted decision is
+  distinct from implemented and verified closure. No new register, hook or check runner.
+
+## Consequences
+
+Architecture can receive a Revise judgment independently of a correctly implemented slice.
+Reviewers need scenario evidence and component ownership, not a fixed amount of prose or probes.
+Improved maintainability remains **Proposed** until exercised by actual changes.

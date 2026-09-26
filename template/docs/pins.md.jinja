@@ -1,0 +1,42 @@
+# Pins
+
+Every pin with how and when it was last verified. Change a pin with the `pin-check` skill: read
+the primary source{% if with_rust %}; product pin changes run `just deps` and the tests{% endif %}, and date the row here.
+A row without a date is not verified: rows carried from the template say so until checked here.
+
+{% if with_rust -%}
+## Rust
+
+| Component | Pin | Verified | How |
+|---|---|---|---|
+| toolchain | {{ rust_toolchain }} (`rust-toolchain.toml`) | not yet (template) | `rustc --version` inside the repo |
+
+Workspace dependencies are pinned exactly (`=x.y.z` or a git `rev`) and each needs a row here;
+`just deps` enforces both. Declare crate families that must resolve to one version in
+`[workspace.metadata.pins] families` in `Cargo.toml`.
+
+{% endif -%}
+## Dev tools
+
+| Tool | Version | Verified | How |
+|---|---|---|---|
+| Python | {{ python_version }} (`.python-version`, uv) | not yet (template) | `uv run --no-project python --version` |
+| just | 1.58.0 or later | not yet (template) | `just --version` |
+{% if with_python -%}
+| ruff | 0.16.7 (uv dev group) | not yet (template) | `uv run ruff --version` |
+| pyrefly | 1.3.1 (uv dev group) | not yet (template) | `uv run pyrefly --version` |
+| pytest | `uv.lock` | not yet (template) | `uv sync` |
+| Hypothesis | 6.168.1 (uv dev group) | not yet (template) | `uv run python -c 'import hypothesis; print(hypothesis.__version__)'` |
+{% endif -%}
+{% if with_rust -%}
+| cargo-nextest | installed | not yet (template) | `just doctor` |
+| cargo-deny | installed | not yet (template) | `just doctor` |
+| sccache | installed (required by `.cargo/config.toml`) | not yet (template) | `sccache --version` |
+{% endif -%}
+{% if with_ast_grep -%}
+| ast-grep | installed | not yet (template) | `just doctor` |
+{% endif %}
+{%- if with_docs_site %}
+Documentation binaries are pinned only in [site.toml](site.toml); change them with focused
+`just docs-test` and `just docs-check`.
+{% endif %}

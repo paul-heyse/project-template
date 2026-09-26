@@ -1,0 +1,24 @@
+# Which layers of the design standard apply in this repository.
+# Read by the design-review skills; paths are relative to this file.
+{% if not with_ci_profile %}
+profiles = []
+{% endif %}
+[core]
+# Repository owns this edition (ADR-0002); template updates arrive through `copier update`.
+owner = "repository"
+version = "3.0"
+principles = "core/design-principles.md"
+template = "core/design-review-template.md"
+{% if with_ci_profile %}
+[[profiles]]
+name = "code-intelligence"
+version = "1.1"
+prefix = "CI"
+principles = "profiles/code-intelligence/principles.md"
+review = "profiles/code-intelligence/review.md"
+skill = "design-review-code-intelligence"
+{% endif %}
+[binding]
+name = "{{ project_name }}"
+path = "binding/{{ project_name }}.md"
+reviews = "../reviews"

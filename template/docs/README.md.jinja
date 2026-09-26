@@ -1,0 +1,40 @@
+# Documentation
+
+Start with the task, then read the owning contract and adjacent consumer. Expand scope when a
+contradiction or dependency requires it; the whole corpus is not the default reading context.
+
+| Task | Start here |
+|---|---|
+| Understand the system | [Architecture map](design/README.md) → relevant owner |
+| Resume work | [STATUS](../STATUS.md) → the active plan in [plans](plans/README.md) (queue, open findings, qualification boundary) |
+| Review a design or implementation | [Review skill](../.claude/skills/design-review/SKILL.md) → [repository binding](design_review/design_principles/binding/{{ project_name }}.md) |
+| Research a library capability | [Pins](pins.md) → [local capability skills](../.claude/skills/README.md) → Context7, then primary sources |
+| Understand why a decision was made | Owner section's `> Decision:` line → [ADR index](adr/README.md) |
+{% if with_docs_site -%}
+| Maintain this site | [Publishing operations](publishing.md) |
+{% endif %}
+## Authority
+
+The architectural collection owns accepted contracts and labeled targets. Current ADRs own
+rationale and open choices; the active plan owns execution and the current disposition of
+scheduled findings; retained reviews hold dated evidence for open findings; STATUS links the
+current checkpoint. Executable declarations own detailed implementation contracts.
+{% if with_docs_site %}
+The site derives navigation and search from the retained working set. **Current** is the default:
+architecture, entry pages, the active standard and process, accepted decisions and selected work.
+**Reference** contains proposals, supporting reviews and evidence, pins and guidance.
+**Everything** searches both. A search result's scope is a reading aid, not a truth verdict;
+evidence labels still apply. Local capability indexes are not bundled into the website.
+{% endif %}
+## Historical recovery
+
+Retired plans, reviews, evidence and ADRs are not part of the working set (ADR-0001); current
+owners carry every surviving obligation, so recovery is never a reading prerequisite. To recover
+a deleted path:
+
+- Find the commit that deleted it: `git log --diff-filter=D --name-only --format=%h -- '<path or glob>'`
+  (for an ADR id, `'docs/adr/NNNN-*'`).
+- Show its last content: `git show <commit>^:<path>`; list a deleted directory with
+  `git ls-tree -r --name-only <commit>^ -- <dir>`.
+- Raw evidence is in Git LFS: `git lfs fetch origin <commit>^ --include=<path>`, then
+  `git show <commit>^:<path> | git lfs smudge`.

@@ -1,0 +1,83 @@
+# Copier template: a pinned, low-friction project with the library-context working system.
+# `copier copy gh:paul-heyse/project-template <dir>`; `copier update` in a generated project.
+
+_min_copier_version: "9.18.2"
+_subdirectory: template
+_answers_file: .copier-answers.yml
+_preserve_symlinks: true
+# Seeds the project owns after generation: `copier update` never touches them. Accepted ADRs
+# must stay immutable, and the checkpoint, design, pins and indexes are project content.
+_skip_if_exists:
+  - README.md
+  - STATUS.md
+  - docs/design/DESIGN.md
+  - docs/design/README.md
+  - docs/adr/README.md
+  - docs/adr/0001-*.md
+  - docs/adr/0002-*.md
+  - docs/adr/0003-*.md
+  - docs/pins.md
+  - docs/design_review/design_principles/binding/*.md
+  - docs/design_review/evidence/README.md
+_message_after_copy: |
+  Generated {{ project_name }}. Next: `git init -b main && git add -A && just check`,
+  then write the scope in docs/design/DESIGN.md §1 and the first STATUS checkpoint.
+
+project_name:
+  type: str
+  help: Repository name (lowercase kebab-case)
+  validator: >-
+    {% if not project_name or project_name != project_name | lower or ' ' in project_name
+    or '_' in project_name %}Use lowercase kebab-case, e.g. my-project{% endif %}
+
+project_description:
+  type: str
+  help: One or two sentences — what the project is and does (goes into AGENTS.md and README)
+  validator: "{% if not project_description.strip() %}Required{% endif %}"
+
+github_owner:
+  type: str
+  help: GitHub owner of the repository
+  default: paul-heyse
+
+python_version:
+  type: str
+  help: Python for the process scripts (and the Python layer, if chosen); exact, via uv
+  default: "3.14.7"
+
+with_rust:
+  type: bool
+  help: Rust layer (toolchain pin, workspace lints, sccache + clang/mold, nextest, cargo-deny, pin policy)
+  default: true
+
+rust_toolchain:
+  type: str
+  help: Stable Rust toolchain to pin
+  default: "1.98.1"
+  when: "{{ with_rust }}"
+
+crate_name:
+  type: str
+  help: Name of the starter crate under crates/
+  default: "{{ project_name }}"
+  when: "{{ with_rust }}"
+
+with_python:
+  type: bool
+  help: Python layer via uv (ruff, pyrefly, pytest, hypothesis)
+  default: true
+
+with_ast_grep:
+  type: bool
+  help: ast-grep rules scaffold (rules grow from design-review findings)
+  default: true
+
+with_docs_site:
+  type: bool
+  help: Documentation site (mdBook + Pagefind + lychee) with a docs-only CI artifact
+  default: false
+
+with_ci_profile:
+  type: bool
+  help: Code-intelligence design-review profile (static analysis, code graphs, retrieval for agents)
+  default: false

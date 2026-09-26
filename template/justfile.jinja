@@ -1,0 +1,122 @@
+{%- set formats = with_rust or with_python -%}
+# The only command surface agents need. `just` lists recipes.
+# Check recipes do not edit source; tests may create their own data fixtures.
+# `fmt` and `adr new|supersede|index` edit the working tree.
+
+set shell := ["bash", "-euo", "pipefail", "-c"]
+
+# List recipes
+default:
+    @just --list
+
+# The default loop: {% if formats %}format check, lints, tests, {% endif %}{% if with_ast_grep %}rules, {% endif %}ADRs, agent config
+check:{% if formats %} fmt-check lint{% endif %}{% if with_rust %} test{% endif %}{% if with_python %} py-check{% else %} script-tests{% endif %}{% if with_ast_grep %} rules-scan rules-test{% endif %} lint-agents
+    uv run --no-project python scripts/adr.py lint
+
+# Everything: check{% if with_rust %} + dependency policy{% endif %} (end-of-scope acceptance, not the design loop)
+test-all: check{% if with_rust %} deps{% endif %}
+{% if formats %}
+# {% if with_rust %}rustfmt{% endif %}{% if with_rust and with_python %} + {% endif %}{% if with_python %}ruff format{% endif %} check (no changes)
+fmt-check:
+{%- if with_rust %}
+    cargo fmt --all --check
+{%- endif %}
+{%- if with_python %}
+    uv run ruff format --check
+{%- endif %}
+{% endif %}
+# Format everything (mutating)
+fmt:
+{%- if with_rust %}
+    cargo fmt --all
+{%- endif %}
+{%- if with_python %}
+    uv run ruff format
+    uv run ruff check --fix --quiet
+{%- endif %}
+{%- if not formats %}
+    @echo "fmt: not_run (no formatter layer)"
+{%- endif %}
+{% if formats %}
+# {% if with_rust %}clippy (deny warnings){% endif %}{% if with_rust and with_python %} + {% endif %}{% if with_python %}ruff lint{% endif %}
+lint:
+{%- if with_rust %}
+    cargo clippy --release --workspace --all-targets --quiet -- -D warnings
+{%- endif %}
+{%- if with_python %}
+    uv run ruff check --quiet
+{%- endif %}
+{% endif %}
+{%- if with_rust %}
+# Rust tests share the release profile with shipped binaries, so repeated runs execute cached
+# optimized test binaries. Snapshots never auto-accept (INSTA_UPDATE=no).
+test *args:
+    INSTA_UPDATE=no cargo nextest run --release --workspace --no-tests=pass {% raw %}{{args}}{% endraw %}
+
+# Exact workspace pins with a docs/pins.md row, one version per declared family, cargo-deny
+deps:
+    uv run --no-project python scripts/check_pins.py
+    cargo deny --log-level error check bans sources licenses
+{% endif %}
+{%- if with_python %}
+# Python tests (scripts and packages) + pyrefly
+py-check:
+    uv run pytest
+    uv run pyrefly check --summary=none
+{% else %}
+# Process-script tests in an isolated environment (no project install)
+script-tests:
+    uv run --no-project --with pytest python -m pytest -q -o pythonpath=scripts tests/scripts
+{% endif %}
+{%- if with_ast_grep %}
+# ast-grep scan over the tree (rules/ grows from design-review findings)
+rules-scan:
+    @if ls rules/*.yml >/dev/null 2>&1; then ast-grep scan; else echo "rules-scan: not_run (no rules yet)"; fi
+
+# ast-grep rule fixtures
+rules-test:
+    @if ls rules/*.yml >/dev/null 2>&1; then ast-grep test --skip-snapshot-tests; else echo "rules-test: not_run (no rules yet)"; fi
+{% endif %}
+# ADR tooling: new <slug> [--title T] | supersede <ADR-NNNN> <slug> | index | lint | revisit
+[positional-arguments]
+adr *args:
+    @uv run --no-project python scripts/adr.py "$@"
+
+# Claude/Codex parity and dead-reference check for agent instructions and skills
+lint-agents:
+    uv run --no-project python scripts/check_agents.py
+
+# Tool presence and versions (compare with docs/pins.md)
+doctor:
+    #!/usr/bin/env bash
+    for t in just uv git git-lfs gh rg{% if with_rust %} cargo rustc cargo-nextest cargo-insta cargo-deny clang mold sccache{% endif %}{% if with_ast_grep %} ast-grep{% endif %}; do
+      printf '%-14s ' "$t"; command -v "$t" >/dev/null && "$t" --version 2>/dev/null | head -1 || echo MISSING
+    done
+    printf '%-14s ' python; uv run --no-project python --version
+{%- if with_python %}
+    printf '%-14s ' ruff; uv run ruff --version
+    printf '%-14s ' pyrefly; uv run pyrefly --version
+{%- endif %}
+{%- if with_docs_site %}
+    uv run --no-project python scripts/docs.py doctor
+
+# Install declared documentation binaries and isolated test dependencies (network allowed)
+bootstrap-docs:
+    uv run --no-project python scripts/docs.py bootstrap
+
+# Build Markdown, Pagefind and offline link/fragment checks without product dependencies
+docs:
+    uv run --no-project --offline --no-python-downloads python scripts/docs.py build
+
+# Existing metadata checks plus a complete publication
+docs-check:
+    uv run --no-project --offline --no-python-downloads python scripts/docs.py check
+
+# Focused documentation/ADR regressions only
+docs-test:
+    uv run --no-project --offline --no-python-downloads python scripts/docs.py test
+
+# Build then serve the finished artifact; no watcher or reindex during serving
+docs-serve port="8000":
+    uv run --no-project --offline --no-python-downloads python scripts/docs.py serve --port {% raw %}{{port}}{% endraw %}
+{%- endif %}

@@ -1,0 +1,158 @@
+# {{ project_name }} — agent instructions
+
+{{ project_description }}
+
+This is a personal project with one operator. Process is deliberately light (ADR-0001). Keep
+it that way: before adding a hook, gate, register or new document type, check that it has a
+real consumer.
+
+## Start of session
+
+1. Read `STATUS.md`: where we are and what's next.
+2. For product work, read the active plan in `docs/plans/` (its current state, execution queue
+   and findings table). There is at most one active plan.
+3. For design questions, follow **owner → decision → open work**:
+   - start at the architecture map `docs/design/README.md` and read the owning section in
+     `docs/design/DESIGN.md` (scope §1, binding decisions §2) or `docs/design/sections/`, plus
+     adjacent consumers; labels there distinguish implemented, accepted target and proposed;
+   - the section's `> Decision:` line names the ADR that holds the reason and rejected
+     alternatives (`docs/adr/README.md` lists accepted records and open proposals);
+   - known defects and deferred choices affecting the section are rows in the active plan's
+     findings table, linked from the owner.
+4. Retired plans, reviews, evidence and ADRs are not reading context; recover one from Git only
+   when a current owner is insufficient (`docs/README.md`, Historical recovery).
+
+## Where things are
+
+| Path | What |
+|---|---|
+| `docs/design/DESIGN.md`, `docs/design/sections/` | Architectural collection; stable § IDs. DESIGN §2 holds the binding decisions (§B1, §B2, …) |
+| `docs/README.md` | Task routes and historical recovery |
+{% if with_docs_site -%}
+| `docs/publishing.md` | Documentation site commands; site navigation and search are derived |
+{% endif -%}
+| `docs/plans/` | The active plan only; a finished or superseded plan is removed once its obligations move |
+| `docs/adr/` | Current decision records (accepted and open proposals), a generated index, and `TEMPLATE.md` |
+| `docs/design_review/design_principles/` | The layered design standard, declared in `standard.toml`: six foundations (FP-01–06), architectural judgments A1–A3, supporting rules DP-01–24 and gates G1–G8{% if with_ci_profile %}, the code-intelligence profile{% endif %}, and the repository binding (ADR-0002) |
+| `docs/design_review/reviews/` | Review outputs: evidence, never authority; kept while a finding they supply is open |
+| `docs/design_review/evidence/` | Probes, spikes and investigations behind decisions, one `YYYY-MM-DD_<topic>/` folder each with a README; raw outputs and binaries through Git LFS; never venvs or `target/`. Put probes here, not in a session scratchpad |
+| `docs/pins.md` | Every pin, with dated verification |
+{% if with_rust -%}
+| `crates/` | The Rust workspace; `crates/{{ crate_name }}` is the starter crate |
+{% endif -%}
+| `scripts/` | `adr.py`, `design_sections.py`{% if with_docs_site %} and `docs.py`{% endif %} (documentation), `check_agents.py`{% if with_rust %}, `check_pins.py`{% endif %}, and the format hook |
+| `tests/scripts/` | Tests for the process scripts |
+{% if with_ast_grep -%}
+| `rules/`, `rule-tests/` | ast-grep rules. They grow only from design-review findings |
+{% endif %}
+## Commands
+
+| When | Run |
+|---|---|
+| During a design/implementation phase | Use focused compile, probe, and behavior checks only where they resolve a material question. Do not run the fully integrated gate after each slice or commit. |
+| A slice is ready | `just check`: {% if with_rust or with_python %}format check, lints, {% endif %}tests{% if with_ast_grep %}, rules{% endif %}, ADR and agent lint |
+| At the end of the integrated scope | `just test-all`: `check`{% if with_rust %} plus `just deps`{% endif %} |
+| Format (mutating) | `just fmt` |
+{% if with_rust -%}
+| Dependency policy | `just deps`: exact workspace pins with a `docs/pins.md` row, one version per declared family (`[workspace.metadata.pins]` in `Cargo.toml`), and cargo-deny sources and licenses |
+{% endif -%}
+| Decisions | `just adr new <slug> --title "…"`, `just adr supersede ADR-NNNN <slug>`, `just adr index`, `just adr lint`, `just adr revisit` |
+{% if with_docs_site -%}
+| Documentation changes | `just docs-test` for publisher/resolver changes; `just docs-check` for publication. First run: `just bootstrap-docs`; preview: `just docs-serve`. No product gate solely for docs. |
+{% endif -%}
+| Tools present? | `just doctor` |
+| Template changes | `copier update --defaults`, then review the diff like any other change (`.copier-answers.yml` is never edited by hand) |
+
+{% if with_rust -%}
+The Rust toolchain is pinned to {{ rust_toolchain }} in `rust-toolchain.toml`. The machine's
+rustup default may be nightly, so don't pass `+nightly` or `+stable` to cargo in this workspace.
+The repository's `.cargo/config.toml` sets 16 Cargo jobs, `sccache` as the compiler wrapper,
+and incremental compilation off so the compiler cache can store workspace crates. Keep Clang
+and mold as the linker route. Avoid changing `CARGO_TARGET_DIR`, rustflags, or worktrees during
+ordinary development because those changes disrupt build reuse. For an isolated diagnosis,
+override the config through Cargo's environment variables and report it.
+
+{% endif -%}
+Python is {{ python_version }} via `uv` (`.python-version`); run Python tools as `uv run …`.
+{% if with_python %}The type checker is **pyrefly**, not pyright or mypy. {% endif %}The process
+scripts are stdlib-only and run without a project environment.
+
+## Writing code against libraries
+
+- Library capability skills are pinned, offline indexes kept under `.claude/skills/` but
+  gitignored and versioned outside this repo. They are repo-agnostic: a skill never cites this
+  repository; the repository only picks libraries and pins. Use a matching skill **before**
+  writing against an API rather than relying on memory, and list it in
+  `.claude/skills/README.md`.
+- For a library no skill covers, **Context7 is the first stop**, then primary sources. Check a
+  skill's or document's version against `docs/pins.md` before transferring a claim. An empty
+  search result is not evidence that a capability is absent.
+
+## Testing rules
+
+- Full `just test-all` runs are end-of-scope acceptance, not the design loop. Run focused
+  checks during design, then run it once the integrated scope is ready; repeat only for a
+  failure or a subsequent material change.
+- **Validators are shared.** Invariant validators are library code, used by both tests and the
+  production path. Don't write test-only copies.
+{% if with_rust -%}
+- Rust tests run under nextest in the release profile, so repeated runs reuse cached optimized
+  code. Test data may be fresh, existing, or empty according to the test's purpose.
+- **Contract snapshots** (insta), once adopted, run with `INSTA_UPDATE=no`. To accept a change,
+  read the `.snap.new` diff first, then run `cargo insta accept`. Never run `cargo insta review`,
+  which is interactive. A contract snapshot change is a migration, so say so in the commit.
+{% endif -%}
+{% if with_python -%}
+- Python tests live under `tests/`; pytest runs with `--strict-markers --strict-config`.
+{% endif %}
+## Working agreements
+
+- **Judgment over evidence ceremony.** Principles state properties; never add probes, tests or
+  oracles merely as proof of diligence. Run a check when it resolves a real question.
+- **No new alignment linting.** Don't add lints or checks for design alignment; update existing
+  checks only when they break. Skills are welcome.
+- **Probes go to the evidence folder**, `docs/design_review/evidence/<date>_<topic>/` with a
+  README, not to a session scratchpad.
+- **Detail over length.** Architecture pages have no line budget: the detail the design needs
+  comes before brevity. History belongs in Git, not in the design.
+
+## Reporting
+
+- Report outcomes as `passed`, `failed`, `blocked` (name the missing prerequisite) or `not_run`,
+  and give the command that produced each. A mocked provider is never `passed`. Never turn
+  outcomes into a percentage.
+- Design claims carry a principles §D label (`Proposed` … `Tested` … `Measured`). An unlabelled
+  claim is a defect; `Proposed` is not.
+- Date every "verified" claim.
+
+## Decisions and reviews
+
+- **Write an ADR** (the `adr` skill) when a change alters a §B decision, chooses between real
+  alternatives, or would surprise a future session. Amend the owning architectural section in
+  the same commit. To pivot, supersede the old ADR; accepted ADRs are immutable.
+- **Keep a current working set** (ADR-0001). Update the owner whose meaning changed instead of
+  appending history. When a plan, review, evidence folder or ADR loses its last current consumer,
+  carry its surviving obligations forward and delete it; Git holds it
+  ([historical recovery](docs/README.md#historical-recovery)).
+- **Design reviews** use `design-review` and its declared profiles{% if with_ci_profile %}
+  (`design-review-code-intelligence`){% endif %}, usually through the `design-reviewer` subagent. The binding's
+  **Reviews in this repository** section owns cadence and tier/purpose selection (ADR-0002).
+  Begin with responsibilities, contracts and expected changes; assess A1–A3 separately from
+  correctness/fidelity gates. A bounded slice does not certify the enclosing architecture.
+  Review depth follows impact and uncertainty.
+- **Findings** retain stable source-review IDs. The active plan's findings table owns current
+  disposition for scheduled work; unscheduled deferrals stay in the source review with a trigger
+  (binding §4). Record the responsible component and closure evidence; link from follow-up
+  reviews and STATUS. A decision being accepted does not establish implementation or verified
+  closure.
+
+## Git
+
+- Work on `main` in the current working tree for ordinary edits, reviews and spikes. Use a
+  separate worktree only when truly parallel agents must edit production code concurrently.
+- Commit to `main` in small commits. Each message names the slice and any ADR, and states the
+  test outcome. Never push unless asked.
+- Never force-push or `reset --hard`.
+- `.claude/skills/*` is gitignored except the process skills: `adr`, `design-review`,
+  {% if with_ci_profile %}`design-review-code-intelligence`, {% endif %}`handoff`, `pin-check`.
+- At the end of a session that changed what's true, run the `handoff` skill.

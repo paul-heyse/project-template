@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+{%- if with_python %}
+  "enabledPlugins": {
+    "pyright-lsp@claude-plugins-official": false,
+    "pyrefly-local@local-pyrefly-tools": true
+  },
+{%- endif %}
+  "permissions": {
+    "allow": [
+      "Bash(just *)",
+{%- if with_rust %}
+      "Bash(cargo check*)",
+      "Bash(cargo build*)",
+      "Bash(cargo clippy*)",
+      "Bash(cargo fmt*)",
+      "Bash(cargo nextest*)",
+      "Bash(cargo test*)",
+      "Bash(cargo insta*)",
+      "Bash(cargo deny*)",
+      "Bash(cargo tree*)",
+      "Bash(cargo metadata*)",
+{%- endif %}
+      "Bash(uv run *)",
+      "Bash(uv sync*)",
+      "Bash(rg *)",
+{%- if with_ast_grep %}
+      "Bash(ast-grep *)",
+{%- endif %}
+      "Bash(git status*)",
+      "Bash(git diff*)",
+      "Bash(git log*)",
+      "Bash(git show*)",
+      "Bash(git add*)",
+      "Bash(git commit*)",
+      "Bash(git worktree*)"
+{%- if with_rust %},
+      "Read(~/.cargo/registry/**)",
+      "Read(~/.cargo/git/**)"
+{%- endif %}
+    ],
+    "deny": [
+      "Bash(git push --force*)",
+      "Bash(git push -f*)",
+      "Bash(git reset --hard*)",
+{%- if with_rust %}
+      "Bash(cargo publish*)",
+{%- endif %}
+      "Bash(pip install*)"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/scripts/hooks/format_edited.sh",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
+}

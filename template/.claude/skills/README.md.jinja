@@ -1,0 +1,28 @@
+# Skills
+
+Two kinds live here. Both are visible to Codex through the `.agents/skills` symlink.
+
+## Process skills (tracked in this repo)
+
+Workflows for building this repository. A skill is added when a workflow has actually repeated.
+
+| Skill | Use |
+|---|---|
+| [`adr/`](adr/SKILL.md) | Record or supersede a decision; amend the owning architectural section in the same commit |
+| [`design-review/`](design-review/SKILL.md) | Review ownership, contracts and change scenarios against the layered design standard (`docs/design_review/design_principles/standard.toml`); cadence in the {{ project_name }} binding |
+{% if with_ci_profile -%}
+| [`design-review-code-intelligence/`](design-review-code-intelligence/SKILL.md) | The code-intelligence profile, loaded with `design-review` |
+{% endif -%}
+| [`handoff/`](handoff/SKILL.md) | Rewrite STATUS.md from the actual tree at session end |
+| [`pin-check/`](pin-check/SKILL.md) | Change or re-verify any dependency or tool pin |
+
+## Library capability skills (gitignored — versioned outside this repo)
+
+Pinned, offline indexes of the libraries this project builds on. They exist because an agent
+writing against a fast-moving library otherwise writes the API it remembers. They are large and
+repo-agnostic, so this repo ignores them; list each one here when it is added, so agent-facing
+links to it resolve. Silence in an index is not evidence of absence. Check a skill's pinned
+profile against `docs/pins.md` before transferring a claim.
+
+| Repository | Indexes | Built from |
+|---|---|---|

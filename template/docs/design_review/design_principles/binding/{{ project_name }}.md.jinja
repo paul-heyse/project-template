@@ -1,0 +1,121 @@
+# {{ project_name }} binding
+
+The repository layer of the design standard. It defines no principles; it maps the
+[core design principles](../core/design-principles.md){% if with_ci_profile %} and the
+[code-intelligence profile](../profiles/code-intelligence/principles.md){% endif %} onto this repository's
+binding decisions, review cadence, vocabularies and code. `docs/design/DESIGN.md` plus
+`docs/design/sections/` is the architectural collection; DESIGN §2 delegates review mechanics to
+this page under ADR-0002. Other design contracts and accepted decisions govern their domains;
+report a conflict and its resolution route.
+
+## Standard applied
+
+| Layer | Document | Version |
+|---|---|---|
+| Core | [design principles](../core/design-principles.md), [review template](../core/design-review-template.md) | 3.0 (repository-owned edition, ADR-0002) |
+{% if with_ci_profile -%}
+| Profile | [code-intelligence principles](../profiles/code-intelligence/principles.md), [review additions](../profiles/code-intelligence/review.md) | 1.1 |
+{% endif -%}
+| Binding | this page | — |
+
+The version/path declaration in [`standard.toml`](../standard.toml) is authoritative for loading.
+Preserve DP{% if with_ci_profile %}/CI{% endif %} IDs and historical version semantics; FP-01–FP-06 and A1–A3 supply the
+architecture structure.
+
+## Reviews in this repository
+
+- **Location:** `docs/design_review/reviews/design_review_{slug}_{YYYY-MM-DD}.md`.
+- **Who:** the `design-review` skill{% if with_ci_profile %} with `design-review-code-intelligence`{% endif %}, usually through a
+  fresh `design-reviewer` subagent, so the author of a change is not its reviewer.
+- **Cadence and purpose** (ADR-0002):
+  - Before a substantial stage, changed ownership/dependency boundary or §B decision: a
+    **design/target** review, including adjacent consumers and realistic change scenarios.
+  - For a bounded slice inside accepted boundaries: **change/conformance**, with the affected
+    contract, one relevant extension scenario and its enclosing architectural limit. Pure
+    mechanical changes may give an explicit reason the scenario is unchanged.
+  - At an integrated stage or increment boundary: **design/target** review of the assembled
+    scope and accumulated findings; compare the original scenarios with the resulting code.
+    A coincident stage/increment end needs one review. Depth follows impact and uncertainty.
+  - Reopen architectural analysis sooner when repeated classifiers, private dependencies,
+    inseparable test setup or repeated structural deferrals affect planned work. These are
+    reasoning triggers, not new blocking hooks.
+  - A local pass never certifies the enclosing architecture.
+- **Authority:** the architectural collection is authoritative, so a divergence from an
+  implemented claim is a code defect or a stale DESIGN section; distinguish both from an accepted
+  target still awaiting implementation.
+- **Outcomes and labels:** check outcomes are `passed`/`failed`/`blocked`/`not_run` with the
+  command (AGENTS.md *Reporting*); historical test receipts keep their original date and scope
+  and are not fresh runs; a mocked provider is never a pass; outcomes are never turned into a
+  percentage.
+- **Reviews are evidence, never authority.** A governed architectural section changes through
+  the ADR that responds to a finding.
+{% if with_docs_site %}
+**Documentation boundary (ADR-0003).** Read the architecture map, relevant section owner and
+adjacent consumers. Stable section IDs survive relocation; one resolver supplies ADR lint and the
+site directory. Derived navigation/search and link checks serve readers; they do not certify
+implementation or historical claims. Documentation tooling uses focused `just docs-test` /
+`just docs-check`, independently of integrated product qualification.
+{% endif %}
+## 1. Binding decisions and what they bear on
+
+IDs are never reused or renumbered. Changing a §B decision needs an ADR and a design/target review.
+
+| ID | Binding decision (DESIGN.md §2 is authoritative) | Bears on |
+|---|---|---|
+| — | None yet: add a row per §B decision, naming the DP{% if with_ci_profile %}/CI{% endif %} rules and gates it bears on | — |
+
+## 2. Recurring review questions, routed onto the gates
+
+Add domain questions here as reviews repeat them, each routed to the gate that settles it. Use
+them after reconstructing responsibilities and expected changes.
+
+## 3. Vocabulary and scenario authorities
+
+| Meaning | Authority |
+|---|---|
+| Design claim strength | Core principles §D; label and date the claim actually established |
+| Architectural judgments | Core §E, A1–A3; report separately from gate verdicts |
+| Correctness/fidelity gate verdicts | Core §A{% if with_ci_profile %} and profile gates{% endif %} |
+| Check execution outcomes | AGENTS.md Reporting; each outcome names its command |
+| Domain vocabulary | Executable declarations and DESIGN; never infer it from review labels |
+
+Select scenarios from the active plan. Record the recurring architectural scenarios here with
+their expected boundary as they emerge (for example: add a variant using existing categories;
+upgrade a dependency; change an invariant; test a transformation in isolation). They are scenario
+seeds, not promises about current implementation.
+
+## 4. Where findings land
+
+The source review owns the dated finding and its evidence, identified by `review#Fnn`. Current
+execution disposition has **one owner**: the active plan's findings table when scheduled, otherwise
+an explicit Deferred row in the source review. On transfer to a plan, link the review to that owner;
+retain the original assessment. Subsequent reviews and STATUS link to the owner instead of copying
+mutable status. Related findings with one structural cause share a remediation row and keep every
+source reference. No separate register is introduced.
+
+The plan row records source findings, disposition, responsible component, decision/implementation
+links, and closure evidence or revisit trigger. Dispositions are open, in progress, deferred,
+closed or superseded. An accepted ADR is a decision, not implementation or closure. Close a finding
+only when the named evidence establishes its correction. A closed or superseded row can leave the
+plan once the commit that removes the row cites its closure evidence; Git retains it (ADR-0001).
+
+An action uses the existing route appropriate to it:
+
+- **ADR + DESIGN** for changed architecture, semantics or a meaningful alternative; accepted
+  records are immutable except lifecycle metadata. A proposed ADR can carry an open decision.
+- **Implementation/refactor** inside an accepted contract, with the affected owner and deletion
+  obligations; no ADR is needed solely to report code movement.
+- **Test{% if with_ast_grep %} or `rules/` entry{% endif %}** when a meaningful regression is plausible and a cheap check catches
+  it. Keep independent semantic controls independent.
+- **Deferred disposition** with scope consequence and the event that reopens it.
+
+| Existing check | Use |
+|---|---|
+| Focused tests/probes | Resolve material implementation uncertainty |
+{% if with_ast_grep -%}
+| `just rules-scan`, `just rules-test` | A justified code-shape invariant |
+{% endif -%}
+| `just adr lint`, `just lint-agents` | Decision metadata and agent-facing links/commands |
+| `just test-all` | Integrated functional acceptance at scope end, not every slice or process edit |
+
+Review quality is established by scenario reasoning and calibration, not by a new checker.

@@ -1,0 +1,27 @@
+# Build output, local stores and generated sites (rebuildable)
+/build/
+{%- if with_rust %}
+/target/
+# insta pending snapshots — review, then `cargo insta accept`
+*.snap.new
+*.pending-snap
+{%- endif %}
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Library capability skills are large and versioned outside this repo.
+# Only the small process skills are tracked.
+/.claude/skills/*
+!/.claude/skills/README.md
+!/.claude/skills/adr/
+!/.claude/skills/design-review/
+{%- if with_ci_profile %}
+!/.claude/skills/design-review-code-intelligence/
+{%- endif %}
+!/.claude/skills/handoff/
+!/.claude/skills/pin-check/
+
+.claude/settings.local.json

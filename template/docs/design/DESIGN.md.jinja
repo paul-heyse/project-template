@@ -1,0 +1,74 @@
+# {{ project_name }} — design
+
+**This file plus `docs/design/sections/` is the architectural authority**; the
+[architecture map](README.md) routes each responsibility to its owner. This file holds scope
+(§1), the binding decisions (§2, §B1…) and durable deferrals (§13); focused owners hold the
+rest. Labels distinguish implemented behavior from accepted targets: an accepted target is not an
+implementation claim. Current ADRs say why and what was rejected ([index](../adr/README.md)); the
+active plan in [plans](../plans/README.md) owns execution and the disposition of known defects.
+
+**Changing a section.** Change a governed section in the same commit as the ADR that decides it
+and keep its `> Decision: ADR-NNNN` line. Section IDs are never renumbered or reused: insert
+`§3.2.1` rather than shifting `§3.3`, and a moved live section leaves a relocation pointer. Keep
+sections current rather than appending history (ADR-0001). There is no line budget: the detail the
+design needs comes before length. Column- and field-level contracts live in executable
+declarations and their tests; they are not repeated here.
+
+**Labels.** Every claim carries a principles §D label (`Proposed`, `Interface-checked`,
+`Implemented`, `Tested`, `Measured`, `Formally established`). A section's label applies unless a
+line says otherwise. `Interface-checked` means the named library surface was read at the pinned
+version (skill brief, probe or pinned source), not that our code uses it yet.
+
+---
+
+<a id="section-1"></a>
+
+## §1 Scope
+
+<a id="section-1-1"></a>
+
+### §1.1 Objective
+
+**Proposed.** {{ project_description }}
+
+State the promise, its consumers and what is explicitly out of scope. Add §1.2… as the scope
+needs them.
+
+<a id="section-2"></a>
+
+## §2 Binding decisions
+
+**Development process** (ADR-0001). The checkout holds a current working set: architecture owns
+contracts and targets, current ADRs own reasons and open choices, the active plan owns execution
+and scheduled finding disposition, STATUS the checkpoint. A reader never needs a supersession
+chain or retired plan; retired records, reviews, plans and evidence are recovered from Git
+([historical recovery](../README.md#historical-recovery)). Governing references must resolve,
+historical `supersedes` entries need not, and ADR ids are never reused. Work happens on `main`;
+focused checks are the loop and `just test-all` is end-of-scope acceptance.
+
+**Design review** (ADR-0002). The repository owns core 3.0 of the design standard and declares
+it in `docs/design_review/design_principles/standard.toml`. The six foundations organize review
+of responsibilities, contracts, composition, authority, constraints and local reasoning. A1–A3
+judge architecture independently of correctness and domain-fidelity gates. The
+{{ project_name }} binding maps §B decisions to the standard and owns review cadence and finding
+disposition. Changing a §B decision needs an ADR and a design/target review. Acceptance,
+implementation and verification remain distinct facts.
+{% if with_docs_site %}
+**Documentation publication** (ADR-0003). Focused architecture pages retain stable section IDs;
+a moved live section leaves a relocation pointer. One resolver drives ADR references and the
+generated section directory. Publication derives navigation and search from sources; it does not
+prove implementation. [Publishing operations](../publishing.md) owns the commands.
+{% endif %}
+> Decision: ADR-0001, ADR-0002{% if with_docs_site %}, ADR-0003{% endif %}
+
+
+No product binding decisions yet. Add each as `### §B1 <decision stated as a sentence>` with a
+committed `<a id="section-b1"></a>` anchor, a label and its `> Decision:` line, in the same
+commit as the ADR that decides it.
+
+<a id="section-13"></a>
+
+## §13 Deferred
+
+**Accepted deferrals.** Capabilities outside the current architecture on purpose; each returns
+by ADR when a named consumer needs it. The active plan owns the scheduling triggers. None yet.

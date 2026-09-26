@@ -1,0 +1,15 @@
+@AGENTS.md
+
+## Claude Code specifics
+
+- **Hook:** `scripts/hooks/format_edited.sh` runs after every Edit/Write and formats only the
+  edited file{% if with_rust and with_python %} (rustfmt / ruff format){% elif with_rust %} (rustfmt){% elif with_python %} (ruff format){% endif %}. It never blocks. If a file changes on disk after your
+  edit, that is the formatter.
+{% if with_python -%}
+- **Diagnostics:** the pyright plugin is disabled for this project (`.claude/settings.json`);
+  in-session Python diagnostics come from pyrefly.
+{% endif -%}
+- **Subagent:** `.claude/agents/design-reviewer.md` runs the `design-review` skill with fresh
+  context. Give it the target and expected change scenarios; the binding selects tier and purpose.
+- **Memory:** project memory records preferences that are not yet written down here; the
+  repository binding under ADR-0002 owns review mechanics; AGENTS.md owns agent instructions.
