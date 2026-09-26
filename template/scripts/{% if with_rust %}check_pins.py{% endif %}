@@ -1,0 +1,83 @@
+"""Rust pin policy: exact workspace pins with a docs/pins.md row, one version per pinned family.
+
+- Every `[workspace.dependencies]` entry is pinned exactly (`=x.y.z` or a git `rev`) and has a
+  row in `docs/pins.md`, so `cargo update` cannot move it without a reviewed diff. A row names
+  the crate anywhere in the page, or matches a first-column glob such as `arrow-*`.
+- `[workspace.metadata.pins] families` lists crate-name patterns whose types cross crate
+  boundaries (e.g. `"arrow(-.+)?"`). Two versions of such a crate compile but are incompatible
+  at every boundary, so a lockfile holding two fails. Cargo.lock is read directly, so
+  dev-dependencies count too.
+
+Usage: check_pins.py [LOCKFILE ...]   (default: ./Cargo.lock)
+"""
+
+from __future__ import annotations
+
+import re
+import sys
+import tomllib
+from collections import defaultdict
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+
+
+def families(manifest: Path) -> re.Pattern[str] | None:
+    workspace = tomllib.loads(manifest.read_text()).get("workspace", {})
+    patterns = workspace.get("metadata", {}).get("pins", {}).get("families", [])
+    return re.compile("^(" + "|".join(f"(?:{p})" for p in patterns) + ")$") if patterns else None
+
+
+def duplicates(lockfile: Path, family: re.Pattern[str] | None) -> dict[str, list[str]]:
+    if family is None:
+        return {}
+    versions: dict[str, set[str]] = defaultdict(set)
+    for pkg in tomllib.loads(lockfile.read_text()).get("package", []):
+        if family.match(pkg["name"]):
+            versions[pkg["name"]].add(pkg["version"])
+    return {name: sorted(v) for name, v in versions.items() if len(v) > 1}
+
+
+def unpinned(manifest: Path, pins: Path) -> list[str]:
+    deps = tomllib.loads(manifest.read_text()).get("workspace", {}).get("dependencies", {})
+    text = pins.read_text()
+    globs = [
+        cell.strip(" `")[:-1]
+        for line in text.splitlines()
+        if line.startswith("| ")
+        for cell in line.split("|")[1].split(",")
+        if cell.strip(" `").endswith("*")
+    ]
+    problems = []
+    for name, spec in sorted(deps.items()):
+        version = spec if isinstance(spec, str) else spec.get("version")
+        exact = (version or "").startswith("=") or (isinstance(spec, dict) and "rev" in spec)
+        if not exact:
+            problems.append(f"{name}: not pinned exactly ({version!r})")
+        if name not in text and not any(name.startswith(g) for g in globs):
+            problems.append(f"{name}: no docs/pins.md row")
+    return problems
+
+
+def main(argv: list[str], root: Path = ROOT) -> int:
+    manifest = root / "Cargo.toml"
+    failed = False
+    for problem in unpinned(manifest, root / "docs" / "pins.md"):
+        print(f"Cargo.toml: {problem}")
+        failed = True
+    family = families(manifest)
+    for lock in [Path(a) for a in argv] or [root / "Cargo.lock"]:
+        if not lock.exists():
+            print(f"{lock}: not_run (no lockfile)")
+            continue
+        dups = duplicates(lock, family)
+        for name, versions in sorted(dups.items()):
+            print(f"{lock}: {name} resolves to {', '.join(versions)}")
+        failed |= bool(dups)
+        if not dups:
+            print(f"{lock}: pinned families ok")
+    return 1 if failed else 0
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))

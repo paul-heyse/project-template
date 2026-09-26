@@ -1,0 +1,81 @@
+#!/usr/bin/env bash
+# Create a project from the Copier template, commit the scaffold and publish it on GitHub.
+#
+# Usage: new-project <name> [--public] [--dir PATH] [--local-only] [--ref TAG]
+#                           [--template SRC] [-- <extra copier arguments>]
+#
+#   <name>         repository name (lowercase kebab-case); also the default directory ~/<name>
+#   --public       create a public GitHub repository (default: private)
+#   --dir PATH     generate into PATH instead of ~/<name>
+#   --local-only   generate and commit locally; do not create a GitHub repository
+#   --ref TAG      template version (default: the latest release tag)
+#   --template SRC template source (default: gh:paul-heyse/project-template)
+#
+# The remaining questions (description, layers) are asked interactively; pass answers with
+# `-- -d with_docs_site=true` to skip them. Installed as `gh new` via
+#   gh alias set --shell new 'new-project "$@"'
+set -euo pipefail
+
+usage() { sed -n '2,/^set -euo/p' "$0" | sed -e '$d' -e 's/^# \{0,1\}//'; }
+
+name="" visibility="--private" dir="" local_only=false ref=""
+template="gh:paul-heyse/project-template"
+extra=()
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --public) visibility="--public" ;;
+    --private) visibility="--private" ;;
+    --dir) dir="$2"; shift ;;
+    --local-only) local_only=true ;;
+    --ref) ref="$2"; shift ;;
+    --template) template="$2"; shift ;;
+    -h|--help) usage; exit 0 ;;
+    --) shift; extra=("$@"); break ;;
+    -*) echo "new-project: unknown option $1" >&2; exit 2 ;;
+    *)
+      if [ -n "$name" ]; then echo "new-project: unexpected argument $1" >&2; exit 2; fi
+      name="$1" ;;
+  esac
+  shift
+done
+[ -n "$name" ] || { usage >&2; exit 2; }
+
+tools=(copier git git-lfs just uv)
+$local_only || tools+=(gh)
+for tool in "${tools[@]}"; do
+  command -v "$tool" >/dev/null || { echo "new-project: blocked: $tool is not installed" >&2; exit 1; }
+done
+
+dest="${dir:-$HOME/$name}"
+[ ! -e "$dest" ] || { echo "new-project: $dest already exists" >&2; exit 1; }
+
+copier copy ${ref:+--vcs-ref "$ref"} -d project_name="$name" "${extra[@]}" "$template" "$dest"
+cd "$dest"
+
+answer() {
+  uv run --no-project --quiet --with pyyaml python -c \
+    'import sys, yaml; print(yaml.safe_load(open(".copier-answers.yml"))[sys.argv[1]])' "$1"
+}
+
+git init -q -b main
+git lfs install --local >/dev/null
+# Lockfiles belong to the scaffold commit.
+if [ -f Cargo.toml ]; then cargo generate-lockfile --quiet; fi
+if [ -f pyproject.toml ]; then uv sync --quiet; fi
+git add -A
+git commit -qm "Scaffold from project-template $(answer _commit)"
+echo "new-project: committed the scaffold in $dest"
+
+echo "new-project: just check"
+if ! just check; then
+  echo "new-project: failed: just check (not published; the scaffold commit is kept in $dest)" >&2
+  exit 1
+fi
+
+if $local_only; then
+  echo "new-project: passed; local only, not published"
+  exit 0
+fi
+gh repo create "$(answer github_owner)/$name" "$visibility" --source . --remote origin --push \
+  --description "$(answer project_description)"
+echo "new-project: passed; published $(answer github_owner)/$name (${visibility#--})"
