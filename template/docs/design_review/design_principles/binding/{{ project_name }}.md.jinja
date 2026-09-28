@@ -111,7 +111,10 @@ An action uses the existing route appropriate to it:
 
 | Existing check | Use |
 |---|---|
-| Focused tests/probes | Resolve material implementation uncertainty |
+| Compile checks, focused tests/probes | During implementation: validate the scope just implemented |
+{% if with_rust or with_python -%}
+| `just fmt`, `just lint` | Once, after all functional scope is implemented; never mid-plan |
+{% endif -%}
 {% if with_ast_grep -%}
 | `just rules-scan`, `just rules-test` | A justified code-shape invariant |
 {% endif -%}

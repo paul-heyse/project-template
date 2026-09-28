@@ -38,9 +38,9 @@ change while keeping decisions, evidence and current state findable.
   Accepted records change only through replacement, apart from status metadata and dated
   factual amendments. ADR ids are allocated above every number in Git history.
 - **Development loop.** Work on `main` in the current tree; use a worktree only when truly
-  parallel agents must edit production code concurrently. Focused checks are the loop,
-  `just check` precedes calling a slice done, and `just test-all` is end-of-scope acceptance, not
-  a per-commit gate. Outcomes use `passed`/`failed`/`blocked`/`not_run` with their commands.
+  parallel agents must edit production code concurrently. Compile checks and targeted tests are the loop;
+  formatting, linting, `just check` and `just test-all` run once all functional scope is
+  implemented, not per slice or commit. Outcomes use `passed`/`failed`/`blocked`/`not_run` with their commands.
 - **Proportion.** Before adding a hook, gate, register or document type, name its consumer.
 
 ## Consequences

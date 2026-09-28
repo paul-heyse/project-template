@@ -9,7 +9,7 @@ set shell := ["bash", "-euo", "pipefail", "-c"]
 default:
     @just --list
 
-# The default loop: {% if formats %}format check, lints, tests, {% endif %}{% if with_ast_grep %}rules, {% endif %}ADRs, agent config
+# Integrated checks after all functional scope is implemented: {% if formats %}format check, lints, tests, {% endif %}{% if with_ast_grep %}rules, {% endif %}ADRs, agent config
 check:{% if formats %} fmt-check lint{% endif %}{% if with_rust %} test{% endif %}{% if with_python %} py-check{% else %} script-tests{% endif %}{% if with_ast_grep %} rules-scan rules-test{% endif %} lint-agents
     uv run --no-project python scripts/adr.py lint
 

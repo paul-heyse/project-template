@@ -2,13 +2,13 @@
 
 ## Claude Code specifics
 
-- **Hook:** `scripts/hooks/format_edited.sh` runs after every Edit/Write and formats only the
-  edited file{% if with_rust and with_python %} (rustfmt / ruff format){% elif with_rust %} (rustfmt){% elif with_python %} (ruff format){% endif %}. It never blocks. If a file changes on disk after your
-  edit, that is the formatter.
+- **No format hook.** Nothing formats files after Edit/Write; formatting runs once, at the end of
+  the scope (AGENTS.md, Testing rules).
 {% if with_python -%}
 - **Diagnostics:** the pyright plugin is disabled for this project (`.claude/settings.json`)
-  because pyrefly is the type checker. There is no in-session Python language server; run
-  `uv run pyrefly check` (part of `just py-check`) for Python diagnostics.
+  because pyrefly is the type checker. There is no in-session Python language server; Python
+  diagnostics come from `uv run pyrefly check` (part of `just py-check`) once functional scope is
+  complete.
 {% endif -%}
 - **Subagent:** `.claude/agents/design-reviewer.md` runs the `design-review` skill with fresh
   context. Give it the target and expected change scenarios; the binding selects tier and purpose.

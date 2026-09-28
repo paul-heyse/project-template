@@ -16,7 +16,7 @@ Every generated project gets the **core**:
 - `docs/design_review/`: the layered design standard (core 3.0), a repository binding, reviews
   and evidence conventions, the `design-review` skill and the `design-reviewer` subagent;
 - `docs/plans/`, `docs/pins.md` and the `pin-check` skill;
-- `.claude/settings.json` (permissions, a format-on-edit hook), `.agents/skills` for Codex, and
+- `.claude/settings.json` (permissions), `.agents/skills` for Codex, and
   `scripts/check_agents.py` (`just lint-agents`: every agent-facing path, link and recipe
   resolves);
 - `.gitattributes` for Git LFS evidence, and a `justfile` whose `check`, `test-all` and `doctor`

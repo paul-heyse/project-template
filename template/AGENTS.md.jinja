@@ -40,7 +40,7 @@ real consumer.
 {% if with_rust -%}
 | `crates/` | The Rust workspace; `crates/{{ crate_name }}` is the starter crate |
 {% endif -%}
-| `scripts/` | `adr.py`, `design_sections.py`{% if with_docs_site %} and `docs.py`{% endif %} (documentation), `check_agents.py`{% if with_rust %}, `check_pins.py`{% endif %}, and the format hook |
+| `scripts/` | `adr.py`, `design_sections.py`{% if with_docs_site %} and `docs.py`{% endif %} (documentation), `check_agents.py`{% if with_rust %}, `check_pins.py`{% endif %} |
 | `tests/scripts/` | Tests for the process scripts |
 {% if with_ast_grep -%}
 | `rules/`, `rule-tests/` | ast-grep rules. They grow only from design-review findings |
@@ -49,10 +49,10 @@ real consumer.
 
 | When | Run |
 |---|---|
-| During a design/implementation phase | Use focused compile, probe, and behavior checks only where they resolve a material question. Do not run the fully integrated gate after each slice or commit. |
-| A slice is ready | `just check`: {% if with_rust or with_python %}format check, lints, {% endif %}tests{% if with_ast_grep %}, rules{% endif %}, ADR and agent lint |
-| At the end of the integrated scope | `just test-all`: `check`{% if with_rust %} plus `just deps`{% endif %} |
-| Format (mutating) | `just fmt` |
+| During a design/implementation phase | Compile checks and targeted tests or probes for the scope just implemented. No formatting, linting or integrated gate after a slice or commit. |
+| After all functional scope in the plan is implemented | `just fmt`, then `just check`: {% if with_rust or with_python %}format check, lints, {% endif %}tests{% if with_ast_grep %}, rules{% endif %}, ADR and agent lint |
+| Then, as end-of-scope acceptance | `just test-all`: `check`{% if with_rust %} plus `just deps`{% endif %} |
+| Format (mutating) | `just fmt`, once at the end of the scope (above) |
 {% if with_rust -%}
 | Dependency policy | `just deps`: exact workspace pins with a `docs/pins.md` row, one version per declared family (`[workspace.metadata.pins]` in `Cargo.toml`), and cargo-deny sources and licenses |
 {% endif -%}
@@ -90,9 +90,14 @@ scripts are stdlib-only and run without a project environment.
 
 ## Testing rules
 
-- Full `just test-all` runs are end-of-scope acceptance, not the design loop. Run focused
-  checks during design, then run it once the integrated scope is ready; repeat only for a
-  failure or a subsequent material change.
+- **During implementation, only compile checks and targeted tests.** Validate each new piece of
+  scope with a compile check and the focused tests or probes that exercise it. Integrated tests
+  (`just check`, `just test-all`) wait until all functional scope in the plan is implemented;
+  repeat them only for a failure or a subsequent material change.
+- **No formatting or linting until all functional scope is implemented.** Don't run `just fmt`,
+  formatters, linters or type checkers mid-plan: they add nothing during execution and rewrite
+  code other than yours, which you then have to reassess. Run `just fmt` once at the end, then the
+  integrated gates (which include the lint checks).
 - **Validators are shared.** Invariant validators are library code, used by both tests and the
   production path. Don't write test-only copies.
 {% if with_rust -%}
