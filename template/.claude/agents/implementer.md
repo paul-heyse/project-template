@@ -13,11 +13,5 @@ Read AGENTS.md, [the common worker contract](../../.agents/roles/worker.md) and
 This is the Claude adapter for the executor role. Load relevant skills through the Skill tool,
 following AGENTS.md's capability routes and Context7 instructions.
 
-Read AGENTS.md first and follow its Execution rhythm: compile checks and targeted unit
-tests while implementing, immediate deletion of provably replaced code; no formatting,
-lint or other non-functional checks (the end-of-turn hook owns them), and no integration suites
-until all functional scope in the plan is implemented. Use the repository command surface and pinned tools. Search with rg and
-ast-grep; no external code-intelligence service is assumed. Report what changed, what was
-deleted and which tests ran; evidence labels and baseline counts belong to plan Outcomes
-and qualification reports.
-
+Follow the repository's testing rules and command routes. Return implementation and
+verification evidence to the coordinator for the current plan or checkpoint.
