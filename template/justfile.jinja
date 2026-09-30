@@ -1,7 +1,8 @@
 {%- set formats = with_rust or with_python -%}
 # The only command surface agents need. `just` lists recipes.
-# Check recipes do not edit source; tests may create their own data fixtures.
-# `fmt` and `adr new|supersede|index` edit the working tree.
+# Check recipes do not edit source, except `ruff`'s auto-fixes; tests may create their own data.
+# `fmt`, `skills-sync` and `adr new|supersede|index` edit the working tree. Agents run functional
+# tests; the end-of-turn hook (`scripts/after_turn.py`) runs formatting, generators and `hygiene`.
 
 set shell := ["bash", "-euo", "pipefail", "-c"]
 
@@ -9,22 +10,17 @@ set shell := ["bash", "-euo", "pipefail", "-c"]
 default:
     @just --list
 
-# Integrated checks after all functional scope is implemented: {% if formats %}format check, lints, tests, {% endif %}{% if with_ast_grep %}rules, {% endif %}ADRs, agent config
-check:{% if formats %} fmt-check lint{% endif %}{% if with_rust %} test{% endif %}{% if with_python %} py-check{% else %} script-tests{% endif %}{% if with_ast_grep %} rules-scan rules-test{% endif %} lint-agents
-    uv run --no-project python scripts/adr.py lint
+# The functional tests agents run once all functional scope is implemented
+check:{% if with_rust %} test{% endif %}{% if with_python %} py-test{% else %} script-tests{% endif %}
 
-# Everything: check{% if with_rust %} + dependency policy{% endif %} (end-of-scope acceptance, not the design loop)
-test-all: check{% if with_rust %} deps{% endif %}
-{% if formats %}
-# {% if with_rust %}rustfmt{% endif %}{% if with_rust and with_python %} + {% endif %}{% if with_python %}ruff format{% endif %} check (no changes)
-fmt-check:
-{%- if with_rust %}
-    cargo fmt --all --check
-{%- endif %}
-{%- if with_python %}
-    uv run ruff format --check
-{%- endif %}
-{% endif %}
+# Everything functional (end-of-scope acceptance, not the design loop)
+test-all: check
+
+# The end-of-turn hook runs every dependency below after each turn
+# (`scripts/after_turn.py check <id>` re-runs one); agents do not.
+# Every non-functional check, one check id per dependency
+hygiene: lint-agents adr-lint{% if with_ast_grep %} rules-scan rules-test{% endif %}{% if with_python %} ruff types{% endif %}{% if with_docs_site %} docs-check{% endif %}{% if with_rust %} deps clippy{% endif %}
+
 # Format everything (mutating)
 fmt:
 {%- if with_rust %}
@@ -32,22 +28,17 @@ fmt:
 {%- endif %}
 {%- if with_python %}
     uv run ruff format
-    uv run ruff check --fix --quiet
+    # Apply ruff's auto-fixes; what remains is the `ruff` check's to report.
+    uv run ruff check --fix --quiet --exit-zero
 {%- endif %}
 {%- if not formats %}
     @echo "fmt: not_run (no formatter layer)"
 {%- endif %}
-{% if formats %}
-# {% if with_rust %}clippy (deny warnings){% endif %}{% if with_rust and with_python %} + {% endif %}{% if with_python %}ruff lint{% endif %}
-lint:
-{%- if with_rust %}
+{% if with_rust %}
+# clippy, denying warnings
+clippy:
     cargo clippy --release --workspace --all-targets --quiet -- -D warnings
-{%- endif %}
-{%- if with_python %}
-    uv run ruff check --quiet
-{%- endif %}
-{% endif %}
-{%- if with_rust %}
+
 # Rust tests share the release profile with shipped binaries, so repeated runs execute cached
 # optimized test binaries. Snapshots never auto-accept (INSTA_UPDATE=no).
 test *args:
@@ -59,10 +50,17 @@ deps:
     cargo deny --log-level error check bans sources licenses
 {% endif %}
 {%- if with_python %}
-# Python tests (scripts and packages) + pyrefly
-py-check:
-    uv run pytest
+# ruff lint, applying its safe auto-fixes first
+ruff:
+    uv run ruff check --fix --quiet
+
+# pyrefly type check
+types:
     uv run pyrefly check --summary=none
+
+# Python tests (scripts and packages)
+py-test:
+    uv run pytest
 {% else %}
 # Process-script tests in an isolated environment (no project install)
 script-tests:
@@ -82,6 +80,14 @@ rules-test:
 adr *args:
     @uv run --no-project python scripts/adr.py "$@"
 
+# Regenerate the ADR index (an end-of-turn sync step)
+adr-index:
+    @uv run --no-project python scripts/adr.py index
+
+# ADR metadata and index
+adr-lint:
+    uv run --no-project python scripts/adr.py lint
+
 # Claude/Codex parity and dead-reference check for agent instructions and skills
 lint-agents:
     uv run --no-project python scripts/check_agents.py
@@ -93,6 +99,14 @@ skills-sync:
 # Check that the links match the selection (exit 1 when a sync is pending)
 skills-check:
     python3 scripts/library_skills.py --check
+
+# Fail when `doctor` reports a missing or failing tool (end-of-turn readiness)
+doctor-check:
+    #!/usr/bin/env bash
+    set -uo pipefail
+    out=$(just doctor 2>&1); status=$?
+    printf '%s\n' "$out"
+    [ "$status" -eq 0 ] && ! grep -qE 'MISSING|FAILED|below the declared floor' <<<"$out"
 
 # Tool presence and versions (compare with docs/pins.md)
 doctor:

@@ -29,7 +29,7 @@ Every generated project gets the **core**:
 | Question | Default | Adds |
 |---|---|---|
 | `with_rust` | yes | `rust-toolchain.toml`, workspace lints and profiles, `.cargo/config.toml` (sccache, clang + mold), nextest, cargo-deny, `scripts/check_pins.py` (`just deps`), a starter crate |
-| `with_python` | yes | `pyproject.toml` with ruff, pyrefly, pytest and Hypothesis; `just py-check` |
+| `with_python` | yes | `pyproject.toml` with ruff, pyrefly, pytest and Hypothesis; `just py-test`, `ruff`, `types` |
 | `with_ast_grep` | yes | `sgconfig.yml`, empty `rules/` and `rule-tests/`, `just rules-scan` / `rules-test` |
 | `with_docs_site` | no | mdBook + Pagefind + lychee via `scripts/docs.py`, a docs-only CI workflow, ADR-0003 |
 | `with_ci_profile` | no | The code-intelligence design-review profile and skill |
@@ -74,8 +74,10 @@ working tree, review the diff, and commit `.copier-answers.yml`; `copier update`
    verbatim). Keep scripts as plain files that read convention paths or data, so they stay
    identical across projects.
 2. `just test` renders the core, rust, python and full combinations from the working tree into
-   `build/render/` and runs each project's own `just check` (plus `just deps`, `docs-test` and
-   `docs-check` where the layer is present).
+   `build/render/` and runs each project's own `just check`, every `just hygiene` check
+   (`docs-check` only when the docs tools are installed) and `docs-test`, then an end-of-turn
+   smoke test: `scripts/after_turn.py stop` with the fixer off, the prompt barrier, a complete
+   report and a clean tree.
 3. Commit, then tag a release: `git tag vX.Y.Z && git push --follow-tags`. `copier copy` and
    `copier update` use the latest tag.
 

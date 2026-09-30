@@ -2,13 +2,14 @@
 
 ## Claude Code specifics
 
-- **No format hook.** Nothing formats files after Edit/Write; formatting runs once, at the end of
-  the scope (AGENTS.md, Testing rules).
+- **End-of-turn hooks, no edit hook.** Nothing formats files after Edit/Write. `Stop`,
+  `UserPromptSubmit` and a `PreToolUse` guard run `scripts/after_turn.py` (AGENTS.md, Commands).
+  They are silent to the model and need no agent action. A fixer runs as a headless `claude -p` on
+  Sonnet at the session's effort; subagents stopping don't trigger the hooks.
 {% if with_python -%}
 - **Diagnostics:** the pyright plugin is disabled for this project (`.claude/settings.json`)
   because pyrefly is the type checker. There is no in-session Python language server; Python
-  diagnostics come from `uv run pyrefly check` (part of `just py-check`) once functional scope is
-  complete.
+  diagnostics come from `just types`, one of the end-of-turn checks.
 {% endif -%}
 - **Subagent:** `.claude/agents/design-reviewer.md` runs the `design-review` skill with fresh
   context. Give it the target and expected change scenarios; the binding selects tier and purpose.

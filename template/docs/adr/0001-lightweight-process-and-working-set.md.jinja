@@ -39,8 +39,11 @@ change while keeping decisions, evidence and current state findable.
   factual amendments. ADR ids are allocated above every number in Git history.
 - **Development loop.** Work on `main` in the current tree; use a worktree only when truly
   parallel agents must edit production code concurrently. Compile checks and targeted tests are the loop;
-  formatting, linting, `just check` and `just test-all` run once all functional scope is
-  implemented, not per slice or commit. Outcomes use `passed`/`failed`/`blocked`/`not_run` with their commands.
+  `just check` and `just test-all` (functional tests only) run once all functional scope is
+  implemented, not per slice or commit. Formatting, generators and every non-functional check
+  (`just hygiene`) run in the end-of-turn hooks (`scripts/after_turn.py`), where a cheaper fixer
+  agent repairs what it can; their consumers are the operator, who sees what is left, and the next
+  turn, which starts from a clean tree. Outcomes use `passed`/`failed`/`blocked`/`not_run` with their commands.
 - **Proportion.** Before adding a hook, gate, register or document type, name its consumer.
 
 ## Consequences

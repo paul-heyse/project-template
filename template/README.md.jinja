@@ -13,7 +13,8 @@
 
 Tools: `just`, `uv`, `git` with Git LFS{% if with_rust %}, the Rust toolchain in `rust-toolchain.toml` with cargo-nextest, cargo-deny, sccache, clang and mold{% endif %}{% if with_ast_grep %}, ast-grep{% endif %}. `just doctor` lists what is
 present. During implementation, run compile checks and targeted tests; once all functional scope
-is implemented, run `just fmt`, then `just check` and `just test-all`.
+is implemented, run `just test-all`. Formatting and the non-functional checks (`just hygiene`) run in
+the end-of-turn hooks (`scripts/after_turn.py`).
 {% if with_docs_site %}
 ## Documentation locally
 

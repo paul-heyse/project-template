@@ -31,8 +31,10 @@ pythonpath = ["scripts"]
 line-length = 100
 src = ["scripts"]
 target-version = "py{{ pyminor | replace('.', '') }}"
-# Fixtures are analyzer input; docs may contain illustrative code fences.
-extend-exclude = ["fixtures", ".claude/skills", "target", "docs"]
+# Fixtures are analyzer input; docs may contain illustrative code fences. A subdirectory that is a
+# separate Python project with its own environment (conventionally under `services/`) is excluded.
+extend-exclude = ["fixtures", ".claude/skills", "target", "docs", "services"]
+force-exclude = true
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "B", "UP", "SIM", "RUF"]

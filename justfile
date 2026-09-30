@@ -31,15 +31,28 @@ combo name data:
     git -c commit.gpgsign=false -c user.name=template-test -c user.email=test@example.invalid commit -qm "render {{name}}"
     echo "== {{name}}: just check"
     just check
-    if [ -f Cargo.toml ]; then echo "== {{name}}: just deps"; just deps; fi
-    if [ -f docs/site.toml ]; then
-      if command -v mdbook >/dev/null && command -v pagefind >/dev/null && command -v lychee >/dev/null; then
-        echo "== {{name}}: just docs-test, just docs-check"
-        just docs-test
-        just docs-check
-      else
+    docs_tools=true
+    command -v mdbook >/dev/null && command -v pagefind >/dev/null && command -v lychee >/dev/null || docs_tools=false
+    for check in $(just --dump --dump-format json | python3 -c 'import json, sys; print(*[d["recipe"] for d in json.load(sys.stdin)["recipes"]["hygiene"]["dependencies"]])'); do
+      if [ "$check" = docs-check ] && ! $docs_tools; then
         echo "== {{name}}: docs-check not_run (mdbook, pagefind or lychee missing; run just bootstrap-docs in a render)"
+        continue
       fi
-    fi
+      echo "== {{name}}: just $check"
+      just "$check"
+    done
+    if [ -f docs/site.toml ] && $docs_tools; then echo "== {{name}}: just docs-test"; just docs-test; fi
+    echo "== {{name}}: end-of-turn smoke (fixer off)"
+    echo '{}' | AFTER_TURN_FIXER=off uv run --no-project --python 3.14 python scripts/after_turn.py stop --harness claude
+    uv run --no-project --python 3.14 python scripts/after_turn.py prompt --harness claude </dev/null >/dev/null
+    python3 - "$(git rev-parse --absolute-git-dir)/after-turn/report.json" "$docs_tools" <<'EOF'
+    import json, sys
+    report = json.load(open(sys.argv[1]))
+    failed = sorted(k for k, v in report["checks"].items() if v["status"] != "passed")
+    allowed = [] if sys.argv[2] == "true" else ["docs-check"]
+    assert report["complete"], "end-of-turn report incomplete"
+    assert set(failed) <= set(allowed), f"end-of-turn checks failed: {failed}"
+    print(f"end-of-turn report: {len(report['checks'])} steps, failed {failed or 'none'}")
+    EOF
     test -z "$(git status --porcelain)" || { echo "{{name}}: checks left the tree dirty"; git status --short; exit 1; }
     echo "== {{name}}: passed"

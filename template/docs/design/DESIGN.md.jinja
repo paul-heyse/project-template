@@ -44,8 +44,9 @@ and scheduled finding disposition, STATUS the checkpoint. A reader never needs a
 chain or retired plan; retired records, reviews, plans and evidence are recovered from Git
 ([historical recovery](../README.md#historical-recovery)). Governing references must resolve,
 historical `supersedes` entries need not, and ADR ids are never reused. Work happens on `main`;
-compile checks and targeted tests are the loop; formatting, linting and `just test-all` follow
-once all functional scope is implemented.
+compile checks and targeted tests are the loop, and `just test-all` (functional) follows once all
+functional scope is implemented; formatting, generators and every non-functional check run in the
+end-of-turn hooks (ADR-0001).
 
 **Design review** (ADR-0002/0004). The repository owns core 3.1 of the design standard and declares
 it in `docs/design_review/design_principles/standard.toml`. The six foundations organize review

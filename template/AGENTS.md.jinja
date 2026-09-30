@@ -49,19 +49,18 @@ real consumer.
 
 | When | Run |
 |---|---|
-| During a design/implementation phase | Compile checks and targeted tests or probes for the scope just implemented. No formatting, linting or integrated gate after a slice or commit. |
-| After all functional scope in the plan is implemented | `just fmt`, then `just check`: {% if with_rust or with_python %}format check, lints, {% endif %}tests{% if with_ast_grep %}, rules{% endif %}, ADR and agent lint |
-| Then, as end-of-scope acceptance | `just test-all`: `check`{% if with_rust %} plus `just deps`{% endif %} |
-| Format (mutating) | `just fmt`, once at the end of the scope (above) |
+| During a design/implementation phase | Compile checks and targeted tests or probes for the scope just implemented. No integrated gate after a slice or commit. |
+| After all functional scope in the plan is implemented | `just test-all`: the functional tests (`just check`). Qualification also cites a clean end-of-turn report for the same tree (`.git/after-turn/report.json`) |
+| After every turn (automatic) | The end-of-turn hooks (`scripts/after_turn.py`, configured in `.config/after-turn.toml` and wired in `.claude/settings.json` and `.codex/hooks.json`) run once the main agent stops: `just skills-sync`, `just adr-index` and `just fmt`; then, in the background, `just doctor-check` and every `just hygiene` check. A fixer agent (Claude Sonnet at the session's effort, or Codex `gpt-6.1-sol` at medium) repairs what it can, the operator sees what is left, and the next prompt waits for the checks. Never run, check or troubleshoot any of this yourself |
 {% if with_rust -%}
-| Dependency policy | `just deps`: exact workspace pins with a `docs/pins.md` row, one version per declared family (`[workspace.metadata.pins]` in `Cargo.toml`), and cargo-deny sources and licenses |
+| Dependency policy | `just deps`, an end-of-turn check: exact workspace pins with a `docs/pins.md` row, one version per declared family (`[workspace.metadata.pins]` in `Cargo.toml`), and cargo-deny sources and licenses |
 {% endif -%}
-| Decisions | `just adr new <slug> --title "…"`, `just adr supersede ADR-NNNN <slug>`, `just adr index`, `just adr lint`, `just adr revisit` |
+| Decisions | `just adr new <slug> --title "…"`, `just adr supersede ADR-NNNN <slug>`, `just adr revisit`; the end-of-turn hooks regenerate the index and run the ADR lint |
 {% if with_docs_site -%}
-| Documentation changes | `just docs-test` for publisher/resolver changes; `just docs-check` for publication. First run: `just bootstrap-docs`; preview: `just docs-serve`. No product gate solely for docs. |
+| Documentation changes | `just docs-test` for publisher/resolver changes; `docs-check` (publication) runs at the end of each turn. First run: `just bootstrap-docs`; preview: `just docs-serve`. No product gate solely for docs. |
 {% endif -%}
-| Select shared library skills | Edit `.config/library-skills.toml`, then `just skills-sync` (`just skills-check` to inspect). Skills live in `~/.local/share/library-skills` (`LIBRARY_SKILLS_ROOT` if moved); a library skill never cites this repository, so repo-specific wiring goes here and in `docs/pins.md` |
-| Tools present? | `just doctor` |
+| Select shared library skills | Edit `.config/library-skills.toml`; the end-of-turn hooks run `just skills-sync` (`just skills-check` to inspect). Skills live in `~/.local/share/library-skills` (`LIBRARY_SKILLS_ROOT` if moved); a library skill never cites this repository, so repo-specific wiring goes here and in `docs/pins.md` |
+| Tools present? | `just doctor`; the end-of-turn checks report a missing tool |
 | Template changes | `copier update --defaults`, then review the diff like any other change (`.copier-answers.yml` is never edited by hand) |
 
 {% if with_rust -%}
@@ -75,8 +74,10 @@ override the config through Cargo's environment variables and report it.
 
 {% endif -%}
 Python is {{ python_version }} via `uv` (`.python-version`); run Python tools as `uv run …`.
-{% if with_python %}The type checker is **pyrefly**, not pyright or mypy. {% endif %}The process
-scripts are stdlib-only and run without a project environment.
+{% if with_python %}The type checker is **pyrefly**, not pyright or mypy. A subdirectory that is a
+separate Python project with its own environment goes in root ruff's `extend-exclude`. {% endif %}The
+process scripts are stdlib-only and run without a project environment; the end-of-turn script runs
+on a pinned `uv run --no-project --python 3.14 python`.
 
 ## Writing code against libraries
 
@@ -95,10 +96,10 @@ scripts are stdlib-only and run without a project environment.
   scope with a compile check and the focused tests or probes that exercise it. Integrated tests
   (`just check`, `just test-all`) wait until all functional scope in the plan is implemented;
   repeat them only for a failure or a subsequent material change.
-- **No formatting or linting until all functional scope is implemented.** Don't run `just fmt`,
-  formatters, linters or type checkers mid-plan: they add nothing during execution and rewrite
-  code other than yours, which you then have to reassess. Run `just fmt` once at the end, then the
-  integrated gates (which include the lint checks).
+- **No formatting, linting or other non-functional checks.** The end-of-turn hooks run them after
+  each turn and a fixer agent repairs what it can. Don't run `just fmt`, formatters, linters, type
+  checkers or any other `just hygiene` check, and don't troubleshoot their failures: they rewrite
+  code other than yours, which you then have to reassess.
 - **Validators are shared.** Invariant validators are library code, used by both tests and the
   production path. Don't write test-only copies.
 {% if with_rust -%}

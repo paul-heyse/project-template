@@ -34,7 +34,7 @@ are recovered from Git, never read as a chain (ADR-0001).
 5. Accepted records are immutable except `status`/`superseded-by`. A factual correction changing
    no decision may be appended as a dated line under `## Amendments`; a decision change needs a
    superseding record. Preserve unrelated decisions when replacing one process or policy clause.
-6. Run `just adr index` and `just adr lint`. The binding owns current finding disposition:
+6. The end-of-turn hooks regenerate the index and run the ADR lint. The binding owns current finding disposition:
    link source review IDs to the active plan; close findings on evidence of the correction,
    not merely acceptance of this record.
 
