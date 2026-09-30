@@ -40,7 +40,7 @@ real consumer.
 {% if with_rust -%}
 | `crates/` | The Rust workspace; `crates/{{ crate_name }}` is the starter crate |
 {% endif -%}
-| `scripts/` | `adr.py`, `design_sections.py`{% if with_docs_site %} and `docs.py`{% endif %} (documentation), `check_agents.py`{% if with_rust %}, `check_pins.py`{% endif %} |
+| `scripts/` | `adr.py`, `design_sections.py`{% if with_docs_site %} and `docs.py`{% endif %} (documentation), `check_agents.py`, `library_skills.py`{% if with_rust %}, `check_pins.py`{% endif %} |
 | `tests/scripts/` | Tests for the process scripts |
 {% if with_ast_grep -%}
 | `rules/`, `rule-tests/` | ast-grep rules. They grow only from design-review findings |
@@ -60,6 +60,7 @@ real consumer.
 {% if with_docs_site -%}
 | Documentation changes | `just docs-test` for publisher/resolver changes; `just docs-check` for publication. First run: `just bootstrap-docs`; preview: `just docs-serve`. No product gate solely for docs. |
 {% endif -%}
+| Select shared library skills | Edit `.config/library-skills.toml`, then `just skills-sync` (`just skills-check` to inspect). Skills live in `~/.local/share/library-skills` (`LIBRARY_SKILLS_ROOT` if moved); a library skill never cites this repository, so repo-specific wiring goes here and in `docs/pins.md` |
 | Tools present? | `just doctor` |
 | Template changes | `copier update --defaults`, then review the diff like any other change (`.copier-answers.yml` is never edited by hand) |
 

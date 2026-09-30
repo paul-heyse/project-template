@@ -1,0 +1,5 @@
+# Shared live library skills exposed to both Codex and Claude Code.
+# Edit enabled, then run just skills-sync. Skill sources live outside this repo
+# (~/.local/share/library-skills; set LIBRARY_SKILLS_ROOT if it is elsewhere).
+directory = ".claude/skills"
+enabled = []

@@ -86,6 +86,14 @@ adr *args:
 lint-agents:
     uv run --no-project python scripts/check_agents.py
 
+# Link the shared library skills selected in .config/library-skills.toml
+skills-sync:
+    python3 scripts/library_skills.py
+
+# Check that the links match the selection (exit 1 when a sync is pending)
+skills-check:
+    python3 scripts/library_skills.py --check
+
 # Tool presence and versions (compare with docs/pins.md)
 doctor:
     #!/usr/bin/env bash
