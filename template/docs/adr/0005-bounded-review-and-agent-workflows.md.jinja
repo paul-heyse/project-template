@@ -1,0 +1,71 @@
+---
+id: ADR-0005
+title: Assess domain models in bounded reviews and coordinate work through reusable agent roles
+status: accepted
+date: {{ '%Y-%m-%d' | strftime }}
+supersedes: [ADR-0004]
+superseded-by: null
+design: [§2]
+evidence: Implemented
+revisit: Repeated delegation overhead, missed semantic contracts or runtime changes warrant revisiting role boundaries or review scope.
+---
+
+## Context
+
+The project needs explicit domain meaning and independent architectural assessment without a
+standing modeling exercise for ordinary implementation. The prior seed required a tracing sequence
+regardless of the question. Review, plan creation and execution also benefit from reusable agent
+responsibilities, while native runtime model and tool settings have separate owners.
+
+[DESIGN §2](../design/DESIGN.md#section-2) owns this workflow. ADR-0002's review cadence and the
+binding's single finding-disposition owner remain in force. This record carries forward ADR-0004's
+model-adequacy criteria and replaces its mandatory assessment/tracing instructions.
+
+## Options
+
+1. **Keep standing assessment and ad hoc delegation.** Minimal configuration, but repeated
+   tracing and implicit worker model inheritance consume attention without serving every task.
+2. **Use a fixed pipeline or domain-specific executor roster.** Predictable assignments add
+   unnecessary handoffs and duplicate workflow instructions.
+3. **Bounded reviews and reusable roles (chosen).** Preserve architectural criteria while
+   choosing investigations and work decomposition around the actual goal.
+
+## Decision
+
+- Adopt core/template 3.2{% if with_ci_profile %} and code-intelligence guidance 1.3{% endif %}, preserving principle IDs and historical review versions.
+- An explicit, coherent domain model must govern behavior wherever domain meaning is established
+  or interpreted. FP-04/A2 assess model adequacy and authoritative realization. A deferral cannot
+  waive an in-scope MUST gap for supported behavior, even with correct current outputs.
+- Model operations as well as concepts; own invariants, contextual bindings and representation
+  contracts. Ordinary types, relations and domain functions suffice; no modeling framework is
+  prescribed. Keep architectural and fidelity judgments independent.
+- Assess these criteria during requested or scheduled design reviews. Ordinary implementation
+  does not initiate a domain-model review. Follow a flow only where it resolves a concrete
+  uncertainty; static source and contract inspection can suffice.
+- A coordinator owns design, integration and acceptance. Six shared roles provide code mapping,
+  library research, independent design review, execution, implementation review and functional
+  testing. Use concurrency as you see fit; strive for parallel execution.
+- [Shared contracts](../../.agents/roles/README.md) own responsibilities. Native Codex and Claude
+  adapters own model/tool settings; Claude's `implementer` adapts the executor role. Explicit
+  user/runtime settings retain authority. The initial model allocations are documented there.
+- Three [skill pairs](../../.claude/skills/README.md) prepare and perform design review, plan
+  creation and execution. Preparation is ordinarily conversational. Existing plans own execution
+  receipts and scheduled findings; no additional ledger is introduced.
+- Plan creation includes focused assessment of the foundations the intended capabilities will
+  use. Carry necessary improvements into prerequisite work. Focused design advice belongs in the
+  plan and cannot replace a formal review due under the binding. A read-only formal reviewer
+  returns the complete report for coordinator publication without changing its judgment.
+- Existing test timing, preservation rules and automatic checks keep their declared owners.
+  These workflows add no worker cap, planning-mode hook or mandatory probe requirement.
+
+## Consequences
+
+Role contracts, native definitions and workflow skills are Implemented scaffold capabilities.
+Product conformance, workflow effectiveness and resource savings require evidence from actual use
+and remain Proposed. Provider settings can evolve without copying behavior into every workflow.
+Workers retain local discretion within their brief; the coordinator resolves material contradictions.
+Historical reviews keep their original scope and version.
+
+Fresh projects receive this self-contained replacement seed. Existing projects keep their own
+decisions and checkpoints when updating the template, and adopt changed policy under their next
+available ADR identifier.

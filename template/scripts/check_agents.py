@@ -56,6 +56,7 @@ def documents(root: Path) -> list[Path]:
     docs = [root / "AGENTS.md", root / "CLAUDE.md", root / ".claude" / "skills" / "README.md"]
     docs += [root / ".claude" / "skills" / s / "SKILL.md" for s in process_skills(root)]
     docs += sorted((root / ".claude" / "agents").glob("*.md"))
+    docs += sorted((root / ".agents" / "roles").glob("*.md"))
     return docs
 
 

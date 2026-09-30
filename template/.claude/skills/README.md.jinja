@@ -9,12 +9,27 @@ Workflows for building this repository. A skill is added when a workflow has act
 | Skill | Use |
 |---|---|
 | [`adr/`](adr/SKILL.md) | Record or supersede a decision; amend the owning architectural section in the same commit |
+| [`plan-design-review/`](plan-design-review/SKILL.md) | Plan an approach to the user's review goal, grounded in the local standard |
 | [`design-review/`](design-review/SKILL.md) | Review explicit domain models, ownership, contracts and change scenarios against the layered design standard (`docs/design_review/design_principles/standard.toml`); cadence in the {{ project_name }} binding |
 {% if with_ci_profile -%}
 | [`design-review-code-intelligence/`](design-review-code-intelligence/SKILL.md) | The code-intelligence profile, loaded with `design-review` |
 {% endif -%}
+| [`plan-creation/`](plan-creation/SKILL.md) | Plan the authoring approach from a review or existing plan, including focused assessment of foundations |
+| [`create-plan/`](create-plan/SKILL.md) | Write the design and execution plan, including foundation improvements and an adaptable structure |
+| [`plan-execution/`](plan-execution/SKILL.md) | Develop the approach to carrying out an existing plan |
+| [`execute-plan/`](execute-plan/SKILL.md) | Carry authorized scope through implementation, review, functional verification and handoff |
 | [`handoff/`](handoff/SKILL.md) | Rewrite STATUS.md from the actual tree at session end |
 | [`pin-check/`](pin-check/SKILL.md) | Change or re-verify any dependency or tool pin |
+
+In Codex, use `/plan $plan-design-review <goal>`, `/plan $plan-creation <reference and goal>` or
+`/plan $plan-execution <plan and scope>` to develop the approach. Leave Plan mode to perform the
+work with `design-review`, `create-plan` or `execute-plan`; invoke the work directly when the
+approach is already clear. Planning companions also work conversationally and do not switch modes.
+
+The [suggested plan outline](create-plan/references/plan-structure.md) is adaptable. Existing plans
+remain the durable owners of packages and receipts. All three pairs use the
+[shared agent roles](../../.agents/roles/README.md); the coordinator retains design, integration
+and acceptance. Use concurrency as you see fit; strive for parallel execution.
 
 ## Library capability skills (gitignored — versioned outside this repo)
 

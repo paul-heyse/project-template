@@ -2,7 +2,8 @@
 
 A [Copier](https://copier.readthedocs.io/) template for a pinned, low-friction, single-operator
 project, carrying the working system extracted from
-[library-context](https://github.com/paul-heyse/library-context) (at `efa01f3`, 2026-09-26).
+[library-context](https://github.com/paul-heyse/library-context), with the shared agent workflows
+and bounded-review policy aligned on 2026-09-30.
 
 Every generated project gets the **core**:
 
@@ -13,10 +14,13 @@ Every generated project gets the **core**:
   ADR-0001 (light process, current working set) and ADR-0002 (design review);
 - `docs/design/`: an architecture map and a DESIGN skeleton with stable § IDs and
   `> Decision:` lines;
-- `docs/design_review/`: the layered design standard (core 3.1), a repository binding, reviews
+- `docs/design_review/`: the layered design standard (core 3.2), a repository binding, reviews
   and evidence conventions, the `design-review` skill and the `design-reviewer` subagent;
-- semantic-model-first domain design as a MUST: explicit concepts and operation contracts
-  govern behavior, assessed through FP-04/A2 alongside the other five foundations (ADR-0004);
+- explicit concepts and operation contracts govern behavior, assessed through FP-04/A2 during
+  bounded design reviews; ordinary implementation does not initiate a modeling exercise (ADR-0005);
+- six shared worker roles with native Codex and Claude adapters, and paired skills for preparing
+  and performing design reviews, plan creation and plan execution. The coordinator retains design,
+  integration and acceptance. Use concurrency as you see fit; strive for parallel execution;
 - `docs/plans/`, `docs/pins.md` and the `pin-check` skill;
 - `.claude/settings.json` (permissions), `.agents/skills` for Codex, and
   `scripts/check_agents.py` (`just lint-agents`: every agent-facing path, link and recipe
@@ -60,10 +64,19 @@ Seeds the project owns after generation are never touched by updates: README, ST
 architecture map, the ADRs and their index, pins, the binding and the evidence index
 (`_skip_if_exists` in `copier.yml`).
 
-Core 3.1 also updates the review template and agent guidance. New projects receive ADR-0004
-for this policy; updates exclude that seed to avoid colliding with project-owned ADR numbers.
-An existing project adopting it records the decision under its next available ID and aligns
-its owned DESIGN and binding summaries. Do not rewrite an accepted seed record.
+Core 3.2 and optional code-intelligence guidance 1.3 update the review standard and agent workflows.
+Fresh projects receive ADR-0005, which carries forward domain-model quality criteria and replaces
+ADR-0004's standing assessment and tracing instructions. The retired seed is no longer generated.
+Updates exclude both seed paths to preserve project-owned ADR numbers and decisions. An existing
+project adopting the policy records its own next available ADR and aligns its owned DESIGN and
+binding summaries; accepted records are not rewritten.
+
+The default workflow supplies shared responsibilities in `.agents/roles`, native settings in
+`.codex/agents` and `.claude/agents`, and the three process-skill pairs documented in the generated
+skills index. The five new planning/authoring/execution skills are tracked core files. Existing
+projects should reconcile customized agent definitions and model defaults when reviewing an update.
+Plan creation includes focused assessment of the foundations it will use; improvements enter the
+plan before dependent work. Planning companions do not switch modes or add a durable second plan.
 
 An existing repository that was not generated can adopt the template: run `copier copy` into its
 working tree, review the diff, and commit `.copier-answers.yml`; `copier update` works from then on.

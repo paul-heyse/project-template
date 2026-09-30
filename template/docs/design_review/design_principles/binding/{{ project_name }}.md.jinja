@@ -12,20 +12,25 @@ report a conflict and its resolution route.
 
 | Layer | Document | Version |
 |---|---|---|
-| Core | [design principles](../core/design-principles.md), [review template](../core/design-review-template.md) | 3.1 (repository-owned edition, ADR-0002/0004) |
+| Core | [design principles](../core/design-principles.md), [review template](../core/design-review-template.md) | 3.2 (repository-owned edition, ADR-0002/0005) |
 {% if with_ci_profile -%}
-| Profile | [code-intelligence principles](../profiles/code-intelligence/principles.md), [review additions](../profiles/code-intelligence/review.md) | 1.2 |
+| Profile | [code-intelligence principles](../profiles/code-intelligence/principles.md), [review additions](../profiles/code-intelligence/review.md) | 1.3 |
 {% endif -%}
 | Binding | this page | — |
 
 The version/path declaration in [`standard.toml`](../standard.toml) is authoritative for loading.
 Preserve DP{% if with_ci_profile %}/CI{% endif %} IDs and historical version semantics; FP-01–FP-06 and A1–A3 supply the
 architecture structure. FP-04/A2 require an adequate, explicit domain model that governs
-behavior. ADR-0004 adopts core/template 3.1 and the aligned profile guidance.
+behavior. ADR-0005 adopts core/template 3.2 and the aligned profile guidance. Apply domain-model
+assessment within requested or scheduled reviews; ordinary implementation does not initiate it.
+Follow flows only where they resolve a concrete uncertainty within that scope.
 
 ## Reviews in this repository
 
 - **Location:** `docs/design_review/reviews/design_review_{slug}_{YYYY-MM-DD}.md`.
+- **Evidence method:** static source, contract and documentation inspection can suffice. Probes
+  are optional when material uncertainty warrants them; no review kind requires a probe or evidence
+  folder merely because it is a review. Tested and Measured claims still need their stated evidence.
 - **Who:** the `design-review` skill{% if with_ci_profile %} with `design-review-code-intelligence`{% endif %}, usually through a
   fresh `design-reviewer` subagent, so the author of a change is not its reviewer.
 - **Cadence and purpose** (ADR-0002):
