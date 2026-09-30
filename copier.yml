@@ -5,6 +5,9 @@ _min_copier_version: "9.18.2"
 _subdirectory: template
 _answers_file: .copier-answers.yml
 _preserve_symlinks: true
+# New decision seeds belong only to fresh projects; an existing project allocates its own IDs.
+_exclude:
+  - "{% if _copier_operation == 'update' %}docs/adr/0004-semantic-model-first-design.md{% endif %}"
 # Seeds the project owns after generation: `copier update` never touches them. Accepted ADRs
 # must stay immutable, and the checkpoint, design, pins and indexes are project content.
 _skip_if_exists:
@@ -16,6 +19,7 @@ _skip_if_exists:
   - docs/adr/0001-*.md
   - docs/adr/0002-*.md
   - docs/adr/0003-*.md
+  - docs/adr/0004-*.md
   - docs/pins.md
   - docs/design_review/design_principles/binding/*.md
   - docs/design_review/evidence/README.md

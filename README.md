@@ -13,8 +13,10 @@ Every generated project gets the **core**:
   ADR-0001 (light process, current working set) and ADR-0002 (design review);
 - `docs/design/`: an architecture map and a DESIGN skeleton with stable § IDs and
   `> Decision:` lines;
-- `docs/design_review/`: the layered design standard (core 3.0), a repository binding, reviews
+- `docs/design_review/`: the layered design standard (core 3.1), a repository binding, reviews
   and evidence conventions, the `design-review` skill and the `design-reviewer` subagent;
+- semantic-model-first domain design as a MUST: explicit concepts and operation contracts
+  govern behavior, assessed through FP-04/A2 alongside the other five foundations (ADR-0004);
 - `docs/plans/`, `docs/pins.md` and the `pin-check` skill;
 - `.claude/settings.json` (permissions), `.agents/skills` for Codex, and
   `scripts/check_agents.py` (`just lint-agents`: every agent-facing path, link and recipe
@@ -57,6 +59,11 @@ just check && git commit -am "Template update to <tag> (just check passed)"
 Seeds the project owns after generation are never touched by updates: README, STATUS, DESIGN, the
 architecture map, the ADRs and their index, pins, the binding and the evidence index
 (`_skip_if_exists` in `copier.yml`).
+
+Core 3.1 also updates the review template and agent guidance. New projects receive ADR-0004
+for this policy; updates exclude that seed to avoid colliding with project-owned ADR numbers.
+An existing project adopting it records the decision under its next available ID and aligns
+its owned DESIGN and binding summaries. Do not rewrite an accepted seed record.
 
 An existing repository that was not generated can adopt the template: run `copier copy` into its
 working tree, review the diff, and commit `.copier-answers.yml`; `copier update` works from then on.

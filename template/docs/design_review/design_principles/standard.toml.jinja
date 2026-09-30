@@ -6,13 +6,13 @@ profiles = []
 [core]
 # Repository owns this edition (ADR-0002); template updates arrive through `copier update`.
 owner = "repository"
-version = "3.0"
+version = "3.1"
 principles = "core/design-principles.md"
 template = "core/design-review-template.md"
 {% if with_ci_profile %}
 [[profiles]]
 name = "code-intelligence"
-version = "1.1"
+version = "1.2"
 prefix = "CI"
 principles = "profiles/code-intelligence/principles.md"
 review = "profiles/code-intelligence/review.md"

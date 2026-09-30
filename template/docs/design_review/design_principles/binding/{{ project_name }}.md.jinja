@@ -12,15 +12,16 @@ report a conflict and its resolution route.
 
 | Layer | Document | Version |
 |---|---|---|
-| Core | [design principles](../core/design-principles.md), [review template](../core/design-review-template.md) | 3.0 (repository-owned edition, ADR-0002) |
+| Core | [design principles](../core/design-principles.md), [review template](../core/design-review-template.md) | 3.1 (repository-owned edition, ADR-0002/0004) |
 {% if with_ci_profile -%}
-| Profile | [code-intelligence principles](../profiles/code-intelligence/principles.md), [review additions](../profiles/code-intelligence/review.md) | 1.1 |
+| Profile | [code-intelligence principles](../profiles/code-intelligence/principles.md), [review additions](../profiles/code-intelligence/review.md) | 1.2 |
 {% endif -%}
 | Binding | this page | — |
 
 The version/path declaration in [`standard.toml`](../standard.toml) is authoritative for loading.
 Preserve DP{% if with_ci_profile %}/CI{% endif %} IDs and historical version semantics; FP-01–FP-06 and A1–A3 supply the
-architecture structure.
+architecture structure. FP-04/A2 require an adequate, explicit domain model that governs
+behavior. ADR-0004 adopts core/template 3.1 and the aligned profile guidance.
 
 ## Reviews in this repository
 

@@ -1,0 +1,46 @@
+---
+id: ADR-0004
+title: Require explicit domain models to govern implementation and architectural review
+status: accepted
+date: {{ '%Y-%m-%d' | strftime }}
+supersedes: []
+superseded-by: null
+design: [§2]
+evidence: Implemented
+revisit: Reviews accept output-only or inadequate domain models, miss independent semantic interpretations, or prescribe modeling machinery without a consumer.
+---
+
+## Context
+
+Core 3.0's authority, types and fidelity requirements can be read as satisfied by consistent
+output schemas even when procedures independently define their meaning. This decision extends
+ADR-0002's repository-owned standard; its review cadence and disposition policy remain in force.
+
+## Options
+
+1. **Add only a principle paragraph.** Leaves review questions and agent summaries incomplete.
+2. **Add another foundation or a modeling framework.** Duplicates assessment or prescribes machinery.
+3. **Strengthen the existing foundations and judgments** (chosen). One governing MUST, FP-04
+   ownership and A2 acceptance preserve the other foundations and freedom of implementation.
+
+## Decision
+
+- Adopt core/template 3.1{% if with_ci_profile %} and code-intelligence guidance 1.2{% endif %}; retain existing IDs and historical review versions.
+- An explicit, coherent domain model must govern behavior wherever domain meaning is established
+  or interpreted. FP-04/A2 assess both model adequacy and authoritative realization. A deferral
+  cannot waive the requirement for supported behavior, even when outputs are currently correct.
+- Model operations as well as concepts; own invariants, contextual bindings and representation
+  contracts. Ordinary types, relations and domain functions suffice; no universal ontology,
+  custom language, registry or serialization of every operation is required.
+- Reviews trace phenomenon → authoritative concept or operation → implementation → consumer
+  → expected change. Classify changes as instances, bindings, compositions, policies, domain
+  concepts or mechanisms. Keep other architectural and fidelity judgments independent.
+- The template, reviewer, process skills and agent instructions describe the same requirement.
+  Library exploration and capability skills are unchanged; no new gate, hook or artifact type.
+
+## Consequences
+
+This is Implemented documentation policy, not a claim of product conformance. Improved change
+locality remains Proposed until supported by actual changes. A mechanism replacement preserves
+the domain contract or exposes incompatibility; no promise makes every replacement inexpensive.
+Historical reviews retain their recorded scope and standard version.

@@ -47,10 +47,13 @@ historical `supersedes` entries need not, and ADR ids are never reused. Work hap
 compile checks and targeted tests are the loop; formatting, linting and `just test-all` follow
 once all functional scope is implemented.
 
-**Design review** (ADR-0002). The repository owns core 3.0 of the design standard and declares
+**Design review** (ADR-0002/0004). The repository owns core 3.1 of the design standard and declares
 it in `docs/design_review/design_principles/standard.toml`. The six foundations organize review
-of responsibilities, contracts, composition, authority, constraints and local reasoning. A1–A3
-judge architecture independently of correctness and domain-fidelity gates. The
+of responsibilities, contracts, composition, explicit domain models and scoped semantic
+authority, constraints and local reasoning. Domain modeling is mandatory wherever implementation
+establishes or interprets domain meaning. Owned concepts and operation contracts govern behavior;
+ordinary domain functions can suffice. A2 assesses both model adequacy and authoritative behavior.
+A1–A3 judge architecture independently of correctness and domain-fidelity gates. The
 {{ project_name }} binding maps §B decisions to the standard and owns review cadence and finding
 disposition. Changing a §B decision needs an ADR and a design/target review. Acceptance,
 implementation and verification remain distinct facts.
@@ -60,7 +63,7 @@ a moved live section leaves a relocation pointer. One resolver drives ADR refere
 generated section directory. Publication derives navigation and search from sources; it does not
 prove implementation. [Publishing operations](../publishing.md) owns the commands.
 {% endif %}
-> Decision: ADR-0001, ADR-0002{% if with_docs_site %}, ADR-0003{% endif %}
+> Decision: ADR-0001, ADR-0002{% if with_docs_site %}, ADR-0003{% endif %}, ADR-0004
 
 
 No product binding decisions yet. Add each as `### §B1 <decision stated as a sentence>` with a
