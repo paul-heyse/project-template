@@ -8,7 +8,12 @@ real consumer.
 
 ## Start of session
 
-1. Read `STATUS.md`: where we are and what's next.
+The root agent reads the current checkpoint and authorities relevant to the task. Delegated
+workers follow their brief and the [shared worker contract](.agents/roles/worker.md), loading
+applicable instructions once; they do not repeat the root's full orientation. Preserve all
+permission, concurrent-work and testing constraints, and follow discovered dependencies.
+
+1. Read `STATUS.md` when resuming work or establishing the current execution baseline.
 2. For product work, read the active plan in `docs/plans/` (its current state, execution queue
    and findings table). There is at most one active plan.
 3. For design questions, follow **owner → decision → open work**:
@@ -144,7 +149,8 @@ on a pinned `uv run --no-project --python 3.14 python`.
 - **Design reviews** use `design-review` and its declared profiles{% if with_ci_profile %}
   (`design-review-code-intelligence`){% endif %}, usually through the `design-reviewer` subagent. The binding's
   **Reviews in this repository** section owns cadence and tier/purpose selection (ADR-0002).
-  Apply the principles and review skill within those bounded review periods (ADR-0005).
+  Apply the principles and review skill within those bounded review periods; [DESIGN §2](docs/design/DESIGN.md#section-2)
+  owns the current decision.
   Ordinary implementation does not initiate a domain-model review. Review depth follows impact
   and uncertainty; flow tracing is optional when it resolves a concrete question.
 - **Findings** retain stable source-review IDs. The active plan's findings table owns current
@@ -155,9 +161,11 @@ on a pinned `uv run --no-project --python 3.14 python`.
 
 ## Agent coordination
 
-Use subagents for review, planning and execution. Use concurrency as you see fit; strive for
-parallel execution. Follow the [shared roles](.agents/roles/README.md), including their explicit
-model/effort routing (ADR-0005). The root agent retains design, integration and acceptance.
+Use subagents when independent work, context isolation, distinct capabilities or independent
+judgment justify the handoff and integration cost. Keep small or tightly coupled tasks with the
+root when useful. Follow the [shared roles](.agents/roles/README.md), including model/effort routing,
+briefs and escalation. [DESIGN §2](docs/design/DESIGN.md#section-2) owns the current workflow decision.
+The root agent retains design, integration and acceptance; no fixed role sequence is required.
 
 ## Git
 

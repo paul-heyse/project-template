@@ -17,10 +17,11 @@ Every generated project gets the **core**:
 - `docs/design_review/`: the layered design standard (core 3.2), a repository binding, reviews
   and evidence conventions, the `design-review` skill and the `design-reviewer` subagent;
 - explicit concepts and operation contracts govern behavior, assessed through FP-04/A2 during
-  bounded design reviews; ordinary implementation does not initiate a modeling exercise (ADR-0005);
+  bounded design reviews; ordinary implementation does not initiate a modeling exercise (ADR-0006);
 - six shared worker roles with native Codex and Claude adapters, and paired skills for preparing
   and performing design reviews, plan creation and plan execution. The coordinator retains design,
-  integration and acceptance. Use concurrency as you see fit; strive for parallel execution;
+  integration and acceptance. Delegation depends on task independence, context or capability needs,
+  and whether its benefit justifies handoff and integration cost;
 - `docs/plans/`, `docs/pins.md` and the `pin-check` skill;
 - `.claude/settings.json` (permissions), `.agents/skills` for Codex, and
   `scripts/check_agents.py` (`just lint-agents`: every agent-facing path, link and recipe
@@ -62,12 +63,14 @@ just check && git commit -am "Template update to <tag> (just check passed)"
 
 Seeds the project owns after generation are never touched by updates: README, STATUS, DESIGN, the
 architecture map, the ADRs and their index, pins, the binding and the evidence index
-(`_skip_if_exists` in `copier.yml`).
+(`_skip_if_exists` in `copier.yml`). Root README and STATUS patterns are anchored so managed
+role and skill READMEs continue to receive workflow updates.
 
 Core 3.2 and optional code-intelligence guidance 1.3 update the review standard and agent workflows.
-Fresh projects receive ADR-0005, which carries forward domain-model quality criteria and replaces
-ADR-0004's standing assessment and tracing instructions. The retired seed is no longer generated.
-Updates exclude both seed paths to preserve project-owned ADR numbers and decisions. An existing
+Fresh projects receive ADR-0006, which carries forward bounded domain-model review criteria and
+reusable roles while introducing task-sensitive delegation, concrete escalation and stronger
+evidence/review defaults. Retired seeds are no longer generated. Updates exclude ADR-0004,
+ADR-0005 and ADR-0006 seed paths to preserve project-owned ADR numbers and decisions. An existing
 project adopting the policy records its own next available ADR and aligns its owned DESIGN and
 binding summaries; accepted records are not rewritten.
 

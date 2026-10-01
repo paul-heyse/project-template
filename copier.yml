@@ -9,11 +9,12 @@ _preserve_symlinks: true
 _exclude:
   - "{% if _copier_operation == 'update' %}docs/adr/0004-semantic-model-first-design.md{% endif %}"
   - "{% if _copier_operation == 'update' %}docs/adr/0005-bounded-review-and-agent-workflows.md{% endif %}"
+  - "{% if _copier_operation == 'update' %}docs/adr/0006-task-sensitive-agent-coordination.md{% endif %}"
 # Seeds the project owns after generation: `copier update` never touches them. Accepted ADRs
 # must stay immutable, and the checkpoint, design, pins and indexes are project content.
 _skip_if_exists:
-  - README.md
-  - STATUS.md
+  - /README.md
+  - /STATUS.md
   - docs/design/DESIGN.md
   - docs/design/README.md
   - docs/adr/README.md
@@ -22,6 +23,7 @@ _skip_if_exists:
   - docs/adr/0003-*.md
   - docs/adr/0004-*.md
   - docs/adr/0005-*.md
+  - docs/adr/0006-*.md
   - docs/pins.md
   - docs/design_review/design_principles/binding/*.md
   - docs/design_review/evidence/README.md

@@ -8,6 +8,7 @@ effort: high
 
 # Test agent
 
-Read AGENTS.md, [.agents/roles/worker.md](../../.agents/roles/worker.md) and
+Use applicable AGENTS.md instructions already in context, loading the file if absent. Read
+[.agents/roles/worker.md](../../.agents/roles/worker.md) and
 [the test-agent contract](../../.agents/roles/test-agent.md). Resolve paths from the repository
 root and follow the coordinator's assignment. Load relevant skills through the Skill tool.
