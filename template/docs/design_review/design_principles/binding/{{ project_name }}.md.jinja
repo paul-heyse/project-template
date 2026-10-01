@@ -118,11 +118,12 @@ An action uses the existing route appropriate to it:
 | Existing check | Use |
 |---|---|
 | Compile checks, focused tests/probes | During implementation: validate the scope just implemented |
-| `just fmt`, `just hygiene` | After every turn, by the end-of-turn hooks: a fixer agent repairs what it can and the operator sees the rest; agents never run them |
+| `just fmt` | After every turn, by the end-of-turn hooks; agents never run it |
+| `just hygiene` | Once at scope end, beside `just test-all`; the agent fixes what fails. The hooks never run or fix it |
 {% if with_ast_grep -%}
 | `just rules-scan`, `just rules-test` | A justified code-shape invariant; run within `hygiene` |
 {% endif -%}
 | `just adr-lint`, `just lint-agents` | Decision metadata and agent-facing links/commands; run within `hygiene` |
-| `just test-all` | Integrated functional acceptance at scope end, not every slice or process edit; qualification also cites a clean end-of-turn report for the same tree |
+| `just test-all` | Integrated functional acceptance at scope end, not every slice or process edit; qualification also cites `just hygiene` passing for the same tree |
 
 Review quality is established by scenario reasoning and calibration, not by a new checker.

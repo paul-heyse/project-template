@@ -1,7 +1,7 @@
 # Pins
 
 Every pin with how and when it was last verified. Change a pin with the `pin-check` skill: read
-the primary source{% if with_rust %}; product pin changes run the tests (the end-of-turn checks run `just deps`){% endif %}, and date the row here.
+the primary source{% if with_rust %}; product pin changes run the tests (`just hygiene` runs `just deps`){% endif %}, and date the row here.
 A row without a date is not verified: rows carried from the template say so until checked here.
 
 {% if with_rust -%}

@@ -11,7 +11,7 @@ Every generated project gets the **core**:
   (`passed`/`failed`/`blocked`/`not_run`), Git rules and working agreements;
 - `STATUS.md` and the `handoff` skill: the current checkpoint;
 - `docs/adr/` with `scripts/adr.py` (`just adr new|supersede|index|lint|revisit`) and seed
-  ADR-0001 (light process, current working set) and ADR-0002 (design review);
+  ADR-0001 (light process, current working set, automatic end-of-turn steps) and ADR-0002 (design review);
 - `docs/design/`: an architecture map and a DESIGN skeleton with stable § IDs and
   `> Decision:` lines;
 - `docs/design_review/`: the layered design standard (core 3.2), a repository binding, reviews
@@ -92,13 +92,13 @@ working tree, review the diff, and commit `.copier-answers.yml`; `copier update`
 2. `just test` renders the core, rust, python and full combinations from the working tree into
    `build/render/` and runs each project's own `just check`, every `just hygiene` check
    (`docs-check` only when the docs tools are installed) and `docs-test`, then an end-of-turn
-   smoke test: `scripts/after_turn.py stop` with the fixer off, the prompt barrier, a complete
-   report and a clean tree.
+   smoke test: `scripts/after_turn.py stop`, the background job's report with every step
+   passed, a silent prompt and a clean tree.
 3. Commit, then tag a release: `git tag vX.Y.Z && git push --follow-tags`. `copier copy` and
    `copier update` use the latest tag.
 
-Do not change the seed ADRs' decisions in place once released: a generated project's accepted
-records are immutable. Put a changed process decision in a new ADR seed instead.
+Seed ADRs are updated in place here when a process decision changes. A generated project's
+accepted records stay immutable: it records the change in its own superseding ADR.
 
 Improvements made in a generated project, or in library-context, come back here by hand.
 

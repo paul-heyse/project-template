@@ -7,7 +7,7 @@ supersedes: []
 superseded-by: null
 design: [§2]
 evidence: Implemented
-revisit: Current readers need retired documents, supersession chains or amendment logs to interpret a contract, or a process mechanism exists without a consumer.
+revisit: Current readers need retired documents, supersession chains or amendment logs to interpret a contract, or a process mechanism exists without a consumer, or the end-of-turn hooks need a step that is not automatic.
 ---
 
 ## Context
@@ -27,6 +27,11 @@ change while keeping decisions, evidence and current state findable.
 3. **A current working set with Git for recovery** (chosen): each kind of fact has one current
    owner; retired material leaves the tree and is recovered from Git on demand.
 
+For the end-of-turn hooks, a fixer agent that repairs failed checks proved brittle: it edited other
+sessions' in-progress code and needed a command guard and harness-specific plumbing. Running the
+checks only to report them leaves findings without an owner who knows the change. The hooks keep
+only automatic steps (chosen), and the agent owns `just hygiene` at scope end.
+
 ## Decision
 
 - **Ownership.** Architecture pages (DESIGN plus `docs/design/sections/`) own current contracts
@@ -40,10 +45,11 @@ change while keeping decisions, evidence and current state findable.
 - **Development loop.** Work on `main` in the current tree; use a worktree only when truly
   parallel agents must edit production code concurrently. Compile checks and targeted tests are the loop;
   `just check` and `just test-all` (functional tests only) run once all functional scope is
-  implemented, not per slice or commit. Formatting, generators and every non-functional check
-  (`just hygiene`) run in the end-of-turn hooks (`scripts/after_turn.py`), where a cheaper fixer
-  agent repairs what it can; their consumers are the operator, who sees what is left, and the next
-  turn, which starts from a clean tree. Outcomes use `passed`/`failed`/`blocked`/`not_run` with their commands.
+  implemented, not per slice or commit. The end-of-turn hooks (`scripts/after_turn.py`) run only
+  automatic steps: formatting with safe auto-fixes, generators and readiness. They fix nothing
+  else, never block the next prompt and show failed steps to the operator only. Every
+  non-functional check (`just hygiene`: type errors, lint, policy) runs once at scope end beside
+  `just test-all`, and the agent fixes what fails. Outcomes use `passed`/`failed`/`blocked`/`not_run` with their commands.
 - **Proportion.** Before adding a hook, gate, register or document type, name its consumer.
 
 ## Consequences

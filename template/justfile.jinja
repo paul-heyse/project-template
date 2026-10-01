@@ -2,7 +2,8 @@
 # The only command surface agents need. `just` lists recipes.
 # Check recipes do not edit source, except `ruff`'s auto-fixes; tests may create their own data.
 # `fmt`, `skills-sync` and `adr new|supersede|index` edit the working tree. Agents run functional
-# tests; the end-of-turn hook (`scripts/after_turn.py`) runs formatting, generators and `hygiene`.
+# tests and, at scope end, `hygiene`; the end-of-turn hook (`scripts/after_turn.py`) runs only
+# formatting and generators.
 
 set shell := ["bash", "-euo", "pipefail", "-c"]
 
@@ -16,8 +17,8 @@ check:{% if with_rust %} test{% endif %}{% if with_python %} py-test{% else %} s
 # Everything functional (end-of-scope acceptance, not the design loop)
 test-all: check
 
-# The end-of-turn hook runs every dependency below after each turn
-# (`scripts/after_turn.py check <id>` re-runs one); agents do not.
+# Agents run this once at scope end, beside `test-all`, and fix what fails (`just <id>` re-runs
+# one); the end-of-turn hook does not run it.
 # Every non-functional check, one check id per dependency
 hygiene: lint-agents adr-lint{% if with_ast_grep %} rules-scan rules-test{% endif %}{% if with_python %} ruff types{% endif %}{% if with_docs_site %} docs-check{% endif %}{% if with_rust %} deps clippy{% endif %}
 

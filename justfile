@@ -42,17 +42,17 @@ combo name data:
       just "$check"
     done
     if [ -f docs/site.toml ] && $docs_tools; then echo "== {{name}}: just docs-test"; just docs-test; fi
-    echo "== {{name}}: end-of-turn smoke (fixer off)"
-    echo '{}' | AFTER_TURN_FIXER=off uv run --no-project --python 3.14 python scripts/after_turn.py stop --harness claude
-    uv run --no-project --python 3.14 python scripts/after_turn.py prompt --harness claude </dev/null >/dev/null
-    python3 - "$(git rev-parse --absolute-git-dir)/after-turn/report.json" "$docs_tools" <<'EOF'
+    echo "== {{name}}: end-of-turn smoke"
+    report="$(git rev-parse --absolute-git-dir)/after-turn/report.json"
+    echo '{}' | uv run --no-project --python 3.14 python scripts/after_turn.py stop --harness claude
+    for _ in $(seq 600); do [ -f "$report" ] && break; sleep 1; done
+    python3 - "$report" <<'EOF'
     import json, sys
     report = json.load(open(sys.argv[1]))
-    failed = sorted(k for k, v in report["checks"].items() if v["status"] != "passed")
-    allowed = [] if sys.argv[2] == "true" else ["docs-check"]
-    assert report["complete"], "end-of-turn report incomplete"
-    assert set(failed) <= set(allowed), f"end-of-turn checks failed: {failed}"
-    print(f"end-of-turn report: {len(report['checks'])} steps, failed {failed or 'none'}")
+    failed = sorted(k for k, v in report["steps"].items() if v["status"] != "passed")
+    assert not failed, f"end-of-turn steps failed: {failed}"
+    print(f"end-of-turn report: {len(report['steps'])} steps, failed none")
     EOF
+    test -z "$(uv run --no-project --python 3.14 python scripts/after_turn.py prompt --harness claude </dev/null)" || { echo "{{name}}: prompt hook printed output"; exit 1; }
     test -z "$(git status --porcelain)" || { echo "{{name}}: checks left the tree dirty"; git status --short; exit 1; }
     echo "== {{name}}: passed"
