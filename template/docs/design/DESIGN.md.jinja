@@ -63,8 +63,8 @@ disposition. Changing a §B decision needs an ADR and a design/target review. Ac
 implementation and verification remain distinct facts.
 
 **Agent workflow — Implemented** (ADR-0006). [Shared role contracts](../../.agents/roles/README.md)
-define six reusable worker responsibilities, while native Codex and Claude adapters own model and
-tool settings. The coordinator owns design, integration and acceptance. Delegate when independent work, context isolation, distinct capabilities or independent judgment
+define six reusable worker responsibilities, while native Codex and Claude adapters own model settings
+only; no role file restricts tools or sandbox, so the contracts alone bound each role's effects. The coordinator owns design, integration and acceptance. Delegate when independent work, context isolation, distinct capabilities or independent judgment
 justify handoff and integration cost; small or tightly coupled tasks may remain with the root.
 Shared roles own task-specific context, concrete briefs and evidence-based escalation. Paired skills prepare and perform reviews, plan creation and
 execution. Plan creation includes focused assessment of foundations and schedules necessary

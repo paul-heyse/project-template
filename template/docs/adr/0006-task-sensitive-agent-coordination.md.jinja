@@ -50,11 +50,11 @@ its general preference for parallel execution and previous evidence/review model
   independent judgment justify handoff and integration cost. Parallelize ready independent work;
   small or tightly coupled tasks may remain with the coordinator. No fixed role sequence applies.
 - [Shared contracts](../../.agents/roles/README.md) own responsibilities. Native Codex and Claude
-  adapters own model/tool settings; Claude's `implementer` adapts the executor role. Explicit
-  user/runtime settings retain authority. Codex role files carry no sandbox settings: Codex applies
-  the session's sandbox to every role. `library-research` may write the evidence locations AGENTS.md
-  names and a shared library skill its brief assigns, as its contract states; Claude grants it
-  Write/Edit for that. Codex implementation-reviewer uses gpt-6.1-sol/high;
+  adapters own model settings; Claude's `implementer` adapts the executor role. Explicit
+  user/runtime settings retain authority. Native role files carry no tool lists or sandbox settings:
+  every role inherits the session's tools and sandbox, and the shared contracts alone bound its
+  effects. `library-research` may write the evidence locations AGENTS.md names and a shared
+  library skill its brief assigns, as its contract states. Codex implementation-reviewer uses gpt-6.1-sol/high;
   Claude code-mapper and library-research use Sonnet/medium, and design-reviewer uses Opus/high.
   Other allocations stay unchanged; the shared role table owns current routing. These are policy
   defaults; model-quality improvements and resource savings remain unmeasured.
