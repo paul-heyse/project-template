@@ -1,4 +1,5 @@
-# cargo-deny policy: allowed sources and licenses (`just deps`).
+# cargo-deny policy (`just deps` checks bans and sources; licences are never a rejection reason,
+# so the license list below is informational).
 # The single-version family rule lives in scripts/check_pins.py, which reads Cargo.lock directly
 # so dev-only duplicates count too, and matches crate-name patterns rather than a name list.
 
@@ -14,8 +15,8 @@ wildcards = "allow"
 
 [sources]
 unknown-registry = "deny"
-unknown-git = "deny"
-# Add each pinned git repository here, with the reason.
+unknown-git = "allow"
+# A git dependency is an exact pin: its reason is a docs/pins.md row, so no allowlist is kept here.
 allow-git = []
 
 [licenses]

@@ -41,7 +41,7 @@ permission, concurrent-work and testing constraints, and follow discovered depen
 | `docs/design_review/design_principles/` | The layered design standard, declared in `standard.toml`: six foundations (FP-01–06), including an explicit domain model and scoped semantic authority; independent architectural judgments A1–A3, supporting rules DP-01–24 and gates G1–G8{% if with_ci_profile %}, the code-intelligence profile{% endif %}, and the repository binding (ADR-0002) |
 | `docs/design_review/reviews/` | Review outputs: evidence, never authority; kept while a finding they supply is open |
 | `docs/design_review/evidence/` | Probes, spikes and investigations behind decisions, one `YYYY-MM-DD_<topic>/` folder each with a README; raw outputs and binaries through Git LFS; never venvs or `target/`. Put probes here, not in a session scratchpad |
-| `docs/pins.md` | Every pin, with dated verification |
+| `docs/pins.md` | Deliberate pins only, each with its reason and when to revisit it |
 {% if with_rust -%}
 | `crates/` | The Rust workspace; `crates/{{ crate_name }}` is the starter crate |
 {% endif -%}
@@ -58,8 +58,9 @@ permission, concurrent-work and testing constraints, and follow discovered depen
 | After all functional scope in the plan is implemented | `just test-all`: the functional tests (`just check`). Then `just hygiene`, every non-functional check, once; fix what fails and re-run a single check with `just <id>`. Qualification cites both passing for the same tree |
 | After every turn (automatic) | The end-of-turn hooks (`scripts/after_turn.py`, configured in `.config/after-turn.toml` and wired in `.claude/settings.json` and `.codex/hooks.json`) run once the main agent stops: `just skills-sync`, `just adr-index` and `just fmt` (with ruff's safe auto-fixes); then, in the background, `just doctor-check`. The operator, never the model, sees failed steps; the next prompt never waits. The hooks run no other checks and fix nothing: type errors, lint and policy findings are yours, through `just hygiene` at scope end. Don't run the formatters or generators yourself |
 {% if with_rust -%}
-| Dependency policy | `just deps`, a `hygiene` check: exact workspace pins with a `docs/pins.md` row, one version per declared family (`[workspace.metadata.pins]` in `Cargo.toml`), and cargo-deny sources and licenses |
+| Dependency policy | `just deps`, a `hygiene` check: each declared family (`[workspace.metadata.pins]` in `Cargo.toml`) resolves to one version, every exact pin or git rev has a `docs/pins.md` row, and cargo-deny checks bans and sources |
 {% endif -%}
+| Move dependencies to the latest | `just upgrade` (root) or `just upgrade <dir> …` (sub-projects), at your discretion; then the affected tests |
 | Decisions | `just adr new <slug> --title "…"`, `just adr supersede ADR-NNNN <slug>`, `just adr revisit`; the end-of-turn hooks regenerate the index; `just adr-lint` runs within `just hygiene` |
 {% if with_docs_site -%}
 | Documentation changes | `just docs-test` for publisher/resolver changes; `docs-check` (publication) runs within `just hygiene`. First run: `just bootstrap-docs`; preview: `just docs-serve`. No product gate solely for docs. |
@@ -92,8 +93,23 @@ on a pinned `uv run --no-project --python 3.14 python`.
   writing against an API rather than relying on memory, and list it in
   `.claude/skills/README.md`.
 - For a library no skill covers, **Context7 is the first stop**, then primary sources. Check a
-  skill's or document's version against `docs/pins.md` before transferring a claim. An empty
-  search result is not evidence that a capability is absent.
+  skill's or document's version against the locked version (`uv.lock`{% if with_rust %}/`Cargo.lock`{% endif %}) before
+  transferring a claim. An empty search result is not evidence that a capability is absent.
+
+### Dependencies
+
+- **Add freely.** Add any library the work warrants without asking: no ADR and no
+  `docs/pins.md` row. Use the tool's default specifier — `uv add` (a `>=` floor){% if with_rust %}, `cargo add`
+  (a caret requirement){% endif %}.
+- **Latest by default.** The resolver picks versions; the committed lockfiles record them and
+  the `--locked` gates keep runs reproducible. Move to the latest at your discretion with
+  `just upgrade`, then run the tests the move affects.
+- **Pin only for a reason.** An exact version, upper cap, git rev or hold-back needs an overt
+  reason specific to that dependency — a named breakage, a type-sharing family that must
+  resolve to one version, a fork or vendored source, golden or byte-stable output, a parity
+  oracle, wheel availability — recorded in `docs/pins.md` with when to revisit it (the
+  `pin-check` skill{% if with_rust %}; `just deps` checks that every exact pin has a row{% endif %}).
+  Reproducibility, "already in the lock" and a version entering a key or digest are not reasons.
 
 ## Testing rules
 

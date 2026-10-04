@@ -1,4 +1,4 @@
-# Copier template: a pinned, low-friction project with the library-context working system.
+# Copier template: a low-friction project with the library-context working system.
 # `copier copy gh:paul-heyse/project-template <dir>`; `copier update` in a generated project.
 
 _min_copier_version: "9.18.2"
@@ -55,7 +55,7 @@ python_version:
 
 with_rust:
   type: bool
-  help: Rust layer (toolchain pin, workspace lints, sccache + clang/mold, nextest, cargo-deny, pin policy)
+  help: Rust layer (toolchain pin, workspace lints, sccache + clang/mold, nextest, cargo-deny, dependency policy)
   default: true
 
 rust_toolchain:

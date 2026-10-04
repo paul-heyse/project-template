@@ -1,42 +1,34 @@
 # Pins
 
-Every pin with how and when it was last verified. Change a pin with the `pin-check` skill: read
-the primary source{% if with_rust %}; product pin changes run the tests (`just hygiene` runs `just deps`){% endif %}, and date the row here.
-A row without a date is not verified: rows carried from the template say so until checked here.
+Dependencies float: manifests carry the tool's default specifier
+(`uv add` → `>=`{% if with_rust %}, `cargo add` → caret{% endif %}), the committed lockfiles record the resolved versions, and
+`just upgrade` moves them to the latest at an agent's discretion. This page lists only the deliberate exceptions — an
+exact version, cap, git rev or hold-back — each with the reason specific to that dependency and
+when to revisit it. Add, change or remove a row with the `pin-check` skill. A dependency with
+no row here is whatever the lockfile holds.
 
+## Toolchains
+
+| Component | Pin | Reason | Revisit when | Verified |
+|---|---|---|---|---|
+| Python | {{ python_version }} (`.python-version`, uv) | Interpreter and toolchain versions are outside the float policy for now | the policy extends to toolchains | not yet (template): `uv run --no-project python --version` |
+| just | 1.58.0 or later | Interpreter and toolchain versions are outside the float policy for now | the policy extends to toolchains | not yet (template): `just --version` |
 {% if with_rust -%}
-## Rust
-
-| Component | Pin | Verified | How |
-|---|---|---|---|
-| toolchain | {{ rust_toolchain }} (`rust-toolchain.toml`) | not yet (template) | `rustc --version` inside the repo |
-
-Workspace dependencies are pinned exactly (`=x.y.z` or a git `rev`) and each needs a row here;
-`just deps` enforces both. Declare crate families that must resolve to one version in
-`[workspace.metadata.pins] families` in `Cargo.toml`.
-
-{% endif -%}
-## Dev tools
-
-| Tool | Version | Verified | How |
-|---|---|---|---|
-| Python | {{ python_version }} (`.python-version`, uv) | not yet (template) | `uv run --no-project python --version` |
-| just | 1.58.0 or later | not yet (template) | `just --version` |
-{% if with_python -%}
-| ruff | 0.16.7 (uv dev group) | not yet (template) | `uv run ruff --version` |
-| pyrefly | 1.3.1 (uv dev group) | not yet (template) | `uv run pyrefly --version` |
-| pytest | `uv.lock` | not yet (template) | `uv sync` |
-| Hypothesis | 6.168.1 (uv dev group) | not yet (template) | `uv run python -c 'import hypothesis; print(hypothesis.__version__)'` |
-{% endif -%}
-{% if with_rust -%}
-| cargo-nextest | installed | not yet (template) | `just doctor` |
-| cargo-deny | installed | not yet (template) | `just doctor` |
-| sccache | installed (required by `.cargo/config.toml`) | not yet (template) | `sccache --version` |
-{% endif -%}
-{% if with_ast_grep -%}
-| ast-grep | installed | not yet (template) | `just doctor` |
+| Rust toolchain | {{ rust_toolchain }} (`rust-toolchain.toml`, `rust-version`) | Interpreter and toolchain versions are outside the float policy for now | the policy extends to toolchains | not yet (template): `rustc --version` inside the repo |
 {% endif %}
+## Dependencies
+
+| Component | Pin | Reason | Revisit when | Verified |
+|---|---|---|---|---|
+{%- if with_rust %}
+
+A caret requirement (what `cargo add` writes) needs nothing here. An exact `=x.y.z` or a git
+`rev` needs a row in this table; `just deps` checks that it has one. Declare crate families
+that must resolve to one version in `[workspace.metadata.pins] families` in `Cargo.toml`.
+{%- endif %}
 {%- if with_docs_site %}
-Documentation binaries are pinned only in [site.toml](site.toml); change them with focused
-`just docs-test` and `just docs-check`.
-{% endif %}
+
+Documentation binaries are listed in [site.toml](site.toml). A tool listed there without a
+version means the latest; a version given there is a pin and needs a row here. Change them with
+focused `just docs-test` and `just docs-check`.
+{%- endif %}

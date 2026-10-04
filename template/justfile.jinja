@@ -45,10 +45,11 @@ clippy:
 test *args:
     INSTA_UPDATE=no cargo nextest run --release --workspace --no-tests=pass {% raw %}{{args}}{% endraw %}
 
-# Exact workspace pins with a docs/pins.md row, one version per declared family, cargo-deny
+# One version per declared family, a docs/pins.md row for every exact pin or git rev, and
+# cargo-deny bans and sources (licences are never a rejection reason)
 deps:
     uv run --no-project python scripts/check_pins.py
-    cargo deny --log-level error check bans sources licenses
+    cargo deny --log-level error check bans sources
 {% endif %}
 {%- if with_python %}
 # ruff lint, applying its safe auto-fixes first
@@ -76,6 +77,26 @@ rules-scan:
 rules-test:
     @if ls rules/*.yml >/dev/null 2>&1; then ast-grep test --skip-snapshot-tests; else echo "rules-test: not_run (no rules yet)"; fi
 {% endif %}
+# Move lockfiles to the latest versions the manifests allow, at the agent's discretion; then run
+# the tests the move affects. Upgrade-specific checks join this recipe when a need emerges.
+# `just upgrade` moves the root workspace; `just upgrade <dir> …` moves those sub-projects' locks.
+upgrade *projects:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    if [ -z "{% raw %}{{ projects }}{% endraw %}" ]; then
+{%- if with_python %}
+        uv lock --upgrade
+{%- endif %}
+{%- if with_rust %}
+        cargo update
+{%- endif %}
+{%- if not formats %}
+        echo "upgrade: no root lockfile; name the sub-projects to move"
+{%- endif %}
+    else
+        for p in {% raw %}{{ projects }}{% endraw %}; do uv lock --upgrade --project "$p"; done
+    fi
+
 # ADR tooling: new <slug> [--title T] | supersede <ADR-NNNN> <slug> | index | lint | revisit
 [positional-arguments]
 adr *args:
@@ -109,7 +130,7 @@ doctor-check:
     printf '%s\n' "$out"
     [ "$status" -eq 0 ] && ! grep -qE 'MISSING|FAILED|below the declared floor' <<<"$out"
 
-# Tool presence and versions (compare with docs/pins.md)
+# Tool presence and the versions in use
 doctor:
     #!/usr/bin/env bash
     for t in just uv git git-lfs gh rg{% if with_rust %} cargo rustc cargo-nextest cargo-insta cargo-deny clang mold sccache{% endif %}{% if with_ast_grep %} ast-grep{% endif %}; do

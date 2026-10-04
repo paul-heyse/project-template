@@ -19,7 +19,7 @@ Workflows for building this repository. A skill is added when a workflow has act
 | [`plan-execution/`](plan-execution/SKILL.md) | Develop the approach to carrying out an existing plan |
 | [`execute-plan/`](execute-plan/SKILL.md) | Carry authorized scope through implementation, review, functional verification and handoff |
 | [`handoff/`](handoff/SKILL.md) | Rewrite STATUS.md from the actual tree at session end |
-| [`pin-check/`](pin-check/SKILL.md) | Change or re-verify any dependency or tool pin |
+| [`pin-check/`](pin-check/SKILL.md) | Deliberately pin, cap or hold a dependency, or verify a version claim |
 
 In Codex, use `/plan $plan-design-review <goal>`, `/plan $plan-creation <reference and goal>` or
 `/plan $plan-execution <plan and scope>` to develop the approach. Leave Plan mode to perform the
@@ -38,7 +38,7 @@ Pinned, offline indexes of the libraries this project builds on. They exist beca
 writing against a fast-moving library otherwise writes the API it remembers. They are large and
 repo-agnostic, so this repo ignores them; list each one here when it is added, so agent-facing
 links to it resolve. Silence in an index is not evidence of absence. Check a skill's pinned
-profile against `docs/pins.md` before transferring a claim.
+profile against the locked version (`uv.lock`{% if with_rust %}/`Cargo.lock`{% endif %}) before transferring a claim.
 
 | Repository | Indexes | Built from |
 |---|---|---|

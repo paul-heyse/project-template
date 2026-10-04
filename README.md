@@ -1,6 +1,6 @@
 # project-template
 
-A [Copier](https://copier.readthedocs.io/) template for a pinned, low-friction, single-operator
+A [Copier](https://copier.readthedocs.io/) template for a low-friction, single-operator
 project, carrying the working system extracted from
 [library-context](https://github.com/paul-heyse/library-context), with the shared agent workflows
 and bounded-review policy aligned on 2026-09-30.
@@ -22,7 +22,10 @@ Every generated project gets the **core**:
   and performing design reviews, plan creation and plan execution. The coordinator retains design,
   integration and acceptance. Delegation depends on task independence, context or capability needs,
   and whether its benefit justifies handoff and integration cost;
-- `docs/plans/`, `docs/pins.md` and the `pin-check` skill;
+- `docs/plans/`; a dependency policy where libraries are added freely and float to the latest
+  (`uv add`/`cargo add` defaults, committed lockfiles, `just upgrade` at the agent's discretion),
+  with `docs/pins.md` listing only deliberate pins, each with its reason, through the `pin-check`
+  skill;
 - `.claude/settings.json` (permissions), `.agents/skills` for Codex, and
   `scripts/check_agents.py` (`just lint-agents`: every agent-facing path, link and recipe
   resolves);
@@ -33,7 +36,7 @@ Every generated project gets the **core**:
 
 | Question | Default | Adds |
 |---|---|---|
-| `with_rust` | yes | `rust-toolchain.toml`, workspace lints and profiles, `.cargo/config.toml` (sccache, clang + mold), nextest, cargo-deny, `scripts/check_pins.py` (`just deps`), a starter crate |
+| `with_rust` | yes | `rust-toolchain.toml`, workspace lints and profiles, `.cargo/config.toml` (sccache, clang + mold), nextest, cargo-deny bans and sources, `scripts/check_pins.py` (`just deps`: declared families resolve to one version, every exact pin or git rev has a pins row), a starter crate |
 | `with_python` | yes | `pyproject.toml` with ruff, pyrefly, pytest and Hypothesis; `just py-test`, `ruff`, `types` |
 | `with_ast_grep` | yes | `sgconfig.yml`, empty `rules/` and `rule-tests/`, `just rules-scan` / `rules-test` |
 | `with_docs_site` | no | mdBook + Pagefind + lychee via `scripts/docs.py`, a docs-only CI workflow, ADR-0003 |

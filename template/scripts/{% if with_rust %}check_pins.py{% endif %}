@@ -1,8 +1,9 @@
-"""Rust pin policy: exact workspace pins with a docs/pins.md row, one version per pinned family.
+"""Rust dependency policy: deliberate pins have a docs/pins.md row; one version per family.
 
-- Every `[workspace.dependencies]` entry is pinned exactly (`=x.y.z` or a git `rev`) and has a
-  row in `docs/pins.md`, so `cargo update` cannot move it without a reviewed diff. A row names
-  the crate anywhere in the page, or matches a first-column glob such as `arrow-*`.
+- Workspace dependencies float by default: a caret, tilde or range requirement (what `cargo add`
+  writes) needs nothing. Only a deliberate pin, an exact `=x.y.z` or a git `rev`/`tag`, must
+  have a row in `docs/pins.md` recording its reason. A row names the crate anywhere in the page,
+  or matches a first-column glob such as `arrow-*`.
 - `[workspace.metadata.pins] families` lists crate-name patterns whose types cross crate
   boundaries (e.g. `"arrow(-.+)?"`). Two versions of such a crate compile but are incompatible
   at every boundary, so a lockfile holding two fails. Cargo.lock is read directly, so
@@ -51,11 +52,14 @@ def unpinned(manifest: Path, pins: Path) -> list[str]:
     problems = []
     for name, spec in sorted(deps.items()):
         version = spec if isinstance(spec, str) else spec.get("version")
-        exact = (version or "").startswith("=") or (isinstance(spec, dict) and "rev" in spec)
-        if not exact:
-            problems.append(f"{name}: not pinned exactly ({version!r})")
+        if (version or "").startswith("="):
+            kind = "exact pin"
+        elif isinstance(spec, dict) and ("rev" in spec or "tag" in spec):
+            kind = "git rev"
+        else:
+            continue
         if name not in text and not any(name.startswith(g) for g in globs):
-            problems.append(f"{name}: no docs/pins.md row")
+            problems.append(f"{name}: {kind} without a docs/pins.md row")
     return problems
 
 

@@ -31,11 +31,17 @@ name = "syn"
 version = "2.0.0"
 """
 
+PINNED = """serde = "=1.0.228"
+fork = { git = "https://example.invalid/fork", rev = "abc" }
+"""
+
 
 @pytest.fixture
 def root(tmp_path: Path) -> Path:
     (tmp_path / "docs").mkdir()
-    (tmp_path / "docs" / "pins.md").write_text("| `arrow-*` | =59.3.0 | 2026-09-26 | read |\n")
+    (tmp_path / "docs" / "pins.md").write_text(
+        "| `arrow-*` | =59.3.0 | one family version | arrow 60 | 2026-09-26 |\n"
+    )
     (tmp_path / "Cargo.toml").write_text(MANIFEST)
     (tmp_path / "Cargo.lock").write_text(LOCK)
     return tmp_path
@@ -59,13 +65,31 @@ def test_no_declared_families_checks_only_pins(root: Path) -> None:
     assert check_pins.main([], root) == 0
 
 
-def test_a_range_pin_and_a_missing_row_fail(root: Path) -> None:
-    (root / "Cargo.toml").write_text(MANIFEST + 'serde = "1"\n')
+def test_a_caret_dependency_needs_no_row(root: Path) -> None:
+    (root / "Cargo.toml").write_text(MANIFEST + 'serde = "1.0.228"\ntoml = { version = "0.9" }\n')
+    assert check_pins.unpinned(root / "Cargo.toml", root / "docs" / "pins.md") == []
+    assert check_pins.main([], root) == 0
+
+
+def test_an_exact_pin_or_git_rev_without_a_row_fails(root: Path) -> None:
+    (root / "Cargo.toml").write_text(MANIFEST + PINNED)
     assert check_pins.unpinned(root / "Cargo.toml", root / "docs" / "pins.md") == [
-        "serde: not pinned exactly ('1')",
-        "serde: no docs/pins.md row",
+        "fork: git rev without a docs/pins.md row",
+        "serde: exact pin without a docs/pins.md row",
     ]
     assert check_pins.main([], root) == 1
+
+
+def test_an_exact_pin_or_git_rev_with_a_row_passes(root: Path) -> None:
+    (root / "Cargo.toml").write_text(MANIFEST + PINNED)
+    pins = root / "docs" / "pins.md"
+    pins.write_text(
+        pins.read_text()
+        + "| serde | =1.0.228 | golden output | upstream fix | 2026-10-04 |\n"
+        + "| fork | rev abc | fork | upstream merge | 2026-10-04 |\n"
+    )
+    assert check_pins.unpinned(root / "Cargo.toml", pins) == []
+    assert check_pins.main([], root) == 0
 
 
 def test_missing_lockfile_is_not_run_not_failure(root: Path) -> None:
