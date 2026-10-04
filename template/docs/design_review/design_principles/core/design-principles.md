@@ -1,6 +1,7 @@
 # Design principles
 
 **Version 3.2 · 2026-09-30** · Core layer: repository- and domain-agnostic.
+DP-14/DP-15 wording revised 2026-10-04 (resolved version, not "pin"); obligations unchanged.
 Supersedes core 3.1; §I preserves its lineage and the Data Model–Based Design Charter 1.0 ID map.
 
 > **Localize change. Encode domain meaning explicitly. Extend through composition.**

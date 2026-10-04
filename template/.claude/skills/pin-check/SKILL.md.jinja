@@ -26,8 +26,8 @@ needs no pin and no row. This skill covers the deliberate exceptions recorded in
    Not reasons: reproducibility (the lockfile gives it), "already in the lock", or a version
    entering a key or digest (a bump re-keys).
 3. Write the pin, then run the tests the change affects; `just test-all` at the end of the
-   scope.{% if with_rust %} `just hygiene` runs `just deps`: every exact pin or git rev has a row, declared
-   families resolve to one version, and cargo-deny checks bans and sources.{% endif %}
+   scope.{% if with_rust %} `just hygiene` runs `just deps`: every exact pin, cap or git rev has a row, declared
+   families are pinned exactly and resolve to one version, and cargo-deny checks bans and sources.{% endif %}
 {%- if with_docs_site %}
    For documentation binaries in `docs/site.toml`: a tool listed without a version means the
    latest; a version given there is a pin with a `docs/pins.md` row. Verify the installed

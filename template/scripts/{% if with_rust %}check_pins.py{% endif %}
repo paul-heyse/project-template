@@ -1,9 +1,11 @@
 """Rust dependency policy: deliberate pins have a docs/pins.md row; one version per family.
 
-- Workspace dependencies float by default: a caret, tilde or range requirement (what `cargo add`
-  writes) needs nothing. Only a deliberate pin, an exact `=x.y.z` or a git `rev`/`tag`, must
-  have a row in `docs/pins.md` recording its reason. A row names the crate anywhere in the page,
-  or matches a first-column glob such as `arrow-*`.
+- Workspace dependencies float by default: a caret requirement (what `cargo add` writes) or an
+  open `>=` floor needs nothing. A deliberate pin needs a row in `docs/pins.md` recording its
+  reason: an exact `=x.y.z`, a cap (`<`, `<=`, `~` or a wildcard) or a git `rev`/`tag`. A row
+  names the crate anywhere in the page, or matches a first-column glob such as `arrow-*`.
+- A member of a declared family is pinned exactly (one glob row covers the family), so an
+  update cannot move one member without the others.
 - `[workspace.metadata.pins] families` lists crate-name patterns whose types cross crate
   boundaries (e.g. `"arrow(-.+)?"`). Two versions of such a crate compile but are incompatible
   at every boundary, so a lockfile holding two fails. Cargo.lock is read directly, so
@@ -39,8 +41,22 @@ def duplicates(lockfile: Path, family: re.Pattern[str] | None) -> dict[str, list
     return {name: sorted(v) for name, v in versions.items() if len(v) > 1}
 
 
+def pin_kind(spec: str | dict) -> str | None:
+    """`exact pin`, `cap` or `git rev` for a deliberate pin; None for a caret or open floor."""
+    if isinstance(spec, dict) and ("rev" in spec or "tag" in spec):
+        return "git rev"
+    version = spec if isinstance(spec, str) else spec.get("version")
+    comparators = [c.strip() for c in (version or "").split(",") if c.strip()]
+    if any(c.startswith("=") for c in comparators):
+        return "exact pin"
+    if any(c.startswith(("<", "~")) or "*" in c for c in comparators):
+        return "cap"
+    return None
+
+
 def unpinned(manifest: Path, pins: Path) -> list[str]:
     deps = tomllib.loads(manifest.read_text()).get("workspace", {}).get("dependencies", {})
+    family = families(manifest)
     text = pins.read_text()
     globs = [
         cell.strip(" `")[:-1]
@@ -51,12 +67,12 @@ def unpinned(manifest: Path, pins: Path) -> list[str]:
     ]
     problems = []
     for name, spec in sorted(deps.items()):
-        version = spec if isinstance(spec, str) else spec.get("version")
-        if (version or "").startswith("="):
-            kind = "exact pin"
-        elif isinstance(spec, dict) and ("rev" in spec or "tag" in spec):
-            kind = "git rev"
-        else:
+        kind = pin_kind(spec)
+        local = isinstance(spec, dict) and "path" in spec
+        if family and family.match(name) and kind not in ("exact pin", "git rev") and not local:
+            problems.append(f"{name}: family member not pinned exactly")
+            continue
+        if kind is None:
             continue
         if name not in text and not any(name.startswith(g) for g in globs):
             problems.append(f"{name}: {kind} without a docs/pins.md row")

@@ -58,7 +58,7 @@ permission, concurrent-work and testing constraints, and follow discovered depen
 | After all functional scope in the plan is implemented | `just test-all`: the functional tests (`just check`). Then `just hygiene`, every non-functional check, once; fix what fails and re-run a single check with `just <id>`. Qualification cites both passing for the same tree |
 | After every turn (automatic) | The end-of-turn hooks (`scripts/after_turn.py`, configured in `.config/after-turn.toml` and wired in `.claude/settings.json` and `.codex/hooks.json`) run once the main agent stops: `just skills-sync`, `just adr-index` and `just fmt` (with ruff's safe auto-fixes); then, in the background, `just doctor-check`. The operator, never the model, sees failed steps; the next prompt never waits. The hooks run no other checks and fix nothing: type errors, lint and policy findings are yours, through `just hygiene` at scope end. Don't run the formatters or generators yourself |
 {% if with_rust -%}
-| Dependency policy | `just deps`, a `hygiene` check: each declared family (`[workspace.metadata.pins]` in `Cargo.toml`) resolves to one version, every exact pin or git rev has a `docs/pins.md` row, and cargo-deny checks bans and sources |
+| Dependency policy | `just deps`, a `hygiene` check: each declared family (`[workspace.metadata.pins]` in `Cargo.toml`) resolves to one version, family members are pinned exactly, every exact pin, cap or git rev has a `docs/pins.md` row, and cargo-deny checks bans and sources |
 {% endif -%}
 | Move dependencies to the latest | `just upgrade` (root) or `just upgrade <dir> …` (sub-projects), at your discretion; then the affected tests |
 | Decisions | `just adr new <slug> --title "…"`, `just adr supersede ADR-NNNN <slug>`, `just adr revisit`; the end-of-turn hooks regenerate the index; `just adr-lint` runs within `just hygiene` |
@@ -108,7 +108,7 @@ on a pinned `uv run --no-project --python 3.14 python`.
   reason specific to that dependency — a named breakage, a type-sharing family that must
   resolve to one version, a fork or vendored source, golden or byte-stable output, a parity
   oracle, wheel availability — recorded in `docs/pins.md` with when to revisit it (the
-  `pin-check` skill{% if with_rust %}; `just deps` checks that every exact pin has a row{% endif %}).
+  `pin-check` skill{% if with_rust %}; `just deps` checks that every exact pin, cap or git rev has a row{% endif %}).
   Reproducibility, "already in the lock" and a version entering a key or digest are not reasons.
 
 ## Testing rules

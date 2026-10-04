@@ -22,9 +22,11 @@ no row here is whatever the lockfile holds.
 |---|---|---|---|---|
 {%- if with_rust %}
 
-A caret requirement (what `cargo add` writes) needs nothing here. An exact `=x.y.z` or a git
-`rev` needs a row in this table; `just deps` checks that it has one. Declare crate families
-that must resolve to one version in `[workspace.metadata.pins] families` in `Cargo.toml`.
+A caret requirement (what `cargo add` writes) or an open `>=` floor needs nothing here. An
+exact `=x.y.z`, a cap (`<`, `<=`, `~`, a wildcard) or a git `rev` needs a row in this table;
+`just deps` checks that it has one. Declare crate families that must resolve to one version in
+`[workspace.metadata.pins] families` in `Cargo.toml`, and pin their members exactly (one glob
+row such as `arrow-*` covers a family).
 {%- endif %}
 {%- if with_docs_site %}
 

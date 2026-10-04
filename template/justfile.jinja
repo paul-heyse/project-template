@@ -45,7 +45,7 @@ clippy:
 test *args:
     INSTA_UPDATE=no cargo nextest run --release --workspace --no-tests=pass {% raw %}{{args}}{% endraw %}
 
-# One version per declared family, a docs/pins.md row for every exact pin or git rev, and
+# One exact version per declared family, a docs/pins.md row for every exact pin, cap or git rev, and
 # cargo-deny bans and sources (licences are never a rejection reason)
 deps:
     uv run --no-project python scripts/check_pins.py
@@ -78,7 +78,8 @@ rules-test:
     @if ls rules/*.yml >/dev/null 2>&1; then ast-grep test --skip-snapshot-tests; else echo "rules-test: not_run (no rules yet)"; fi
 {% endif %}
 # Move lockfiles to the latest versions the manifests allow, at the agent's discretion; then run
-# the tests the move affects. Upgrade-specific checks join this recipe when a need emerges.
+# the tests the move affects. Upgrade-specific checks join this recipe when a need emerges{% if with_rust %}
+# (`just deps` re-checks the families and pins after `cargo update`){% endif %}.
 # `just upgrade` moves the root workspace; `just upgrade <dir> …` moves those sub-projects' locks.
 upgrade *projects:
     #!/usr/bin/env bash
@@ -89,6 +90,7 @@ upgrade *projects:
 {%- endif %}
 {%- if with_rust %}
         cargo update
+        just deps
 {%- endif %}
 {%- if not formats %}
         echo "upgrade: no root lockfile; name the sub-projects to move"
