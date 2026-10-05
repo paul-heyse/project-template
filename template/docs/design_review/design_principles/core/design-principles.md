@@ -193,6 +193,13 @@ a concrete failure or operational need. Semantic ownership and physical decompos
 separately changeable. A bounded refusal is honest, but does not by itself make the architecture
 fit a workload it claims to support.
 
+Assess execution fit qualitatively from relevant operations and growth/failure scenarios. Explain
+material tradeoffs in plain language. This design/review consideration does not require numerical
+estimates, cost models, estimators, runtime cost accounting, execution-planning machinery,
+instrumentation, formal cost proofs or additional proof artifacts. Introduce such mechanisms only
+for a separate concrete functional or operational requirement. Quantitative performance/capacity
+claims still require measurements; existing semantic correctness obligations remain.
+
 **Audit.** What work, movement and coordination does a complete operation require? How do they
 grow with relevant input dimensions and concurrency? Which costs are required by the result or
 guarantee, and which arise only from the chosen boundaries? What simpler conforming realization
@@ -370,7 +377,8 @@ registration or a first-class operation specification is needed only when a cons
 discover, inspect, compose, plan or persist operations in that form. For material operations,
 state the relevant input universe, supported workload and completeness semantics. Distinguish
 work limits from output limits, and resource exhaustion from a complete answer to a bounded
-question. An exact cost model or new operation registry is not required.
+question. Qualitative assessment suffices here; a cost model, estimator or operation registry needs a
+separate concrete functional or operational requirement.
 
 **Audit.** Can the operation or transformation be invoked, reused and tested without knowing
 its internals? Which domain rules govern it? For a transformation, which equivalence does it
@@ -385,8 +393,8 @@ membership, including additions, removals and failed lookups. Nothing reused sil
 mutable files, "latest" references, clocks or registries. Separate structural from value inputs
 so a value change does not rebuild structure; distinguish reuse of a prepared artifact from
 reuse of an executed result. Equality used for reuse must make results substitutable.
-Invalidate at the finest granularity the evidence supports; conservative beats unsound. Account
-for material over-invalidation as a cost with a reason and a refinement route where warranted.
+Invalidate at the finest granularity the evidence supports; conservative beats unsound. Assess
+material over-invalidation qualitatively, with a reason and a refinement route where warranted.
 Complete build provenance need not become every preparation or result key.
 
 **Audit.** Could an undeclared change alter a reused result? Does a second mechanism track the
@@ -574,8 +582,9 @@ failure and an inconclusive check; human-readable messages are projections of th
 Every output traces to its authored sources, selected policies and providers, transformations
 and attempt, many-to-many where needed. Declare the reproducibility class — recomputation or
 replay of recorded evidence — and record what it needs. Make changes explainable at the level of
-meaning, and make lifecycle decisions (selection, reuse, rejection, cost) observable without
-letting instrumentation dominate cost. Explain complete operations and material cost drivers.
+meaning, and make lifecycle decisions (selection, reuse, rejection) observable without
+letting instrumentation dominate useful work. Explain complete operations and material work drivers
+qualitatively; this review consideration does not require runtime cost instrumentation.
 Compact provenance references and selective hydration can preserve attribution without repeatedly
 moving the full evidence payload; observability cardinality should not dominate useful work.
 
@@ -736,7 +745,7 @@ The following lenses guide judgment where material; they are not twelve mandator
 | Semantic/physical independence | Lower declarations into replaceable layouts, execution plans, identity mappings and lifecycle mechanisms. |
 | Necessary work | Match access paths and algorithmic work to required input and dependencies; retain a complete universe when semantics demand it. |
 | Composed capability | Preserve useful optimizer, bulk and native capabilities across library boundaries. |
-| Data/compute locality | Place work near suitable representations; account for crossings, copies and serialization. |
+| Data/compute locality | Place work near suitable representations; consider crossings, copies and serialization qualitatively. |
 | Working set | Bound live state, intermediate cardinality and expansion; stream, compact or spill where appropriate. |
 | Amortization | Reuse preparation and immutable results under complete, appropriately scoped dependencies. |
 | Assurance economy | Place checks at failure/trust boundaries; reuse established validity without losing independent protection. |
@@ -744,7 +753,7 @@ The following lenses guide judgment where material; they are not twelve mandator
 | Admission and contention | Bound queues and fan-out, coordinate capacity, and define cancellation and drain. |
 | Reusable physical views | Derive indexed or compact representations for real consumers under explicit mappings; avoid parallel authorities. |
 | Work and answer semantics | Distinguish examined-work limits, returned-output bounds, completeness and selected approximation. |
-| Total machinery | Account for generated/runtime objects and operator/developer obligations, not only source lines. |
+| Total machinery | Consider generated/runtime objects and operator/developer obligations qualitatively, alongside source lines. |
 
 Usually remove unnecessary work first, then improve algorithms/access paths, placement and reuse,
 before tuning concurrency or kernels. A clearly dominant local optimization need not follow this order.
@@ -762,15 +771,15 @@ unsupported scenario and carries a disposition/revisit trigger. It never certifi
 | A1 Localize change | Coherent owners and narrow contracts constrain propagation; local behavior can be understood and tested with bounded dependencies. |
 | A2 Encode domain meaning explicitly | Supported phenomena and consequential distinctions have a coherent, scoped model. Domain behavior realizes its owned definitions and operation contracts; constraints, lifecycle and dependencies are explicit, and derived representations preserve their promised semantics. Meaning is not independently reconstructed by consumers or recoverable only from incidental implementation details. |
 | A3 Extend through composition | Existing capabilities can be recombined or substituted through their contracts; new semantic code has an owner, and new machinery has a credible need. |
-| A4 Fit execution to the supported workload | For selected operation and growth/failure scenarios, a credible physical route accounts for access paths, necessary versus repeated work, important crossings/intermediates, resource/transaction lifetimes and recovery scope. The composed architecture introduces no unjustified amplification or predictable failure of the supported workload. Compare a materially simpler or more native realization where credible. Static evidence can establish a structural violation; latency, throughput and capacity claims require measurements. |
+| A4 Fit execution to the supported workload | For selected operation and growth/failure scenarios, qualitatively assess a credible physical route, considering access paths, necessary versus repeated work, important crossings/intermediates, resource/transaction lifetimes and recovery scope. The composed architecture introduces no unjustified amplification or predictable failure of the supported workload. Compare a materially simpler or more native realization where credible. Static evidence can establish a structural violation; latency, throughput and capacity claims require measurements. |
 
 Preserve each correctness/fidelity gate independently. Working behavior cannot compensate for an
 architectural violation, and architectural elegance cannot compensate for a failed semantic gate.
 A2 requires both model adequacy and semantic authority: one owner for an inadequate model does
 not satisfy it. An in-scope violation requires revision even when current outputs are correct.
-A4 cannot be satisfied by merely documenting a cost or safe refusal: justify the retained benefit
-against a conforming alternative. A material unresolved physical premise prevents acceptance of
-that use; it does not require measuring every implementation constant. Proposed architectural
+A4 cannot be satisfied by merely noting a tradeoff or safe refusal: explain the retained benefit
+and material tradeoffs against a conforming alternative in plain language. A material unresolved
+physical premise prevents acceptance of that use; it does not require measuring every implementation constant. Proposed architectural
 acceptance remains distinct from runtime/release qualification.
 
 ## §F Library consideration

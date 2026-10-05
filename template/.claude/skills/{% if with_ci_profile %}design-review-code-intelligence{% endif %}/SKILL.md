@@ -40,11 +40,14 @@ profile names none.
    operations behind the facts and relations in the review scope.
    Check whether consumers independently classify the same concept or interpret an operation's
    outcomes, and identify the affected owners.
-6. **Execution fit under A4:** canonical graph-native artifacts are permitted; declared views
+6. **Qualitative execution-fit assessment under A4:** canonical graph-native artifacts are permitted; declared views
    retain their universe/edge semantics without necessarily rebuilding a graph. Compare semantic
    and physical fit across query engines, graph libraries and transfer/fixpoint kernels. Include
    degree, examined work and intermediate bytes beside output bounds. Consumer pins cover the
-   entire declared journey, including evidence references, resources and continuations.
+   entire declared journey, including evidence references, resources and continuations. Explain
+   material tradeoffs in plain language; cost estimates, models, estimators, runtime accounting,
+   planning machinery, instrumentation and proof artifacts need a separate concrete requirement.
+   Quantitative claims still require measurements; semantic correctness obligations remain.
 
 ## Lenses
 

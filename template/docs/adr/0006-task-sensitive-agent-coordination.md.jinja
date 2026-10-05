@@ -41,11 +41,16 @@ its general preference for parallel execution and previous evidence/review model
 - Model operations as well as concepts; own invariants, contextual bindings and representation
   contracts. Ordinary types, relations and domain functions suffice; no modeling framework is
   prescribed. Keep architectural and fidelity judgments independent.
-- FP-07/A4 require execution fit for the intended workload, including relevant growth, skew,
-  concurrency and failure. Distinguish semantic authority from physical lowerings and operational
+- FP-07/A4 require qualitative assessment of execution fit for the intended workload, including
+  relevant growth, skew, concurrency and failure. Distinguish semantic authority from physical lowerings and operational
   granularity; compare composed library capabilities, necessary work and total machinery. Reuse
   established immutable validity while retaining checks for distinct failure/trust boundaries.
   Drain writers and freeze content/definitions before final persisted reconciliation and publication.
+  Explain material tradeoffs in plain language. This consideration requires no numerical estimates,
+  cost models, estimators, runtime cost accounting, execution-planning machinery, instrumentation,
+  formal cost proofs or additional proof artifacts. Such mechanisms need a separate concrete
+  functional or operational requirement. Quantitative performance/capacity claims still require
+  measurements; semantic correctness obligations remain.
 {% if with_ci_profile %}- CI-05 permits a graph-native canonical artifact; CI-07 preserves analysis semantics without
   mandating runtime placement; CI-08 distinguishes examined work from bounded output; CI-13 pins
   the complete realization across the declared consumer journey and its returned references.

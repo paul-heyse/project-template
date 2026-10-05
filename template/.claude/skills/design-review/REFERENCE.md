@@ -200,7 +200,7 @@ equations are solved sequentially and converge elsewhere or fail, with no diagno
 **Verification:** a fixture with such a cycle asserting one block of size two; it fails today.
 DP-07, DP-12, G6."
 
-### G — Execution fit without a benchmark claim
+### G — Qualitative execution-fit assessment without a benchmark claim
 
 **Inadequate.** "The implementation uses a database and bounds every response, so performance
 is outside this review until benchmarks exist."
@@ -212,6 +212,10 @@ crossings in a supported repeated-small-request workload. **Correction:** establ
 validity at sealing, retain its premises, use indexed batch access, and keep checks for new trust
 boundaries. **Verification:** inspect the new access and validity lifetimes; benchmark separately
 before claiming latency or capacity. FP-07, DP-03, DP-10, DP-23, A4."
+
+The assessment explains material tradeoffs in plain language. It does not require cost estimates,
+models, estimators, runtime accounting, planning machinery, instrumentation or formal cost proofs;
+those need a separate concrete requirement. Semantic correctness obligations remain.
 
 A global SCC computation can legitimately need all nodes and edges even when returning one node's
 component. An output selector cannot justify shrinking the semantic universe. A single native

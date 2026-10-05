@@ -38,7 +38,7 @@ permission, concurrent-work and testing constraints, and follow discovered depen
 {% endif -%}
 | `docs/plans/` | The active plan only; a finished or superseded plan is removed once its obligations move |
 | `docs/adr/` | Current decision records (accepted and open proposals), a generated index, and `TEMPLATE.md` |
-| `docs/design_review/design_principles/` | The layered design standard, declared in `standard.toml`: seven foundations (FP-01–07), including an explicit domain model, scoped semantic authority and execution fit for the intended workload; independent architectural judgments A1–A4, supporting rules DP-01–24 and gates G1–G8{% if with_ci_profile %}, the code-intelligence profile{% endif %}, and the repository binding (ADR-0002) |
+| `docs/design_review/design_principles/` | The layered design standard, declared in `standard.toml`: seven foundations (FP-01–07), including an explicit domain model, scoped semantic authority and qualitative execution-fit assessment for the intended workload; independent architectural judgments A1–A4, supporting rules DP-01–24 and gates G1–G8{% if with_ci_profile %}, the code-intelligence profile{% endif %}, and the repository binding (ADR-0002) |
 | `docs/design_review/reviews/` | Review outputs: evidence, never authority; kept while a finding they supply is open |
 | `docs/design_review/evidence/` | Probes, spikes and investigations behind decisions, one `YYYY-MM-DD_<topic>/` folder each with a README; raw outputs and binaries through Git LFS; never venvs or `target/`. Put probes here, not in a session scratchpad |
 | `docs/pins.md` | Deliberate pins only, each with its reason and when to revisit it |
@@ -175,6 +175,13 @@ process scripts are stdlib-only and run without a project environment.
   (binding §4). Record the responsible component and closure evidence; link from follow-up
   reviews and STATUS. A decision being accepted does not establish implementation or verified
   closure.
+
+FP-07/A4 execution fit is assessed qualitatively from relevant operations and growth/failure
+scenarios, with material tradeoffs explained in plain language. This consideration requires no
+numerical estimates, cost models, estimators, runtime cost accounting, execution-planning machinery,
+instrumentation, formal cost proofs or additional proof artifacts. Such mechanisms need a separate
+concrete functional or operational requirement. Quantitative performance/capacity claims still
+require measurements; semantic correctness obligations remain.
 
 ## Agent coordination
 

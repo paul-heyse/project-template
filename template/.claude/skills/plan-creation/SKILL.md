@@ -37,7 +37,11 @@ Execution-fit questions may also shape the target: access paths, optimizer visib
 movement, working set, reuse/invalidation, assurance placement and publication/recovery scope for
 the intended workload. Examine composed library routes before fixing a backend-neutral interface.
 Keep necessary whole-universe work distinct from avoidable repeated work, and output limits from
-examined-work limits. Use static evidence where sufficient; this is no mandatory benchmark stage.
+examined-work limits. Assess these choices qualitatively and explain material tradeoffs in plain language. Numerical
+estimates, cost models, estimators, runtime cost accounting, execution-planning machinery,
+instrumentation and formal cost proofs or additional proof artifacts need a separate concrete
+functional or operational requirement. Quantitative performance/capacity claims still require
+measurements; semantic correctness obligations remain.
 Investigate such questions early enough to avoid developing substantial detail around an
 unstable premise. Explain what a result would enable or change in the proposed design.
 

@@ -24,9 +24,13 @@ are recovered from Git, never read as a chain (ADR-0001).
 2. Use Context → Options → Decision → Consequences. Identify the expected change, responsible
    components and affected consumer contracts. Include the simplest viable alternative; compare
    coupling, composition, local testing and total integration burden where they distinguish options.
-   For material execution choices, compare physical work, access paths, locality, reuse, assurance,
+   For material execution choices, qualitatively compare physical work, access paths, locality, reuse, assurance,
    lifecycle/recovery and operator/developer burden for the intended workload. State the benefit
-   retained by a costlier option; no new benchmark or standalone comparison artifact is implied.
+   retained by a costlier option and explain material tradeoffs in plain language. This consideration
+   requires no numerical estimates, cost models, estimators, runtime cost accounting, execution-planning
+   machinery, instrumentation, formal cost proofs or additional proof artifacts. Such mechanisms need
+   a separate concrete functional or operational requirement; quantitative performance/capacity claims
+   still require measurements and semantic correctness obligations remain.
 3. `design:` lists stable governed section IDs across the architectural collection. Amend them in the same commit, retaining section
    IDs and a `> Decision: ADR-NNNN` line. Keep the section current rather than appending a
    revision diary. Reference executable contracts rather than duplicating their field definitions.

@@ -79,8 +79,8 @@ question about ownership, behavior or change remains unresolved; no complete flo
    functions can suffice; no registry, universal model or conversion of algorithms to data is required.
 4. **Alternatives and library fit.** Compare a suitable library mechanism and the simplest viable
    design where relevant. Qualify semantics at the resolved version and total integration burden. Functions or
-   modules may be sufficient; a wrapper or new crate must improve a real boundary. Compare the
-   composed physical operation: access paths, optimizer/bulk capabilities, movement, preparation,
+   modules may be sufficient; a wrapper or new crate must improve a real boundary. Qualitatively
+   assess the composed physical operation: access paths, optimizer/bulk capabilities, movement, preparation,
    working set, enforcement frequency, transaction/recovery scope and total operator/developer
    machinery. A module or semantic kind need not impose an execution stage or storage object.
 
@@ -95,8 +95,8 @@ question about ownership, behavior or change remains unresolved; no complete flo
 
 5. **Independent judgments.** Settle A1–A4 from scenario evidence, G1–G8 and profile gates from
    their own evidence, and applicable foundation/supporting-rule verdicts. A2 requires both an
-   adequate domain model and behavior governed by its authorities. A4 needs a credible execution
-   route for a workload premise drawn from functional intent: relevant operations, input size/skew,
+   adequate domain model and behavior governed by its authorities. Qualitatively assess A4 through
+   a credible execution route for a workload premise drawn from functional intent: relevant operations, input size/skew,
    growth, concurrency/deployment and resource envelope. Use relevant growth/failure scenarios;
    safe refusal or bounded output alone does not establish fit. Unresolved stays unresolved.
 6. **Actionable findings and disposition.** Group by structural cause. Name a concrete semantic
@@ -114,8 +114,12 @@ revision even when outputs are currently correct. A deferral alone is not confor
 Read every citation at the grain used. Proposals remain Proposed; interface inspection is
 Interface-checked; code existence is Implemented. Tested/Measured claims name commands, cases,
 conditions and dates. Attribute historical receipts rather than reporting them as current runs.
-Structural cost evidence can establish avoidable amplification before measurement. No speed claim
-is needed for an A4 defect; quantitative speed/capacity claims still require measurements. Do not
+Qualitative assessment of relevant operations and scenarios can establish avoidable amplification
+before measurement. Explain material tradeoffs in plain language. No numerical estimates, cost
+models, estimators, runtime cost accounting, execution-planning machinery, instrumentation, formal
+cost proofs or additional proof artifacts are required by this consideration. Such mechanisms need
+a separate concrete functional or operational requirement; semantic correctness obligations remain.
+No speed claim is needed for an A4 defect; quantitative speed/capacity claims still require measurements. Do not
 narrow the workload to convenient fixtures or turn these lenses into a standing audit/checklist.
 Static review of documentation, source and types can be sufficient, including for library
 features and fit. The reviewing agent decides whether complexity, criticality or unresolved

@@ -23,11 +23,15 @@ Preserve DP{% if with_ci_profile %}/CI{% endif %} IDs and historical version sem
 architecture structure. FP-04/A2 require an adequate, explicit domain model that governs
 behavior. ADR-0002/0006 adopts core/template 3.3 and code-intelligence guidance 1.4 when selected. Apply domain-model
 assessment within requested or scheduled reviews; ordinary implementation does not initiate it.
-Follow flows only where they resolve a concrete uncertainty within that scope. FP-07/A4 assess
+Follow flows only where they resolve a concrete uncertainty within that scope. FP-07/A4 qualitatively assess
 execution fit for the functional-intent workload: access paths, necessary work, library composition,
 locality, working sets, reuse, assurance and lifecycle/recovery scope. Semantic declarations do not
 prescribe physical granularity. Static evidence can establish amplification; quantitative performance
-claims need measurements. No new standing review, checklist or benchmark obligation is introduced.
+claims need measurements. Explain material tradeoffs in plain language; no numerical estimates,
+cost models, estimators, runtime cost accounting, execution-planning machinery, instrumentation,
+formal cost proofs or additional proof artifacts are required by this consideration. Such mechanisms
+need a separate concrete functional or operational requirement; semantic correctness obligations
+remain. No new standing review, checklist or benchmark obligation is introduced.
 
 ## Reviews in this repository
 

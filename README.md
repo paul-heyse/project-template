@@ -70,9 +70,13 @@ architecture map, the ADRs and their index, pins, the binding and the evidence i
 role and skill READMEs continue to receive workflow updates.
 
 Core 3.3 and optional code-intelligence guidance 1.4 add FP-07/A4 execution fit alongside the
-independent semantic gates. Reviews assess physical work, composed libraries, locality, reuse,
-assurance and lifecycle scope for the intended workload, without mandatory benchmarks or new
-checklists. Skills apply the criteria through existing review, planning and ADR routes.
+independent semantic gates. Reviews qualitatively assess physical work, composed libraries, locality,
+reuse, assurance and lifecycle scope from relevant operations and growth/failure scenarios, explaining
+material tradeoffs in plain language. This consideration requires no numerical estimates, cost models,
+estimators, runtime cost accounting, execution-planning machinery, instrumentation, formal cost proofs
+or additional proof artifacts; such mechanisms need a separate concrete functional or operational
+requirement. Quantitative performance/capacity claims still require measurements; semantic correctness
+obligations remain. Skills apply the criteria through existing review, planning and ADR routes.
 Fresh projects receive ADR-0006, which carries forward bounded domain-model review criteria and
 reusable roles while introducing task-sensitive delegation, concrete escalation and stronger
 evidence/review defaults. Retired seeds are no longer generated. Updates exclude ADR-0004,
