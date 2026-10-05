@@ -33,7 +33,7 @@ combo name data:
     just check
     docs_tools=true
     command -v mdbook >/dev/null && command -v pagefind >/dev/null && command -v lychee >/dev/null || docs_tools=false
-    for check in $(just --dump --dump-format json | python3 -c 'import json, sys; print(*[d["recipe"] for d in json.load(sys.stdin)["recipes"]["hygiene"]["dependencies"]])'); do
+    for check in $(just --evaluate hygiene_checks); do
       if [ "$check" = docs-check ] && ! $docs_tools; then
         echo "== {{name}}: docs-check not_run (mdbook, pagefind or lychee missing; run just bootstrap-docs in a render)"
         continue
@@ -42,17 +42,8 @@ combo name data:
       just "$check"
     done
     if [ -f docs/site.toml ] && $docs_tools; then echo "== {{name}}: just docs-test"; just docs-test; fi
-    echo "== {{name}}: end-of-turn smoke"
-    report="$(git rev-parse --absolute-git-dir)/after-turn/report.json"
-    echo '{}' | uv run --no-project --python 3.14 python scripts/after_turn.py stop --harness claude
-    for _ in $(seq 600); do [ -f "$report" ] && break; sleep 1; done
-    python3 - "$report" <<'EOF'
-    import json, sys
-    report = json.load(open(sys.argv[1]))
-    failed = sorted(k for k, v in report["steps"].items() if v["status"] != "passed")
-    assert not failed, f"end-of-turn steps failed: {failed}"
-    print(f"end-of-turn report: {len(report['steps'])} steps, failed none")
-    EOF
-    test -z "$(uv run --no-project --python 3.14 python scripts/after_turn.py prompt --harness claude </dev/null)" || { echo "{{name}}: prompt hook printed output"; exit 1; }
+    echo "== {{name}}: just turn-end, just ready"
+    just turn-end
+    just ready
     test -z "$(git status --porcelain)" || { echo "{{name}}: checks left the tree dirty"; git status --short; exit 1; }
     echo "== {{name}}: passed"

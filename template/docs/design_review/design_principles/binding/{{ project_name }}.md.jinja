@@ -118,8 +118,8 @@ An action uses the existing route appropriate to it:
 | Existing check | Use |
 |---|---|
 | Compile checks, focused tests/probes | During implementation: validate the scope just implemented |
-| `just fmt` | After every turn, by the end-of-turn hooks; agents never run it |
-| `just hygiene` | Once at scope end, beside `just test-all`; the agent fixes what fails. The hooks never run or fix it |
+| `just turn-end` | At the end of a turn that changed files, by the root agent |
+| `just hygiene` | Once at scope end, beside `just test-all`; the agent fixes what fails |
 {% if with_ast_grep -%}
 | `just rules-scan`, `just rules-test` | A justified code-shape invariant; run within `hygiene` |
 {% endif -%}

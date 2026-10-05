@@ -46,8 +46,8 @@ chain or retired plan; retired records, reviews, plans and evidence are recovere
 historical `supersedes` entries need not, and ADR ids are never reused. Work happens on `main`;
 compile checks and targeted tests are the loop, and `just test-all` (functional) follows once all
 functional scope is implemented, with every non-functional check (`just hygiene`) beside it; the
-agent fixes what fails. Formatting and generators run in the end-of-turn hooks, which fix nothing
-else (ADR-0001).
+agent fixes what fails. The root agent runs `just turn-end` (formatting, generators) at the end of a
+turn that changed files (ADR-0001).
 
 **Design review** (ADR-0002/0006). The repository owns core 3.2 of the design standard and declares
 it in `docs/design_review/design_principles/standard.toml`. The six foundations organize review

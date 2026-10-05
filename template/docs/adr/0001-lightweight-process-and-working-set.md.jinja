@@ -7,7 +7,7 @@ supersedes: []
 superseded-by: null
 design: [§2]
 evidence: Implemented
-revisit: Current readers need retired documents, supersession chains or amendment logs to interpret a contract, or a process mechanism exists without a consumer, or the end-of-turn hooks need a step that is not automatic.
+revisit: Current readers need retired documents, supersession chains or amendment logs to interpret a contract, or a process mechanism exists without a consumer, or agents repeatedly skip `just turn-end`.
 ---
 
 ## Context
@@ -27,10 +27,10 @@ change while keeping decisions, evidence and current state findable.
 3. **A current working set with Git for recovery** (chosen): each kind of fact has one current
    owner; retired material leaves the tree and is recovered from Git on demand.
 
-For the end-of-turn hooks, a fixer agent that repairs failed checks proved brittle: it edited other
-sessions' in-progress code and needed a command guard and harness-specific plumbing. Running the
-checks only to report them leaves findings without an owner who knows the change. The hooks keep
-only automatic steps (chosen), and the agent owns `just hygiene` at scope end.
+End-of-turn hooks were tried and removed: a fixer agent edited other sessions' in-progress code,
+and a report-only background job needed a script, a lock and operator plumbing to run a few
+recipes that agents can run themselves. Agents run named bundles instead (chosen), and own
+`just hygiene` at scope end.
 
 ## Decision
 
@@ -45,9 +45,9 @@ only automatic steps (chosen), and the agent owns `just hygiene` at scope end.
 - **Development loop.** Work on `main` in the current tree; use a worktree only when truly
   parallel agents must edit production code concurrently. Compile checks and targeted tests are the loop;
   `just check` and `just test-all` (functional tests only) run once all functional scope is
-  implemented, not per slice or commit. The end-of-turn hooks (`scripts/after_turn.py`) run only
-  automatic steps: formatting with safe auto-fixes, generators and readiness. They fix nothing
-  else, never block the next prompt and show failed steps to the operator only. Every
+  implemented, not per slice or commit. There are no hooks. The root agent runs `just turn-end`
+  (generators, formatting with safe auto-fixes) at the end of a turn that changed files, and
+  `just ready` after an environment change. Every
   non-functional check (`just hygiene`: type errors, lint, policy) runs once at scope end beside
   `just test-all`, and the agent fixes what fails. Outcomes use `passed`/`failed`/`blocked`/`not_run` with their commands.
 - **Proportion.** Before adding a hook, gate, register or document type, name its consumer.

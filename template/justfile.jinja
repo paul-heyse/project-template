@@ -1,9 +1,9 @@
 {%- set formats = with_rust or with_python -%}
 # The only command surface agents need. `just` lists recipes.
 # Check recipes do not edit source, except `ruff`'s auto-fixes; tests may create their own data.
-# `fmt`, `skills-sync` and `adr new|supersede|index` edit the working tree. Agents run functional
-# tests and, at scope end, `hygiene`; the end-of-turn hook (`scripts/after_turn.py`) runs only
-# formatting and generators.
+# `fmt`, `skills-sync` and `adr new|supersede|index` edit the working tree. Three bundles, each
+# keeping going after a failure: `turn-end` at the end of a turn that changed files, `ready` after an
+# environment change, and `hygiene` once at scope end.
 
 set shell := ["bash", "-euo", "pipefail", "-c"]
 
@@ -17,10 +17,34 @@ check:{% if with_rust %} test{% endif %}{% if with_python %} py-test{% else %} s
 # Everything functional (end-of-scope acceptance, not the design loop)
 test-all: check
 
-# Agents run this once at scope end, beside `test-all`, and fix what fails (`just <id>` re-runs
-# one); the end-of-turn hook does not run it.
-# Every non-functional check, one check id per dependency
-hygiene: lint-agents adr-lint{% if with_ast_grep %} rules-scan rules-test{% endif %}{% if with_python %} ruff types{% endif %}{% if with_docs_site %} docs-check{% endif %}{% if with_rust %} deps clippy{% endif %}
+turn_end_steps := "adr-index{% if formats %} fmt{% endif %}"
+ready_steps := "skills-sync doctor-check"
+hygiene_checks := "lint-agents adr-lint{% if with_ast_grep %} rules-scan rules-test{% endif %}{% if with_python %} ruff types{% endif %}{% if with_docs_site %} docs-check{% endif %}{% if with_rust %} deps clippy{% endif %}"
+
+# End of a turn that changed files: regenerate the ADR index and format
+turn-end: (_bundle "turn-end" turn_end_steps)
+
+# After a dependency, toolchain or skill-selection change, or an environment-shaped failure
+ready: (_bundle "ready" ready_steps)
+
+# Scope end, after `test-all`: every non-functional check; fix what fails (`just <id>` re-runs one)
+hygiene: (_bundle "hygiene" hygiene_checks)
+
+# Run each recipe, keep going after a failure, and list the failures
+{% raw %}[private]
+_bundle name steps:
+    #!/usr/bin/env bash
+    set -uo pipefail
+    failed=()
+    for step in {{ steps }}; do
+      echo "== just $step"
+      just "$step" || failed+=("$step")
+    done
+    if [ ${#failed[@]} -gt 0 ]; then
+      echo "{{ name }}: ${#failed[@]} failed: ${failed[*]} (re-run one with just <id>)"
+      exit 1
+    fi
+    echo "{{ name }}: all passed"{% endraw %}
 
 # Format everything (mutating)
 fmt:
@@ -104,7 +128,7 @@ upgrade *projects:
 adr *args:
     @uv run --no-project python scripts/adr.py "$@"
 
-# Regenerate the ADR index (an end-of-turn sync step)
+# Regenerate the ADR index (part of `turn-end`)
 adr-index:
     @uv run --no-project python scripts/adr.py index
 
@@ -124,7 +148,7 @@ skills-sync:
 skills-check:
     python3 scripts/library_skills.py --check
 
-# Fail when `doctor` reports a missing or failing tool (end-of-turn readiness)
+# Fail when `doctor` reports a missing or failing tool (part of `ready`)
 doctor-check:
     #!/usr/bin/env bash
     set -uo pipefail

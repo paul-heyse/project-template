@@ -16,8 +16,8 @@ with [shared roles](.agents/roles/README.md) for both Codex and Claude.
 
 Tools: `just`, `uv`, `git` with Git LFS{% if with_rust %}, the Rust toolchain in `rust-toolchain.toml` with cargo-nextest, cargo-deny, sccache, clang and mold{% endif %}{% if with_ast_grep %}, ast-grep{% endif %}. `just doctor` lists what is
 present. During implementation, run compile checks and targeted tests; once all functional scope
-is implemented, run `just test-all` and `just hygiene` (the non-functional checks). Formatting and generators run
-in the end-of-turn hooks (`scripts/after_turn.py`).
+is implemented, run `just test-all` and `just hygiene` (the non-functional checks). `just turn-end` formats and
+regenerates at the end of a turn; `just ready` re-checks the environment after a change.
 {% if with_docs_site %}
 ## Documentation locally
 

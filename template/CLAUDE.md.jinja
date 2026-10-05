@@ -2,11 +2,9 @@
 
 ## Claude Code specifics
 
-- **End-of-turn hooks, no edit hook.** Nothing formats files after Edit/Write. `Stop` and
-  `UserPromptSubmit` run `scripts/after_turn.py` (AGENTS.md, Commands): formatting, generators and
-  readiness only. They are silent to the model, never block a prompt and fix nothing else;
-  `just hygiene` findings (type errors, lint) are the agent's at scope end. Subagents stopping
-  don't trigger the hooks.
+- **No hooks.** Nothing formats files after Edit/Write or at stop. Run `just turn-end` at the end of
+  a turn that changed files, `just ready` after an environment change and `just hygiene` at scope
+  end (AGENTS.md, Commands).
 {% if with_python -%}
 - **Diagnostics:** the pyright plugin is disabled for this project (`.claude/settings.json`)
   because pyrefly is the type checker. There is no in-session Python language server; Python

@@ -56,17 +56,18 @@ permission, concurrent-work and testing constraints, and follow discovered depen
 |---|---|
 | During a design/implementation phase | Compile checks and targeted tests or probes for the scope just implemented. No integrated gate after a slice or commit. |
 | After all functional scope in the plan is implemented | `just test-all`: the functional tests (`just check`). Then `just hygiene`, every non-functional check, once; fix what fails and re-run a single check with `just <id>`. Qualification cites both passing for the same tree |
-| After every turn (automatic) | The end-of-turn hooks (`scripts/after_turn.py`, configured in `.config/after-turn.toml` and wired in `.claude/settings.json` and `.codex/hooks.json`) run once the main agent stops: `just skills-sync`, `just adr-index` and `just fmt` (with ruff's safe auto-fixes); then, in the background, `just doctor-check`. The operator, never the model, sees failed steps; the next prompt never waits. The hooks run no other checks and fix nothing: type errors, lint and policy findings are yours, through `just hygiene` at scope end. Don't run the formatters or generators yourself |
+| End of a turn that changed files | The root agent runs `just turn-end` (ADR index, formatting with ruff's safe auto-fixes). Subagents don't |
+| After a dependency, toolchain or skill-selection change, or an environment-shaped failure | `just ready` (skills sync, tool check) |
 {% if with_rust -%}
 | Dependency policy | `just deps`, a `hygiene` check: each declared family (`[workspace.metadata.pins]` in `Cargo.toml`) resolves to one version, family members are pinned exactly, every exact pin, cap or git rev has a `docs/pins.md` row, and cargo-deny checks bans and sources |
 {% endif -%}
 | Move dependencies to the latest | `just upgrade` (root) or `just upgrade <dir> …` (sub-projects), at your discretion; then the affected tests |
-| Decisions | `just adr new <slug> --title "…"`, `just adr supersede ADR-NNNN <slug>`, `just adr revisit`; the end-of-turn hooks regenerate the index; `just adr-lint` runs within `just hygiene` |
+| Decisions | `just adr new <slug> --title "…"`, `just adr supersede ADR-NNNN <slug>`, `just adr revisit`; `just turn-end` regenerates the index; `just adr-lint` runs within `just hygiene` |
 {% if with_docs_site -%}
 | Documentation changes | `just docs-test` for publisher/resolver changes; `docs-check` (publication) runs within `just hygiene`. First run: `just bootstrap-docs`; preview: `just docs-serve`. No product gate solely for docs. |
 {% endif -%}
-| Select shared library skills | Edit `.config/library-skills.toml`; the end-of-turn hooks run `just skills-sync` (`just skills-check` to inspect). Skills live in `~/.local/share/library-skills` (`LIBRARY_SKILLS_ROOT` if moved); a library skill never cites this repository, so repo-specific wiring goes here and in `docs/pins.md` |
-| Tools present? | `just doctor`; the end-of-turn hooks report a missing tool |
+| Select shared library skills | Edit `.config/library-skills.toml`; then run `just ready` (`just skills-check` to inspect). Skills live in `~/.local/share/library-skills` (`LIBRARY_SKILLS_ROOT` if moved); a library skill never cites this repository, so repo-specific wiring goes here and in `docs/pins.md` |
+| Tools present? | `just doctor`, or `just ready` |
 | Template changes | `copier update --defaults`, then review the diff like any other change (`.copier-answers.yml` is never edited by hand) |
 
 {% if with_rust -%}
@@ -82,8 +83,7 @@ override the config through Cargo's environment variables and report it.
 Python is {{ python_version }} via `uv` (`.python-version`); run Python tools as `uv run …`.
 {% if with_python %}The type checker is **pyrefly**, not pyright or mypy. A subdirectory that is a
 separate Python project with its own environment goes in root ruff's `extend-exclude`. {% endif %}The
-process scripts are stdlib-only and run without a project environment; the end-of-turn script runs
-on a pinned `uv run --no-project --python 3.14 python`.
+process scripts are stdlib-only and run without a project environment.
 
 ## Writing code against libraries
 
@@ -117,12 +117,11 @@ on a pinned `uv run --no-project --python 3.14 python`.
   scope with a compile check and the focused tests or probes that exercise it. Integrated tests
   (`just check`, `just test-all`) wait until all functional scope in the plan is implemented;
   repeat them only for a failure or a subsequent material change.
-- **No formatting mid-work; non-functional checks once, at scope end.** The end-of-turn hooks run
-  `just fmt` (with ruff's safe auto-fixes) after each turn; don't run it or other formatters
-  yourself. The hooks do not run or fix lint, type or policy checks: once all functional scope is
-  implemented, run `just hygiene` beside `just test-all` and fix what fails (`just <id>` re-runs
-  one check). Don't run hygiene checks during implementation: auto-fixes and findings mid-work move
-  code you are still reasoning about.
+- **No formatting mid-work; non-functional checks once, at scope end.** Run `just turn-end` as the
+  last step of a turn that changed files, not mid-work. Once all functional scope is implemented,
+  run `just hygiene` beside `just test-all` and fix what fails (`just <id>` re-runs one check).
+  Don't run hygiene checks during implementation: auto-fixes and findings mid-work move code you
+  are still reasoning about.
 - **Validators are shared.** Invariant validators are library code, used by both tests and the
   production path. Don't write test-only copies.
 {% if with_rust -%}
