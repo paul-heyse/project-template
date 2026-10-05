@@ -34,14 +34,22 @@ its general preference for parallel execution and previous evidence/review model
 
 ## Decision
 
-- Adopt core/template 3.2{% if with_ci_profile %} and code-intelligence guidance 1.3{% endif %}, preserving principle IDs and historical review versions.
+- Adopt core/template 3.3{% if with_ci_profile %} and code-intelligence guidance 1.4{% endif %}, preserving principle IDs and historical review versions.
 - An explicit, coherent domain model must govern behavior wherever domain meaning is established
   or interpreted. FP-04/A2 assess model adequacy and authoritative realization. A deferral cannot
   waive an in-scope MUST gap for supported behavior, even with correct current outputs.
 - Model operations as well as concepts; own invariants, contextual bindings and representation
   contracts. Ordinary types, relations and domain functions suffice; no modeling framework is
   prescribed. Keep architectural and fidelity judgments independent.
-- Assess these criteria during requested or scheduled design reviews. Ordinary implementation
+- FP-07/A4 require execution fit for the intended workload, including relevant growth, skew,
+  concurrency and failure. Distinguish semantic authority from physical lowerings and operational
+  granularity; compare composed library capabilities, necessary work and total machinery. Reuse
+  established immutable validity while retaining checks for distinct failure/trust boundaries.
+  Drain writers and freeze content/definitions before final persisted reconciliation and publication.
+{% if with_ci_profile %}- CI-05 permits a graph-native canonical artifact; CI-07 preserves analysis semantics without
+  mandating runtime placement; CI-08 distinguishes examined work from bounded output; CI-13 pins
+  the complete realization across the declared consumer journey and its returned references.
+{% endif %}- Assess these criteria during requested or scheduled design reviews. Ordinary implementation
   does not initiate a domain-model review. Follow a flow only where it resolves a concrete
   uncertainty; static source and contract inspection can suffice.
 - A coordinator owns design, integration and acceptance. Six shared roles provide code mapping,

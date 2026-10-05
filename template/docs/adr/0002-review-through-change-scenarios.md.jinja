@@ -13,8 +13,8 @@ revisit: Reviews miss concrete change-propagation or isolated-testing defects, p
 ## Context
 
 Correct local slices can accumulate architectural problems without a system-level decision. The
-template carries library-context's layered design standard (core 3.0, library-context ADR-0040):
-six foundations, three architectural judgments and correctness/fidelity gates, applied through a
+template carries a layered design standard (core 3.3): seven foundations, four architectural
+judgments and independent correctness/fidelity gates, applied through a
 repository binding that owns review cadence and finding disposition.
 
 ## Options
@@ -27,12 +27,17 @@ repository binding that owns review cadence and finding disposition.
 
 ## Decision
 
-- This repository owns core 3.0 and the review template; `standard.toml` declares versions,
+- This repository owns core 3.3 and the review template; `standard.toml` declares versions,
   paths, profiles and the binding.
-- FP-01–FP-06 organize assessment. A1–A3 judge change locality, structural meaning and
-  composition independently of the DP/G gates{% if with_ci_profile %} and the code-intelligence profile's CI gates{% endif %}.
+- FP-01–FP-07 organize assessment. A1–A4 judge change locality, domain meaning,
+  composition and execution fit independently of the DP/G gates{% if with_ci_profile %} and the code-intelligence profile's CI gates{% endif %}.
 - A concrete expected change exposing duplicated decisions, unrelated internals or inseparable
-  tests can require revision even when behavior is correct.
+  tests can require revision even when behavior is correct. A supported workload with unjustified
+  amplification or a predictably unsuitable physical route can also require revision, using static
+  evidence where sufficient. Quantitative speed/capacity claims still need measurements.
+- Compare access paths, necessary work, composed library capabilities, locality, working sets,
+  reuse, assurance placement, lifecycle/recovery and total machinery against functional intent.
+  Semantic ownership does not prescribe physical granularity; safe refusal alone is not fit.
 - The binding owns cadence: design/target reviews before substantial stages or §B changes,
   change/conformance reviews for bounded slices, design/target at integrated stage ends. Effort
   follows risk. Reviews run through a fresh `design-reviewer` subagent, so the author of a change

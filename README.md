@@ -3,7 +3,7 @@
 A [Copier](https://copier.readthedocs.io/) template for a low-friction, single-operator
 project, carrying the working system extracted from
 [library-context](https://github.com/paul-heyse/library-context), with the shared agent workflows
-and bounded-review policy aligned on 2026-09-30.
+and bounded-review and execution-fit policy aligned on 2026-10-05.
 
 Every generated project gets the **core**:
 
@@ -14,7 +14,7 @@ Every generated project gets the **core**:
   ADR-0001 (light process, current working set, end-of-turn bundles) and ADR-0002 (design review);
 - `docs/design/`: an architecture map and a DESIGN skeleton with stable § IDs and
   `> Decision:` lines;
-- `docs/design_review/`: the layered design standard (core 3.2), a repository binding, reviews
+- `docs/design_review/`: the layered design standard (core 3.3), a repository binding, reviews
   and evidence conventions, the `design-review` skill and the `design-reviewer` subagent;
 - explicit concepts and operation contracts govern behavior, assessed through FP-04/A2 during
   bounded design reviews; ordinary implementation does not initiate a modeling exercise (ADR-0006);
@@ -69,7 +69,10 @@ architecture map, the ADRs and their index, pins, the binding and the evidence i
 (`_skip_if_exists` in `copier.yml`). Root README and STATUS patterns are anchored so managed
 role and skill READMEs continue to receive workflow updates.
 
-Core 3.2 and optional code-intelligence guidance 1.3 update the review standard and agent workflows.
+Core 3.3 and optional code-intelligence guidance 1.4 add FP-07/A4 execution fit alongside the
+independent semantic gates. Reviews assess physical work, composed libraries, locality, reuse,
+assurance and lifecycle scope for the intended workload, without mandatory benchmarks or new
+checklists. Skills apply the criteria through existing review, planning and ADR routes.
 Fresh projects receive ADR-0006, which carries forward bounded domain-model review criteria and
 reusable roles while introducing task-sensitive delegation, concrete escalation and stronger
 evidence/review defaults. Retired seeds are no longer generated. Updates exclude ADR-0004,

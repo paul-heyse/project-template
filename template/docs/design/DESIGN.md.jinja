@@ -49,18 +49,24 @@ functional scope is implemented, with every non-functional check (`just hygiene`
 agent fixes what fails. The root agent runs `just turn-end` (formatting, generators) at the end of a
 turn that changed files (ADR-0001).
 
-**Design review** (ADR-0002/0006). The repository owns core 3.2 of the design standard and declares
-it in `docs/design_review/design_principles/standard.toml`. The six foundations organize review
+**Design review** (ADR-0002/0006). The repository owns core 3.3 of the design standard and declares
+it in `docs/design_review/design_principles/standard.toml`. The seven foundations organize review
 of responsibilities, contracts, composition, explicit domain models and scoped semantic
-authority, constraints and local reasoning. Requested and scheduled reviews assess whether an
+authority, constraints, local reasoning and physical execution fit. Requested and scheduled reviews assess whether an
 adequate domain model governs behavior. Ordinary implementation does not initiate a separate
 domain-model review; flow tracing is optional when it resolves a concrete question. Owned concepts
 and operation contracts govern behavior; ordinary domain functions can suffice. A2 assesses both
 model adequacy and authoritative behavior; an in-scope MUST gap cannot be waived for supported behavior.
-A1–A3 judge architecture independently of correctness and domain-fidelity gates. The
+A1–A4 judge architecture independently of correctness and domain-fidelity gates. The
 {{ project_name }} binding maps §B decisions to the standard and owns review cadence and finding
 disposition. Changing a §B decision needs an ADR and a design/target review. Acceptance,
-implementation and verification remain distinct facts.
+implementation and verification remain distinct facts. FP-07/A4 require a credible physical route
+for the functional workload, including relevant growth, skew, concurrency and failure. Compare
+necessary versus repeated work, composed library/optimizer capabilities, locality, working sets,
+reuse, assurance placement, publication/recovery scope and total runtime/operator machinery.
+A bounded response or safe refusal alone does not establish workload fit. Static evidence may
+establish structural cost; measured speed and capacity need measurements. No new permanent
+checklist, benchmark campaign or ordinary-implementation review follows.
 
 **Agent workflow — Implemented** (ADR-0006). [Shared role contracts](../../.agents/roles/README.md)
 define six reusable worker responsibilities, while native Codex and Claude adapters own model settings

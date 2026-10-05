@@ -12,18 +12,22 @@ report a conflict and its resolution route.
 
 | Layer | Document | Version |
 |---|---|---|
-| Core | [design principles](../core/design-principles.md), [review template](../core/design-review-template.md) | 3.2 (repository-owned edition, ADR-0002/0006) |
+| Core | [design principles](../core/design-principles.md), [review template](../core/design-review-template.md) | 3.3 (repository-owned edition, ADR-0002/0006) |
 {% if with_ci_profile -%}
-| Profile | [code-intelligence principles](../profiles/code-intelligence/principles.md), [review additions](../profiles/code-intelligence/review.md) | 1.3 |
+| Profile | [code-intelligence principles](../profiles/code-intelligence/principles.md), [review additions](../profiles/code-intelligence/review.md) | 1.4 |
 {% endif -%}
 | Binding | this page | — |
 
 The version/path declaration in [`standard.toml`](../standard.toml) is authoritative for loading.
-Preserve DP{% if with_ci_profile %}/CI{% endif %} IDs and historical version semantics; FP-01–FP-06 and A1–A3 supply the
+Preserve DP{% if with_ci_profile %}/CI{% endif %} IDs and historical version semantics; FP-01–FP-07 and A1–A4 supply the
 architecture structure. FP-04/A2 require an adequate, explicit domain model that governs
-behavior. ADR-0006 adopts core/template 3.2 and the aligned profile guidance. Apply domain-model
+behavior. ADR-0002/0006 adopts core/template 3.3 and code-intelligence guidance 1.4 when selected. Apply domain-model
 assessment within requested or scheduled reviews; ordinary implementation does not initiate it.
-Follow flows only where they resolve a concrete uncertainty within that scope.
+Follow flows only where they resolve a concrete uncertainty within that scope. FP-07/A4 assess
+execution fit for the functional-intent workload: access paths, necessary work, library composition,
+locality, working sets, reuse, assurance and lifecycle/recovery scope. Semantic declarations do not
+prescribe physical granularity. Static evidence can establish amplification; quantitative performance
+claims need measurements. No new standing review, checklist or benchmark obligation is introduced.
 
 ## Reviews in this repository
 
@@ -80,7 +84,7 @@ them after reconstructing responsibilities and expected changes.
 | Meaning | Authority |
 |---|---|
 | Design claim strength | Core principles §D; label and date the claim actually established |
-| Architectural judgments | Core §E, A1–A3; report separately from gate verdicts |
+| Architectural judgments | Core §E, A1–A4; report separately from gate verdicts |
 | Correctness/fidelity gate verdicts | Core §A{% if with_ci_profile %} and profile gates{% endif %} |
 | Check execution outcomes | AGENTS.md Reporting; each outcome names its command |
 | Domain vocabulary | Executable declarations and DESIGN; never infer it from review labels |
