@@ -12,8 +12,9 @@ The repository layer of the design standard. It defines no principles; it maps t
 [code-intelligence profile](../profiles/code-intelligence/principles.md){% endif %} onto this repository's
 binding decisions, review cadence, vocabularies and code. `docs/design/DESIGN.md` plus
 `docs/design/sections/` is the architectural collection; DESIGN §2 delegates review mechanics to
-this page under ADR-0002. Other design contracts and accepted decisions govern their domains;
-report a conflict and its resolution route.
+this page under ADR-0002. Other design contracts and accepted decisions govern plan execution and
+implementation review in their domains; a design review treats them as current design and reports
+its rule impacts instead (design-review, Grounding).
 
 ## Standard applied
 
@@ -48,10 +49,14 @@ remain. No new standing review, checklist or benchmark obligation is introduced.
   folder merely because it is a review. Tested and Measured claims still need their stated evidence.
 - **Who:** the `design-review` skill{% if with_ci_profile %} with `design-review-code-intelligence`{% endif %}, usually through a
   fresh `design-reviewer` subagent, so the author of a change is not its reviewer.
-- **Cadence and purpose** (ADR-0002):
+- **Grounding:** the standard and the functional target in `docs/design/DESIGN.md` §1.1; any
+  mechanism §1.1 names is a rule, like ADRs and the policies on this page. A review lists the
+  rules its recommendations would change (`review#RCnn`); they change only after the operator
+  confirms them in plan creation.
+- **Cadence and purpose** (ADR-0002; every review has the `target` purpose):
   - Before a substantial stage, changed ownership/dependency boundary or §B decision: a
     **design/target** review, including adjacent consumers and realistic change scenarios.
-  - For a bounded slice inside accepted boundaries: **change/conformance**, with the affected
+  - For a bounded slice inside accepted boundaries: **change/target**, with the affected
     contract, one relevant extension scenario and its enclosing architectural limit. Pure
     mechanical changes may give an explicit reason the scenario is unchanged.
   - At an integrated stage or increment boundary: **design/target** review of the assembled
@@ -61,15 +66,16 @@ remain. No new standing review, checklist or benchmark obligation is introduced.
     inseparable test setup or repeated structural deferrals affect planned work. These are
     reasoning triggers, not new blocking hooks.
   - A local pass never certifies the enclosing architecture.
-- **Authority:** the architectural collection is authoritative, so a divergence from an
-  implemented claim is a code defect or a stale DESIGN section; distinguish both from an accepted
-  target still awaiting implementation.
+- **Authority:** for plan execution and implementation review, the architectural collection is
+  authoritative, so a divergence from an implemented claim is a code defect or a stale DESIGN
+  section; distinguish both from an accepted target still awaiting implementation. A design
+  review judges the collection against the standard and the functional target instead.
 - **Outcomes and labels:** check outcomes are `passed`/`failed`/`blocked`/`not_run` with the
   command (AGENTS.md *Reporting*); historical test receipts keep their original date and scope
   and are not fresh runs; a mocked provider is never a pass; outcomes are never turned into a
   percentage.
 - **Reviews are evidence, never authority.** A governed architectural section changes through
-  the ADR that responds to a finding.
+  the ADR that responds to a finding, once the operator has confirmed any rule change it carries.
 {% if with_docs_site %}
 **Documentation boundary (ADR-0003).** Read the architecture map, relevant section owner and
 adjacent consumers. Stable section IDs survive relocation; one resolver supplies ADR lint and the
@@ -120,6 +126,8 @@ closed or superseded. An accepted ADR is a decision, not implementation or closu
 only when the named evidence establishes its correction. A closed or superseded row can leave the
 plan once the commit that removes the row cites its closure evidence; Git retains it (ADR-0001).
 
+A review's rule impacts (`review#RCnn`) go to plan creation for operator confirmation first;
+an accepted change then uses the route below, and a rejected one stays as the plan records it.
 An action uses the existing route appropriate to it:
 
 - **ADR + DESIGN** for changed architecture, semantics or a meaningful alternative; accepted

@@ -38,8 +38,11 @@ repository binding that owns review cadence and finding disposition.
 - Compare access paths, necessary work, composed library capabilities, locality, working sets,
   reuse, assurance placement, lifecycle/recovery and total machinery against functional intent.
   Semantic ownership does not prescribe physical granularity; safe refusal alone is not fit.
+- Reviews are grounded only in the standard and the functional target. ADRs, binding policies
+  and other rules are current design: a review lists the rules its recommendations would change,
+  and they change only after the operator confirms them in plan creation.
 - The binding owns cadence: design/target reviews before substantial stages or §B changes,
-  change/conformance reviews for bounded slices, design/target at integrated stage ends. Effort
+  change/target reviews for bounded slices, design/target at integrated stage ends. Effort
   follows risk. Reviews run through a fresh `design-reviewer` subagent, so the author of a change
   is not its reviewer.
 - Reviews preserve dated findings. One active plan table owns current execution disposition;

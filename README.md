@@ -87,6 +87,13 @@ its current decisions, receipts and content; do not overwrite these files with f
 Fresh projects receive these links directly. No new ADR, standard version or gate is needed
 solely to adopt the companion; accepted and historical records remain immutable.
 
+Design reviews are grounded only in the standard and the functional target (DESIGN §1.1). ADRs,
+§B decisions, binding policies and other rules are current design, not criteria: every review
+has the `target` purpose and lists its rule impacts (`review#RCnn`), and `create-plan` has the
+operator accept or reject each before the plan depends on it. The skills carry this to existing
+projects; their protected binding needs the same edits by hand (grounding bullet, `change/target`
+cadence, authority scoped to execution, the RCnn route in § 4). Accepted ADRs stay immutable.
+
 Core 3.3 and optional code-intelligence guidance 1.4 add FP-07/A4 execution fit alongside the
 independent semantic gates. Reviews qualitatively assess physical work, composed libraries, locality,
 reuse, assurance and lifecycle scope from relevant operations and growth/failure scenarios, explaining
