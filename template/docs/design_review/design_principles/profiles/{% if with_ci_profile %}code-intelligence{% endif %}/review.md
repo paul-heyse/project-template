@@ -1,5 +1,10 @@
 # Code-intelligence review additions
 
+Read the [design principles](../../core/design-principles.md) and [efficient-architecture heuristics](../../core/efficient-architecture-heuristics.md) together
+with this profile. Consider relevant physical execution patterns early for code-intelligence
+operations; these additions preserve every core review slot and independent judgment, without
+an exhaustive checklist, cost model or additional proof machinery.
+
 **Version 1.4 · 2026-10-05** · What the [code-intelligence profile](principles.md) adds to
 each slot of the [core review template](../../core/design-review-template.md). The additions sit
 within the core slots; no slot is added or removed. Each applies only where the subject touches

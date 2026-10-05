@@ -5,6 +5,12 @@ description: Plan how to create an implementation-plan document from a design re
 
 # Plan the creation of a plan
 
+Use the [design principles](../../../docs/design_review/design_principles/core/design-principles.md) and [efficient-architecture heuristics](../../../docs/design_review/design_principles/core/efficient-architecture-heuristics.md) together
+while preparing consequential choices and comparing alternatives. Consider relevant patterns
+before physical organization, interfaces, preparation, assurance and lifecycle mechanisms become
+entrenched. Keep the assessment qualitative and proportional; no exhaustive checklist, cost
+model or additional proof machinery is required.
+
 Prepare the investigation and decision-making needed to produce a coherent, implementable
 proposal. Build on the user's intended outcome and any approach already supplied. Choose the
 questions, context and division of reasoning that will make authoring productive; leave the

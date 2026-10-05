@@ -9,6 +9,12 @@ Supersedes core 3.2; §I preserves its lineage and the Data Model–Based Design
 The seven foundations below organize architectural judgment. DP-01–DP-24 retain their IDs as
 supporting rules; §I records the version lineage. Domain profiles supply additional constraints.
 
+Read this standard together with the [efficient-architecture heuristics](efficient-architecture-heuristics.md).
+The companion offers qualitative judgment for consequential choices while preserving these
+principles and their independent correctness, fidelity and assurance obligations. Consider relevant
+patterns early, before physical organization and lifecycle choices become entrenched; it adds no
+checklist, gate, cost model or proof machinery.
+
 ## 0. How to use this document
 
 **Layers.** This is the core of a layered standard:
@@ -182,6 +188,10 @@ local behavior should not require unrelated acquisition, storage or serving infr
 exercised through its contract? Is uncertainty visible rather than hidden in ambient state?
 
 ### FP-07 — Execution fits the workload
+
+Use the [efficient-architecture heuristics](efficient-architecture-heuristics.md) alongside this
+foundation when choosing a physical realization; material tradeoffs can be assessed before
+interfaces, preparation and lifecycle mechanisms become expensive to change.
 
 Choose representations, algorithms, access paths, execution placement and lifecycle granularity
 for the operations and input sizes the system supports. Work should follow necessary data and
@@ -706,6 +716,10 @@ Labels describe different claims, not one ladder: a measured implementation can 
 incorrect, and an interface-checked design can still need substantial engineering.
 
 ## §E Change locality and execution fit
+
+The [efficient-architecture heuristics](efficient-architecture-heuristics.md) complement the
+lenses below. Use relevant patterns for early judgment and revealed mismatches, preserving the
+full foundation, lens and correctness/fidelity assessment rather than replacing it.
 
 Choose realistic changes from the product's next capabilities or known variation axes: a new
 model, provider revision, analytic, workflow, rendering, invariant or isolated test. Assess which

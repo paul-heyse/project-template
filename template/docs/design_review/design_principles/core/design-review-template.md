@@ -1,5 +1,9 @@
 # Design review template
 
+Read the [design principles](design-principles.md) and [efficient-architecture heuristics](efficient-architecture-heuristics.md) together. Use relevant heuristics early in
+consequential physical choices and alternatives; preserve every existing review slot and lens.
+The companion adds no exhaustive checklist, cost models or proof machinery.
+
 **Version 3.3 · 2026-10-05** · Core layer: repository- and domain-agnostic.
 Standard: [design principles](design-principles.md): FP-01–FP-07 organize architectural
 assessment; DP-01–DP-24 support it; A1–A4 and G1–G8 remain separate judgments.

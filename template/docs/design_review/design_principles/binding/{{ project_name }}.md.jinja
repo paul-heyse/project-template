@@ -1,5 +1,12 @@
 # {{ project_name }} binding
 
+Apply the [design principles](../core/design-principles.md) and [efficient-architecture heuristics](../core/efficient-architecture-heuristics.md) together
+for consequential architectural choices. Use qualitative judgment before physical organization,
+interfaces, preparation, assurance and lifecycle choices become entrenched. During execution,
+apply relevant guidance to material open choices or revealed mismatches; reuse settled reviews
+unless concrete new evidence warrants reopening them. No standing checklist, cost model or
+additional proof machinery follows.
+
 The repository layer of the design standard. It defines no principles; it maps the
 [core design principles](../core/design-principles.md){% if with_ci_profile %} and the
 [code-intelligence profile](../profiles/code-intelligence/principles.md){% endif %} onto this repository's
@@ -12,7 +19,7 @@ report a conflict and its resolution route.
 
 | Layer | Document | Version |
 |---|---|---|
-| Core | [design principles](../core/design-principles.md), [review template](../core/design-review-template.md) | 3.3 (repository-owned edition, ADR-0002/0006) |
+| Core | [design principles](../core/design-principles.md), [efficient-architecture heuristics](../core/efficient-architecture-heuristics.md), [review template](../core/design-review-template.md) | 3.3 (repository-owned edition, ADR-0002/0006) |
 {% if with_ci_profile -%}
 | Profile | [code-intelligence principles](../profiles/code-intelligence/principles.md), [review additions](../profiles/code-intelligence/review.md) | 1.4 |
 {% endif -%}

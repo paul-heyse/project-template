@@ -17,6 +17,11 @@ implementation separately from the proposed target.
 
 ## Options
 
+Use the [design principles](../design_review/design_principles/core/design-principles.md) and [efficient-architecture heuristics](../design_review/design_principles/core/efficient-architecture-heuristics.md) together
+to compare material alternatives early, before physical choices become entrenched. Explain
+qualitative tradeoffs where relevant; no checklist, cost model or additional proof machinery
+is required.
+
 1. **The simplest viable alternative** — say why it loses or wins.
 2. Other meaningful choices. Compare change propagation, semantic ownership, composition,
    isolated testing and total library/bespoke integration burden where relevant.

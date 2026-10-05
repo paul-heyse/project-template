@@ -20,7 +20,11 @@ declared cadence. Ordinary implementation work does not itself initiate a domain
 ## Load the standard
 
 Find `standard.toml` at the location named by repository instructions. Read the declared core
-principles and template, each profile and its companion skill, then the repository binding.
+principles, `core.heuristics` companion when declared, and template, each profile and its companion
+skill, then the repository binding. Read the principles and companion together; use relevant
+heuristics early when assessing physical choices and alternatives. Older manifests without
+`core.heuristics` keep their declared loading behavior. The companion adds no exhaustive checklist,
+cost model or additional proof machinery.
 The manifest owns versions and paths; the binding owns local cadence, authority and disposition
 routes. If the manifest is absent, use an available core and state the limitation. If the core is
 missing, report the missing prerequisite.

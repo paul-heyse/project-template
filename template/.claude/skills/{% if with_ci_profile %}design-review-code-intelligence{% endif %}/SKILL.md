@@ -6,6 +6,10 @@ allowed-tools: Read, Glob, Grep, Bash, Write, Edit, Agent
 
 # Design review — code-intelligence profile
 
+Use the [design principles](../../../docs/design_review/design_principles/core/design-principles.md) and [efficient-architecture heuristics](../../../docs/design_review/design_principles/core/efficient-architecture-heuristics.md) together
+with the core review and this profile. Apply relevant qualitative guidance before physical
+choices become entrenched; it adds no checklist, cost model or proof machinery.
+
 This skill **layers onto `design-review`**; it never replaces it. Load the core skill first.
 The core fixes slots 1–12, foundations FP-01–FP-07, architectural judgments A1–A4,
 gates G1–G8, findings and decisions. This profile adds domain constraints. Its fact and

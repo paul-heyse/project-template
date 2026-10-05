@@ -14,7 +14,8 @@ Every generated project gets the **core**:
   ADR-0001 (light process, current working set, end-of-turn bundles) and ADR-0002 (design review);
 - `docs/design/`: an architecture map and a DESIGN skeleton with stable § IDs and
   `> Decision:` lines;
-- `docs/design_review/`: the layered design standard (core 3.3), a repository binding, reviews
+- `docs/design_review/`: the layered design standard (core 3.3) paired with
+  `core/efficient-architecture-heuristics.md` (all H1–H28), a repository binding, reviews
   and evidence conventions, the `design-review` skill and the `design-reviewer` subagent;
 - explicit concepts and operation contracts govern behavior, assessed through FP-04/A2 during
   bounded design reviews; ordinary implementation does not initiate a modeling exercise (ADR-0006);
@@ -68,6 +69,23 @@ Seeds the project owns after generation are never touched by updates: README, ST
 architecture map, the ADRs and their index, pins, the binding and the evidence index
 (`_skip_if_exists` in `copier.yml`). Root README and STATUS patterns are anchored so managed
 role and skill READMEs continue to receive workflow updates.
+
+The design principles and efficient-architecture heuristics are used together in all generated
+projects, independently of the optional code-intelligence profile and documentation site.
+`standard.toml` declares `core.heuristics`; the site publisher includes it when present while
+continuing to accept older manifests without that key. Standard versions remain unchanged.
+The companion supports qualitative early judgment before physical organization, interfaces,
+preparation, assurance and lifecycle choices become entrenched. It adds no checklist, cost
+model or proof machinery and does not restart settled reviews during execution.
+
+Copier continues to protect existing project DESIGN, binding and STATUS files. After updating
+an existing project, manually add links to both
+`docs/design_review/design_principles/core/design-principles.md` and
+`docs/design_review/design_principles/core/efficient-architecture-heuristics.md` in its owned
+DESIGN guidance, binding's applied-standard guidance and current STATUS checkpoint. Preserve
+its current decisions, receipts and content; do not overwrite these files with fresh seeds.
+Fresh projects receive these links directly. No new ADR, standard version or gate is needed
+solely to adopt the companion; accepted and historical records remain immutable.
 
 Core 3.3 and optional code-intelligence guidance 1.4 add FP-07/A4 execution fit alongside the
 independent semantic gates. Reviews qualitatively assess physical work, composed libraries, locality,

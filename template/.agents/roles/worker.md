@@ -1,5 +1,11 @@
 # Shared worker contract
 
+Use the [design principles](../../docs/design_review/design_principles/core/design-principles.md) and [efficient-architecture heuristics](../../docs/design_review/design_principles/core/efficient-architecture-heuristics.md) together
+within the assignment: relevant qualitative judgment for consequential open choices or revealed
+mismatches, before physical mechanisms become entrenched. Reuse settled reviews; raise concrete
+cross-boundary concerns to the coordinator. No exhaustive checklist, cost model or additional
+proof machinery follows, and the role's permitted effects remain as assigned.
+
 Use applicable instructions already supplied in context; if AGENTS.md is absent, load it before
 acting. Load the common and assigned role contracts once, plus relevant workflow or library skills.
 The root's general startup tour is not repeated by workers: use the brief and relevant owners,

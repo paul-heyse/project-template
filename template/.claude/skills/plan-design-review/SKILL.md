@@ -5,6 +5,12 @@ description: Plan a design review around the user's goal, grounded in the reposi
 
 # Plan a design review
 
+Use the [design principles](../../../docs/design_review/design_principles/core/design-principles.md) and [efficient-architecture heuristics](../../../docs/design_review/design_principles/core/efficient-architecture-heuristics.md) together
+while preparing consequential choices and comparing alternatives. Consider relevant patterns
+before physical organization, interfaces, preparation, assurance and lifecycle mechanisms become
+entrenched. Keep the assessment qualitative and proportional; no exhaustive checklist, cost
+model or additional proof machinery is required.
+
 Prepare an inquiry capable of producing an independent, well-supported judgment. Treat the
 user's description as the goal and build on any approach already supplied. Choose the
 questions, context and division of reasoning that will make the review productive; leave its

@@ -1,5 +1,9 @@
 # Design review — reference
 
+Use the [design principles](../../../docs/design_review/design_principles/core/design-principles.md) and [efficient-architecture heuristics](../../../docs/design_review/design_principles/core/efficient-architecture-heuristics.md) together
+with these calibration lenses. Relevant heuristics support early qualitative judgment about
+physical choices; they do not replace existing lenses or create a checklist.
+
 Companion to [SKILL.md](SKILL.md). Lenses and calibration examples that have repeatedly
 turned up real defects. None is a required step. Foundation and rule IDs refer to the core design
 principles; profile lenses live in the profile's own skill.

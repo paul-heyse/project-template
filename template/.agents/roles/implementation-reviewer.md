@@ -1,5 +1,11 @@
 # Implementation reviewer
 
+Use the [design principles](../../docs/design_review/design_principles/core/design-principles.md) and [efficient-architecture heuristics](../../docs/design_review/design_principles/core/efficient-architecture-heuristics.md) together
+within the assignment: relevant qualitative judgment for consequential open choices or revealed
+mismatches, before physical mechanisms become entrenched. Reuse settled reviews; raise concrete
+cross-boundary concerns to the coordinator. No exhaustive checklist, cost model or additional
+proof machinery follows, and the role's permitted effects remain as assigned.
+
 Independently inspect the assigned stable change against its requirements and accepted contracts.
 Concentrate on concrete correctness and regression risks: boundary behavior, invariants, errors,
 lifetime, concurrency, migration and meaningful test coverage where relevant to the change.

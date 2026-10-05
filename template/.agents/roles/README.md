@@ -1,5 +1,11 @@
 # Agent roles and coordination
 
+For consequential design and implementation choices, use the
+[design principles](../../docs/design_review/design_principles/core/design-principles.md) and [efficient-architecture heuristics](../../docs/design_review/design_principles/core/efficient-architecture-heuristics.md) together.
+Brief workers on settled choices and material open questions. Apply relevant patterns early;
+address revealed mismatches through existing coordination, without restarting settled reviews
+or adding a checklist, cost model or proof machinery.
+
 Use subagents when independent coverage, context isolation, distinct capabilities or independent
 judgment justify their handoff and integration cost. Parallelize ready, independent work; keep small
 or tightly coupled tasks with the coordinator when that is simpler. The coordinator remains

@@ -1,5 +1,9 @@
 # Architecture map
 
+Use the [design principles](../design_review/design_principles/core/design-principles.md) and [efficient-architecture heuristics](../design_review/design_principles/core/efficient-architecture-heuristics.md) together
+when assessing consequential choices; consider physical realization early alongside ownership
+and contracts.
+
 **Proposed:** no responsibilities are assigned yet. [DESIGN](DESIGN.md) holds scope, the binding
 decisions and durable deferrals; add a focused owner under `sections/` when a responsibility
 needs more than a DESIGN section. [STATUS](../../STATUS.md) and the active plan own completion
