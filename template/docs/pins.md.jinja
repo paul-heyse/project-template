@@ -1,20 +1,19 @@
 # Pins
 
-Dependencies float: manifests carry the tool's default specifier
-(`uv add` → `>=`{% if with_rust %}, `cargo add` → caret{% endif %}), the committed lockfiles record the resolved versions, and
-`just upgrade` moves them to the latest at an agent's discretion. This page lists only the deliberate exceptions — an
-exact version, cap, git rev or hold-back — each with the reason specific to that dependency and
-when to revisit it. Add, change or remove a row with the `pin-check` skill. A dependency with
-no row here is whatever the lockfile holds.
+Every declared dependency is pinned exactly in its manifest, and the lockfiles hold the rest
+(AGENTS.md, Dependencies). This page lists the holds, meaning pins that should not be bumped
+casually, each with its reason and when to revisit it. It also lists toolchains. A pinned
+dependency without a row can be bumped when the work calls for it. Add, change or remove a row
+with the `pin-check` skill.
 
 ## Toolchains
 
 | Component | Pin | Reason | Revisit when | Verified |
 |---|---|---|---|---|
-| Python | {{ python_version }} (`.python-version`, uv) | Interpreter and toolchain versions are outside the float policy for now | the policy extends to toolchains | not yet (template): `uv run --no-project python --version` |
-| just | 1.58.0 or later | Interpreter and toolchain versions are outside the float policy for now | the policy extends to toolchains | not yet (template): `just --version` |
+| Python | {{ python_version }} (`.python-version`, uv) | Toolchain | a release the project needs | not yet (template): `uv run --no-project python --version` |
+| just | 1.58.0 or later | Toolchain | a release the project needs | not yet (template): `just --version` |
 {% if with_rust -%}
-| Rust toolchain | {{ rust_toolchain }} (`rust-toolchain.toml`, `rust-version`) | Interpreter and toolchain versions are outside the float policy for now | the policy extends to toolchains | not yet (template): `rustc --version` inside the repo |
+| Rust toolchain | {{ rust_toolchain }} (`rust-toolchain.toml`, `rust-version`) | Toolchain | a release the project needs | not yet (template): `rustc --version` inside the repo |
 {% endif %}
 ## Dependencies
 
@@ -22,15 +21,14 @@ no row here is whatever the lockfile holds.
 |---|---|---|---|---|
 {%- if with_rust %}
 
-A caret requirement (what `cargo add` writes) or an open `>=` floor needs nothing here. An
-exact `=x.y.z`, a cap (`<`, `<=`, `~`, a wildcard) or a git `rev` needs a row in this table;
-`just deps` checks that it has one. Declare crate families that must resolve to one version in
-`[workspace.metadata.pins] families` in `Cargo.toml`, and pin their members exactly (one glob
-row such as `arrow-*` covers a family).
+Every registry dependency is pinned exactly (`=x.y.z`) or by git `rev`; `just deps` checks it.
+A row here is only for a hold. Declare crate families that must resolve to one version in
+`[workspace.metadata.pins] families` in `Cargo.toml`; their members are pinned exactly like every
+other dependency.
 {%- endif %}
 {%- if with_docs_site %}
 
-Documentation binaries are listed in [site.toml](site.toml). A tool listed there without a
-version means the latest; a version given there is a pin and needs a row here. Change them with
-focused `just docs-test` and `just docs-check`.
+Documentation binaries are listed in [site.toml](site.toml); the versions there are pinned and
+`just bootstrap-docs` installs exactly those. Change them with focused `just docs-test` and
+`just docs-check`.
 {%- endif %}

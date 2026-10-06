@@ -1,15 +1,14 @@
-"""Rust dependency policy: deliberate pins have a docs/pins.md row; one version per family.
+"""Rust dependency policy: every declared dependency is pinned exactly; one version per family.
 
-- Workspace dependencies float by default: a caret requirement (what `cargo add` writes) or an
-  open `>=` floor needs nothing. A deliberate pin needs a row in `docs/pins.md` recording its
-  reason: an exact `=x.y.z`, a cap (`<`, `<=`, `~` or a wildcard) or a git `rev`/`tag`. A row
-  names the crate anywhere in the page, or matches a first-column glob such as `arrow-*`.
-- A member of a declared family is pinned exactly (one glob row covers the family), so an
-  update cannot move one member without the others.
+- Every `[workspace.dependencies]` entry is pinned exactly, so the environment changes only when
+  someone changes it on purpose: a registry dependency is an exact `=x.y.z` (`cargo add
+  name@=x.y.z`), and a git dependency carries a `rev` (a tag or branch can move). A caret, floor
+  or cap fails. A path dependency is exempt. An exact pin needs no docs/pins.md row; that page
+  lists only holds.
 - `[workspace.metadata.pins] families` lists crate-name patterns whose types cross crate
   boundaries (e.g. `"arrow(-.+)?"`). Two versions of such a crate compile but are incompatible
   at every boundary, so a lockfile holding two fails. Cargo.lock is read directly, so
-  dev-dependencies count too.
+  dev-dependencies count too. Family members are pinned exactly like every other dependency.
 
 Usage: check_pins.py [LOCKFILE ...]   (default: ./Cargo.lock)
 """
@@ -41,49 +40,28 @@ def duplicates(lockfile: Path, family: re.Pattern[str] | None) -> dict[str, list
     return {name: sorted(v) for name, v in versions.items() if len(v) > 1}
 
 
-def pin_kind(spec: str | dict) -> str | None:
-    """`exact pin`, `cap` or `git rev` for a deliberate pin; None for a caret or open floor."""
-    if isinstance(spec, dict) and ("rev" in spec or "tag" in spec):
-        return "git rev"
-    version = spec if isinstance(spec, str) else spec.get("version")
-    comparators = [c.strip() for c in (version or "").split(",") if c.strip()]
-    if any(c.startswith("=") for c in comparators):
-        return "exact pin"
-    if any(c.startswith(("<", "~")) or "*" in c for c in comparators):
-        return "cap"
-    return None
+def problem(spec: str | dict) -> str | None:
+    """Why a dependency is not pinned exactly, or None when it is (or is a path dependency)."""
+    if isinstance(spec, dict) and "path" in spec:
+        return None
+    if isinstance(spec, dict) and "git" in spec:
+        return None if "rev" in spec else "git dependency without a rev"
+    version = (spec if isinstance(spec, str) else spec.get("version")) or ""
+    if re.fullmatch(r"\s*=\s*[^\s,<>=~*^]+\s*", version):
+        return None
+    return f"not pinned exactly ({version!r}; use =x.y.z)"
 
 
-def unpinned(manifest: Path, pins: Path) -> list[str]:
+def unpinned(manifest: Path) -> list[str]:
     deps = tomllib.loads(manifest.read_text()).get("workspace", {}).get("dependencies", {})
-    family = families(manifest)
-    text = pins.read_text()
-    globs = [
-        cell.strip(" `")[:-1]
-        for line in text.splitlines()
-        if line.startswith("| ")
-        for cell in line.split("|")[1].split(",")
-        if cell.strip(" `").endswith("*")
-    ]
-    problems = []
-    for name, spec in sorted(deps.items()):
-        kind = pin_kind(spec)
-        local = isinstance(spec, dict) and "path" in spec
-        if family and family.match(name) and kind not in ("exact pin", "git rev") and not local:
-            problems.append(f"{name}: family member not pinned exactly")
-            continue
-        if kind is None:
-            continue
-        if name not in text and not any(name.startswith(g) for g in globs):
-            problems.append(f"{name}: {kind} without a docs/pins.md row")
-    return problems
+    return [f"{name}: {why}" for name, spec in sorted(deps.items()) if (why := problem(spec))]
 
 
 def main(argv: list[str], root: Path = ROOT) -> int:
     manifest = root / "Cargo.toml"
     failed = False
-    for problem in unpinned(manifest, root / "docs" / "pins.md"):
-        print(f"Cargo.toml: {problem}")
+    for issue in unpinned(manifest):
+        print(f"Cargo.toml: {issue}")
         failed = True
     family = families(manifest)
     for lock in [Path(a) for a in argv] or [root / "Cargo.lock"]:

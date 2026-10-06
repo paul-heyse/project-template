@@ -1,46 +1,26 @@
 ---
 name: pin-check
-description: Deliberately pin, cap or hold back a dependency or tool, remove such a pin, or verify a claim about which version is in use. Not needed to add or upgrade a dependency — those float (`uv add`{% if with_rust %}, `cargo add`{% endif %}, `just upgrade`). Use before writing an exact version, upper cap or git rev into {% if with_rust %}Cargo.toml, {% endif %}{% if with_python %}pyproject.toml, {% endif %}{% if with_docs_site %}docs/site.toml, {% endif %}or docs/pins.md, and when a "what version do we use" claim needs checking.
+description: Add, bump, hold or release a dependency version, or check a claim about which version is in use. Use before changing a version in a manifest or in docs/pins.md.
 ---
 
 # Pin check
 
-Dependencies float by default (AGENTS.md, Dependencies): adding one or moving to the latest
-needs no pin and no row. This skill covers the deliberate exceptions recorded in
-`docs/pins.md`.
+Every declared dependency is pinned exactly; the lockfiles hold the rest (AGENTS.md, Dependencies).
 
-1. **Read the primary source in this session**: the lockfile (`uv.lock`{% if with_rust %}, `Cargo.lock`{% endif %}), the
-   package's own manifest{% if with_rust %} (for a crate, its `Cargo.toml` in `~/.cargo/registry/src` or
-   `~/.cargo/git/checkouts`){% endif %}, the upstream tag, or the tool's own `--version`. Context7 and
-   memory are leads, not evidence. Never report a version you did not read in this session.
-2. **Pin only for an overt reason specific to the dependency:**
-   - a named breakage or incompatibility;
-   - a type-sharing family that must resolve to one version;
-   - a fork, git rev or vendored source;
-   - a content-addressed acquisition;
-   - golden or byte-stable output, or a private-API use;
-   - a parity or reference oracle;
-   - an experimental control;
-   - platform or wheel availability.
-
-   Not reasons: reproducibility (the lockfile gives it), "already in the lock", or a version
-   entering a key or digest (a bump re-keys).
-3. Write the pin, then run the tests the change affects; `just test-all` at the end of the
-   scope.{% if with_rust %} `just hygiene` runs `just deps`: every exact pin, cap or git rev has a row, declared
-   families are pinned exactly and resolve to one version, and cargo-deny checks bans and sources.{% endif %}
+- **Add or bump:** `uv add 'pkg==x.y.z'` (plus `--project <dir>` for a sub-project){% if with_rust %}, or
+  `cargo add pkg@=x.y.z` (a git dependency by its `rev`){% endif %}.
+  Move a family together. Read the lock diff so that only what you meant moved, run the tests the
+  move affects and name it in the commit.
+  Glance at the library-skill versions: when a skill's version differs from the locked one, a
+  transferred claim is unverified at the locked version.{% if with_rust %} `just deps` checks that every registry
+  dependency is exact and declared families resolve to one version.{% endif %}
 {%- if with_docs_site %}
-   For documentation binaries in `docs/site.toml`: a tool listed without a version means the
-   latest; a version given there is a pin with a `docs/pins.md` row. Verify the installed
-   version, then run `just docs-test`; `docs-check` runs within `just hygiene`. No product gate
-   is required.
+  Documentation binaries are pinned in `docs/site.toml`; after a change run `just bootstrap-docs`
+  and `just docs-test`.
 {%- endif %}
-4. Add or update the row in `docs/pins.md`: the pin, its reason, when to revisit it, today's
-   date and the command that verified it. Removing a pin removes its row; the lockfile then
-   holds the version.
-5. If a §B decision governs a pin, moving it is an ADR (`just adr supersede …`).
+- **Hold:** add a `docs/pins.md` row with the reason, when to revisit it, and today's date with the
+  command that verified it. **Release:** delete the row.
+- **Version claims:** read them from the lockfile or installed metadata (or the tool's own
+  `--version`), never from memory or Context7, and date them.
 
-Library skills record the version they were built at, and pins that exist for a skill are
-outside this policy for now. When a skill's version differs from the locked one, a transferred
-claim is unverified at the locked version: say so.
-
-A contradiction between a documented claim and what you read is a finding: stop and report it.
+Never re-resolve wholesale (`uv lock --upgrade`{% if with_rust %}, bare `cargo update`{% endif %}) unless the operator asks.
