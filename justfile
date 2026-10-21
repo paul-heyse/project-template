@@ -7,6 +7,10 @@ set shell := ["bash", "-euo", "pipefail", "-c"]
 default:
     @just --list
 
+# Focused activation/setup renders; no dependency installs or native builds
+test-env:
+    uv run --no-project --offline --no-python-downloads python tools/test-environment.py
+
 # Render all combinations and run their checks
 test: (combo "core" "-d with_rust=false -d with_python=false -d with_ast_grep=false") (combo "rust" "-d with_rust=true -d with_python=false -d with_ast_grep=false") (combo "python" "-d with_rust=false -d with_python=true -d with_ast_grep=true") (combo "full" "-d with_docs_site=true -d with_ci_profile=true")
     @echo "template test: passed (core, rust, python, full)"

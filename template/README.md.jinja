@@ -18,6 +18,12 @@ Tools: `just`, `uv`, `git` with Git LFS{% if with_rust %}, the Rust toolchain in
 present. During implementation, run compile checks and targeted tests; once all functional scope
 is implemented, run `just test-all` and `just hygiene` (the non-functional checks). `just turn-end` formats and
 regenerates at the end of a turn; `just ready` re-checks the environment after a change.
+
+After the scaffold lockfiles exist, run `bash scripts/setup-env` to prepare this checkout's
+tools and selected library-skill links. Installed toolchains follow the pin files; setup
+does not install Rust. If using direnv, review `.envrc` and run `direnv allow` once in each
+checkout. Activation removes inherited Python environment paths and performs no installs,
+builds or service startup. Personal overrides belong in ignored `.envrc.local`.
 {% if with_docs_site %}
 ## Documentation locally
 

@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# Explicit preparation. Installed toolchains are selected by the existing pin files.
+set -euo pipefail
+cd "$(dirname "${BASH_SOURCE[0]}")/.."
+[[ $# -eq 0 ]] || { echo 'usage: bash scripts/setup-env' >&2; exit 2; }
+unset VIRTUAL_ENV UV_NO_SYNC
+{% if with_python %}
+export UV_PROJECT_ENVIRONMENT=.venv
+uv sync --locked --inexact
+uv run --no-sync python scripts/library_skills.py
+{% else %}
+uv run --no-project --offline --no-python-downloads --python "$(cat .python-version)" python scripts/library_skills.py
+{% endif %}

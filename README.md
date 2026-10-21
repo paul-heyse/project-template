@@ -138,6 +138,15 @@ Improvements made in a generated project, or in library-context, come back here 
 
 ## Machine setup
 
+Generated projects include `.envrc` and `scripts/setup-env`. After scaffold lock creation,
+`bash scripts/setup-env` prepares the enabled Python layer and selected library-skill links.
+Directory activation remains separate: review `.envrc`, then `direnv allow` in each checkout.
+It removes foreign Python environment paths and performs no installation or native build.
+Personal overrides use ignored `.envrc.local`; machine-specific Codex configuration stays
+outside the template. The installed Rust toolchain follows the generated pin file.
+`just test-env` checks environment generation for all four layer combinations without
+installing dependencies or building native code.
+
 | Step | Command |
 |---|---|
 | Copier | `uv tool install copier` (9.18.2 verified 2026-09-26) |

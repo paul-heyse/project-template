@@ -74,6 +74,7 @@ permission, concurrent-work and testing constraints, and follow discovered depen
 {% endif -%}
 | Select shared library skills | Edit `.config/library-skills.toml`; then run `just ready` (`just skills-check` to inspect). Skills live in `~/.local/share/library-skills` (`LIBRARY_SKILLS_ROOT` if moved); a library skill never cites this repository, so repo-specific wiring goes here and in `docs/pins.md` |
 | Tools present? | `just doctor`, or `just ready` |
+| Prepare a checkout | `bash scripts/setup-env` uses existing lockfiles and synchronizes selected library skills. Review `.envrc`, then `direnv allow` for activation; ignored `.envrc.local` holds personal overrides. Activation performs no installs, builds or service startup. |
 | Template changes | `copier update --defaults`, then review the diff like any other change (`.copier-answers.yml` is never edited by hand) |
 
 {% if with_rust -%}
