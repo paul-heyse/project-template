@@ -1,6 +1,6 @@
 ---
 name: pin-check
-description: Add, bump, hold or release a dependency version, or check a claim about which version is in use. Use before changing a version in a manifest or in docs/pins.md.
+description: Add, bump, hold or release a dependency pin. Use when changing a dependency in a manifest or a hold in docs/pins.md.
 ---
 
 # Pin check
@@ -11,16 +11,13 @@ Every declared dependency is pinned exactly; the lockfiles hold the rest (AGENTS
   `cargo add pkg@=x.y.z` (a git dependency by its `rev`){% endif %}.
   Move a family together. Read the lock diff so that only what you meant moved, run the tests the
   move affects and name it in the commit.
-  Check overview and documentation versions: when a reference differs from the locked one, a
-  transferred claim is unverified at the locked version.{% if with_rust %} `just deps` checks that every registry
+{% if with_rust %}  `just deps` checks that every registry
   dependency is exact and declared families resolve to one version.{% endif %}
 {%- if with_docs_site %}
   Documentation binaries are pinned in `docs/site.toml`; after a change run `just bootstrap-docs`
   and `just docs-test`.
 {%- endif %}
-- **Hold:** add a `docs/pins.md` row with the reason, when to revisit it, and today's date with the
-  command that verified it. **Release:** delete the row.
-- **Version claims:** read them from the lockfile or installed metadata (or the tool's own
-  `--version`), never from memory or Context7, and date them.
+- **Hold:** add a `docs/pins.md` row with the reason, when to revisit it and today's date.
+  **Release:** delete the row.
 
 Never re-resolve wholesale (`uv lock --upgrade`{% if with_rust %}, bare `cargo update`{% endif %}) unless the operator asks.

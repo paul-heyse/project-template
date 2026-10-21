@@ -289,21 +289,21 @@ establishes a common cause. No mandatory dependency graph or additional analysis
 ### 8. Library fit and total complexity
 
 Available capability overviews can reveal functional families and advanced mechanisms worth
-investigating. Use the binding's documentation route to qualify consequential claims at the
-resolved version. Historical skill or utilization references, where retained, are optional leads;
+investigating. Use the binding's documentation route for consequential details.
+Historical skill or utilization references, where retained, are optional leads;
 they do not establish current fit or require a catalog refresh.
 
 For recommendations materially enabled by a library, preserve concrete capabilities and API
 names, their composition and design role, the reason for the choice, and material conditions or
-limits. Give precise overview-section or primary-source references with version applicability and
-evidence strength. Distinguish selected mechanisms from candidates, examples and unresolved
+limits. Give precise overview-section or primary-source references with evidence strength.
+Distinguish selected mechanisms from candidates, examples and unresolved
 feasibility; carry this account into the recommendation for subsequent planning, whatever the
 review's focus. Scale the explanation to its significance without inventorying routine calls.
 
-| Capability and owner | Consumer or planned scenario | Built-in/library/bespoke candidates | Resolved-version semantic fit and gaps | Coupling/lifecycle/test/replacement burden | Choice and reason |
+| Capability and owner | Consumer or planned scenario | Built-in/library/bespoke candidates | Semantic fit and gaps | Coupling/lifecycle/test/replacement burden | Choice and reason |
 |---|---|---|---|---|---|
 
-Inspect the resolved version's interfaces when making an API claim. A library's full surface is eligible for the
+A library's full surface is eligible for the
 agreed capability; availability alone is not a requirement. An intentional shared library data
 contract can be preferable to a forwarding abstraction. Compare composed capabilities, including
 optimizer/bulk interfaces, physical access, locality, preparation/reuse, working set and recovery.
