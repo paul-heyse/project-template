@@ -1,10 +1,7 @@
 # Design review — reference
 
-Use the [design principles](../../../docs/design_review/design_principles/core/design-principles.md) and [efficient-architecture heuristics](../../../docs/design_review/design_principles/core/efficient-architecture-heuristics.md) together
-with these calibration lenses. Relevant heuristics support early qualitative judgment about
-physical choices; they do not replace existing lenses or create a checklist.
-
-Companion to [SKILL.md](SKILL.md). Lenses and calibration examples that have repeatedly
+Companion to [SKILL.md](SKILL.md); the audit skill can also consult its diagnostic calibration
+without initiating a solution review. Lenses and calibration examples that have repeatedly
 turned up real defects. None is a required step. Foundation and rule IDs refer to the core design
 principles; profile lenses live in the profile's own skill.
 
@@ -204,7 +201,13 @@ equations are solved sequentially and converge elsewhere or fail, with no diagno
 **Verification:** a fixture with such a cycle asserting one block of size two; it fails today.
 DP-07, DP-12, G6."
 
-### G — Qualitative execution-fit assessment without a benchmark claim
+### G — Qualitative execution fit without a benchmark claim
+
+Assess execution fit qualitatively and explain material tradeoffs in plain language. This
+consideration requires no numerical estimates, cost models, estimators, runtime cost accounting,
+execution-planning machinery, instrumentation, formal cost proofs or additional proof artifacts.
+Introduce them only for a separate concrete functional or operational requirement. Quantitative
+performance/capacity claims still require measurements; semantic correctness obligations remain.
 
 **Inadequate.** "The implementation uses a database and bounds every response, so performance
 is outside this review until benchmarks exist."
@@ -216,10 +219,6 @@ crossings in a supported repeated-small-request workload. **Correction:** establ
 validity at sealing, retain its premises, use indexed batch access, and keep checks for new trust
 boundaries. **Verification:** inspect the new access and validity lifetimes; benchmark separately
 before claiming latency or capacity. FP-07, DP-03, DP-10, DP-23, A4."
-
-The assessment explains material tradeoffs in plain language. It does not require cost estimates,
-models, estimators, runtime accounting, planning machinery, instrumentation or formal cost proofs;
-those need a separate concrete requirement. Semantic correctness obligations remain.
 
 A global SCC computation can legitimately need all nodes and edges even when returning one node's
 component. An output selector cannot justify shrinking the semantic universe. A single native

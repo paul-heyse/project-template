@@ -3,7 +3,7 @@
 A [Copier](https://copier.readthedocs.io/) template for a pinned, low-friction, single-operator
 project, carrying the working system extracted from
 [library-context](https://github.com/paul-heyse/library-context), with the shared agent workflows
-and bounded-review and execution-fit policy aligned on 2026-10-05.
+and bounded-review and execution-fit policy aligned on 2026-10-20.
 
 Every generated project gets the **core**:
 
@@ -19,7 +19,7 @@ Every generated project gets the **core**:
   and evidence conventions, the `design-review` skill and the `design-reviewer` subagent;
 - explicit concepts and operation contracts govern behavior, assessed through FP-04/A2 during
   bounded design reviews; ordinary implementation does not initiate a modeling exercise (ADR-0006);
-- six shared worker roles with native Codex and Claude adapters, and paired skills for preparing
+- six shared worker roles with native Codex adapters, and paired skills for preparing
   and performing design reviews, plan creation and plan execution. The coordinator retains design,
   integration and acceptance. Delegation depends on task independence, context or capability needs,
   and whether its benefit justifies handoff and integration cost;
@@ -66,7 +66,7 @@ just check && git commit -am "Template update to <tag> (just check passed)"
 ```
 
 Seeds the project owns after generation are never touched by updates: README, STATUS, DESIGN, the
-architecture map, the ADRs and their index, pins, the binding and the evidence index
+architecture map, the ADRs and their index, pins, the binding and the evidence index, living diagnostic audit and library-overview index
 (`_skip_if_exists` in `copier.yml`). Root README and STATUS patterns are anchored so managed
 role and skill READMEs continue to receive workflow updates.
 
@@ -102,19 +102,28 @@ estimators, runtime cost accounting, execution-planning machinery, instrumentati
 or additional proof artifacts; such mechanisms need a separate concrete functional or operational
 requirement. Quantitative performance/capacity claims still require measurements; semantic correctness
 obligations remain. Skills apply the criteria through existing review, planning and ADR routes.
-Fresh projects receive ADR-0006, which carries forward bounded domain-model review criteria and
-reusable roles while introducing task-sensitive delegation, concrete escalation and stronger
-evidence/review defaults. Retired seeds are no longer generated. Updates exclude ADR-0004,
-ADR-0005 and ADR-0006 seed paths to preserve project-owned ADR numbers and decisions. An existing
-project adopting the policy records its own next available ADR and aligns its owned DESIGN and
-binding summaries; accepted records are not rewritten.
+Fresh projects receive ADR-0006 for task-sensitive coordination and ADR-0007 for the audit-led
+workflow, Codex-only role routing and library-skill retirement. New seed paths are excluded on
+updates so existing projects allocate their own next ADR; accepted decisions stay immutable.
 
-The default workflow supplies shared responsibilities in `.agents/roles`, native settings in
-`.codex/agents` and `.claude/agents`, and the three process-skill pairs documented in the generated
-skills index. The five new planning/authoring/execution skills are tracked core files. Existing
-projects should reconcile customized agent definitions and model defaults when reviewing an update.
-Plan creation includes focused assessment of the foundations it will use; improvements enter the
-plan before dependent work. Planning companions do not switch modes or add a durable second plan.
+The default workflow uses shared responsibilities in `.agents/roles`, Codex settings in
+`.codex/agents`, and tracked process skills in `.claude/skills` exposed through `.agents/skills`.
+A broad persisted principle audit precedes a new solution-review engagement. The operator selects
+holistic, library-targeted, principle-focused or combined focus; reviewers choose methods and depth.
+Requested recommendation audits publish net changes and revise the principal review with attribution
+and recoverable input. Requested completion audits correct the same owning plan. Neither becomes
+automatic per-slice review. Existing plans and reviews are not migrated by this template change.
+
+`docs/design_review/audit/` begins as an explicitly unperformed scaffold and is protected from
+Copier updates once authored. `docs/design_review/reviews/audits/` holds companion conventions.
+`docs/libraries/` supplies a repository-agnostic capability-overview guide and project-owned index.
+Optional overviews orient current Context7/primary-source research; active central library-skill
+selection and synchronization are removed. Existing indexes can retain inactive historical links.
+
+Existing projects must reconcile owned bindings, DESIGN and checkpoints with these workflow
+owners and research routes, preserving local criteria, profiles, accepted scope and historical
+receipts. Copier's protection is intentional; it does not silently upgrade those project-owned
+documents. Shared skills and role guidance update without overwriting them.
 
 An existing repository that was not generated can adopt the template: run `copier copy` into its
 working tree, review the diff, and commit `.copier-answers.yml`; `copier update` works from then on.
@@ -139,13 +148,14 @@ Improvements made in a generated project, or in library-context, come back here 
 ## Machine setup
 
 Generated projects include `.envrc` and `scripts/setup-env`. After scaffold lock creation,
-`bash scripts/setup-env` prepares the enabled Python layer and selected library-skill links.
+`bash scripts/setup-env` prepares the enabled Python layer.
 Directory activation remains separate: review `.envrc`, then `direnv allow` in each checkout.
 It removes foreign Python environment paths and performs no installation or native build.
 Personal overrides use ignored `.envrc.local`; machine-specific Codex configuration stays
 outside the template. The installed Rust toolchain follows the generated pin file.
-`just test-env` checks environment generation for all four layer combinations without
-installing dependencies or building native code.
+`just test-env` checks environment/workflow generation for all four layer combinations, including
+store-free setup, skill and ADR validation, and preservation of project-owned audit/index content
+during a scratch Copier update, without installing product dependencies or building native code.
 
 | Step | Command |
 |---|---|

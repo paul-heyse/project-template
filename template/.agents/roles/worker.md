@@ -1,21 +1,20 @@
 # Shared worker contract
 
-Use the [design principles](../../docs/design_review/design_principles/core/design-principles.md) and [efficient-architecture heuristics](../../docs/design_review/design_principles/core/efficient-architecture-heuristics.md) together
-within the assignment: relevant qualitative judgment for consequential open choices or revealed
-mismatches, before physical mechanisms become entrenched. Reuse settled reviews; raise concrete
-cross-boundary concerns to the coordinator. No exhaustive checklist, cost model or additional
-proof machinery follows, and the role's permitted effects remain as assigned.
-
 Use applicable instructions already supplied in context; if AGENTS.md is absent, load it before
-acting. Load the common and assigned role contracts once, plus relevant workflow or library skills.
+acting. Load the common and assigned role contracts once, plus relevant process skills and the repository's library documentation routes.
 The root's general startup tour is not repeated by workers: use the brief and relevant owners,
 following additional dependencies when evidence requires it. All permission, preservation and test
 rules still apply; named files are not a restriction on necessary read-only investigation. The coordinator's
 brief bounds the assignment and permitted effects; a role contract may grant standing write
 scopes, which a brief can narrow. Name a markdown file you write for its content (`README.md`,
-`<topic>.md`): Claude Code refuses a subagent's Write of a `.md` file whose name begins with
-report, summary, findings or analysis. Resolve paths from the repository root; Codex
+`<topic>.md`). Resolve paths from the repository root; Codex
 discovers skills through `.agents/skills`, and their tracked source is `.claude/skills`.
+
+Use the brief's exact baseline, relevant dirty changes, permitted effects, semantic owner and
+consumer, sibling ownership and completion boundary. Choose local details and native tools within
+that scope. For resumption, follow STATUS → owning active plan → owner when the assignment needs
+their queue or qualification context; [command guidance](../../AGENTS.md#commands) supplies
+the native discovery routes. The coordinator owns assembled acceptance and handoff.
 
 Preserve concurrent work. Do not commit, push or delegate further unless assigned. Report a missing
 prerequisite, conflicting contract or material discovery beyond scope to the coordinator; continue
@@ -28,6 +27,12 @@ For edits, identify changed ownership or behavior and deletions. For checks, giv
 `passed` / `failed` / `blocked` / `not_run`, retaining raw evidence where useful. Keep the response
 compact enough for integration without hiding consequential details.
 
-Follow AGENTS.md's test timing and tool routes. Formatting and generators belong to the
-root's `just turn-end`. Non-functional checks (`just hygiene`) run once at scope end, by the integrator
-unless the assignment includes them.
+Follow AGENTS.md's test timing and pinned tool routes. Formatting and generators belong to the
+root's `just turn-end`. Relevant typing/lint checks and repair run at a declared substantial-task endpoint, by the
+integrator unless assigned. Do not routinely check per edit/slice. Narrow read-only diagnostics
+may resolve named concrete defects. Complete qualification remains at full-scope closure and
+accounts for every declared required functional, applicable-provider and nonfunctional obligation
+through explicitly scoped applicable native results; `test-all`/`hygiene` remain broad routes.
+Final mutations precede qualification or require affected evidence to be reassessed (ADR-0001).
+Retain failed/interrupted records unchanged; report bounded results within their actual scope.
+The coordinator owns complete union accounting and final-source applicability.

@@ -1,12 +1,16 @@
 ---
 name: design-review
-description: Review architecture or a bounded implementation through explicit domain models, expected change scenarios, ownership, contracts, composition and local reasoning. Apply the layered standard, compare library fit and total complexity, and produce an evidence-grounded review. Use for architecture decisions, design reviews and architectural code audits.
+description: Develop and assess design corrections from the refreshed audit within the operator-selected library and principle focus. Compare alternatives against the layered standard and functional target, preserving independent judgment and evidence limits.
 allowed-tools: Read, Glob, Grep, Bash, Write, Edit, Agent
-user-invocable: true
-model-baseline: claude-5 (2026-08)
 ---
 
 # Design review
+
+Use the [design principles](../../../docs/design_review/design_principles/core/design-principles.md) together with the
+[efficient architecture heuristics](../../../docs/design_review/design_principles/core/efficient-architecture-heuristics.md) before material physical choices become entrenched.
+Select relevant patterns for qualitative assessment of consequential choices and alternatives;
+no exhaustive checklist, cost model or additional proof machinery follows. The manifest declares
+the companion and the binding owns its local mapping.
 
 Review a proposed design, implementation or both. Establish how the system accommodates realistic
 change, then judge correctness and domain fidelity independently. The seven foundations organize
@@ -15,16 +19,27 @@ scoped semantic authority, explicit structure, local reasoning and execution fit
 implemented behavior wherever domain meaning is established or interpreted (core §1, FP-04, A2).
 
 Apply this assessment during a requested design review or a review due at the repository's
-declared cadence. Ordinary implementation work does not itself initiate a domain-model review.
+declared cadence. Before a new engagement, refresh the broad diagnostic account through
+[design-principle-audit](../design-principle-audit/SKILL.md), including on direct review invocation.
+Preparation and review can consume the same refreshed audit while its source/standard baseline
+remains applicable; reconcile intervening changes before relying on it. Record the audit revision
+consumed. Loading this skill as assessment criteria during plan creation or execution does not
+initiate a formal review or audit. Ordinary implementation uses its plan and architectural owners.
+
+A requested [recommendation audit](../design-review-audit/SKILL.md) normally continues this
+engagement using its still-applicable baseline; it does not automatically start a second broad
+principle audit. The audit skill owns reassessment and integrated revision of a completed review.
+
+The audit supplies a challengeable diagnosis. Concentrate the review on developing and comparing
+corrections, preserving useful strengths, and discovering opportunities within the operator's
+focus. Inspect decisive current sources; refine a diagnosis or return additional baseline findings
+to the audit when evidence warrants it. The audit does not limit permissible improvements.
 
 ## Load the standard
 
 Find `standard.toml` at the location named by repository instructions. Read the declared core
-principles, `core.heuristics` companion when declared, and template, each profile and its companion
-skill, then the repository binding. Read the principles and companion together; use relevant
-heuristics early when assessing physical choices and alternatives. Older manifests without
-`core.heuristics` keep their declared loading behavior. The companion adds no exhaustive checklist,
-cost model or additional proof machinery.
+principles, the `core.heuristics` companion when declared, and template, each profile and its
+companion skill, then the repository binding.
 The manifest owns versions and paths; the binding owns local cadence, authority and disposition
 routes. If the manifest is absent, use an available core and state the limitation. If the core is
 missing, report the missing prerequisite.
@@ -56,8 +71,13 @@ review lists the rules its recommendations would change (see Identify rule impac
 - **purpose:** always `target`, the best architecture serving the functional outcome; the tier
   sets breadth only. The template's `conformance` purpose is not used: whether an implementation
   matches its accepted design belongs to implementation review.
-- **scenarios/focus:** expected changes, foundations or domain concerns to emphasize. Focus never
-  hides an encountered in-scope defect.
+- **review focus:** the operator selects holistic/unconstrained, library-targeted,
+  principle-focused or combined. Resolve it from the conversation; clarify an unspecified choice
+  rather than choosing for the operator. Library focus names capabilities to investigate, not
+  required adoption. Principle focus directs solution depth; relevant guarantees still constrain
+  remedies. Record encountered out-of-focus problems without automatically expanding the review.
+- **scenarios/depth:** choose revealing changes and uncertainty within that selected focus.
+  Tier and depth do not replace the operator's choice.
 - **slug:** infer from the subject when omitted.
 
 Start from task routes and the relevant architectural section owners, expanding on a concrete
@@ -71,11 +91,9 @@ Ask only if ambiguity would materially change the judgment; otherwise state the 
 
 ## What to establish
 
-For substantial reviews, use the [shared agent roles](../../../.agents/roles/README.md) to delegate
-bounded code mapping and library research where helpful. Give a fresh design reviewer the target,
-requirements and source evidence for an independent judgment. Delegation does not remove the
-reviewer's obligation to inspect decisive evidence or the coordinator's responsibility to resolve
-findings through the existing authority and disposition routes.
+Use the [shared agent roles](../../../.agents/roles/README.md) for bounded evidence gathering and
+independent review where helpful. The reviewer inspects decisive sources; the coordinator retains
+design, integration and acceptance and resolves findings through the existing owners.
 
 Use judgment about investigation order and depth. These are outcomes, not a mandatory tool script.
 Use the least investigation sufficient for the scoped judgment. Follow a flow only when a concrete
@@ -99,27 +117,29 @@ question about ownership, behavior or change remains unresolved; no complete flo
    functions can suffice; no registry, universal model or conversion of algorithms to data is required.
 4. **Alternatives and library fit.** Compare a suitable library mechanism and the simplest viable
    design where relevant. Qualify semantics at the resolved version and total integration burden. Functions or
-   modules may be sufficient; a wrapper or new crate must improve a real boundary. Qualitatively
-   assess the composed physical operation: access paths, optimizer/bulk capabilities, movement, preparation,
+   modules may be sufficient; a wrapper or new crate must improve a real boundary. Compare the
+   composed physical operation: access paths, optimizer/bulk capabilities, movement, preparation,
    working set, enforcement frequency, transaction/recovery scope and total operator/developer
    machinery. A module or semantic kind need not impose an execution stage or storage object.
 
-   **Optional context: existing library use.** A focused look at relevant entries in
-   docs/library-utilization.jsonl, where available, can be especially helpful when considering
-   implementation alternatives. The catalog highlights library capabilities and integration
-   patterns already found useful in the codebase, and may reveal opportunities to reuse
-   established mechanisms instead of introducing ad hoc equivalents. It remains useful as a
-   source of ideas even when some entries lag the implementation. Consultation is optional;
-   catalog entries inform the alternatives, while alignment with the design principles governs
-   the judgment.
+   **Capability orientation.** Available [library overviews](../../../docs/libraries/README.md)
+   can reveal complete capabilities and advanced features worth investigating. Follow Context7
+   and primary-source routes for consequential details at the resolved version. Retained central
+   skill references and old utilization entries, where available, are optional historical leads;
+   neither implies current qualification, required adoption or catalog maintenance.
 
 5. **Independent judgments.** Settle A1–A4 from scenario evidence, G1–G8 and profile gates from
    their own evidence, and applicable foundation/supporting-rule verdicts. A2 requires both an
-   adequate domain model and behavior governed by its authorities. Qualitatively assess A4 through
-   a credible execution route for a workload premise drawn from functional intent: relevant operations, input size/skew,
+   adequate domain model and behavior governed by its authorities. A4 needs a credible execution
+   route, assessed qualitatively, for a workload premise drawn from functional intent: relevant operations, input size/skew,
    growth, concurrency/deployment and resource envelope. Use relevant growth/failure scenarios;
-   safe refusal or bounded output alone does not establish fit. Unresolved stays unresolved.
-6. **Actionable findings and disposition.** Group by structural cause. Name a concrete semantic
+   safe refusal or bounded output alone does not establish fit. Use relevant companion heuristics
+   when comparing composed alternatives and assessing A4; retain existing lenses, principle IDs
+   and independent gate judgments. Unresolved stays unresolved.
+6. **Actionable findings and disposition.** Preserve audit finding IDs and cite their consumed
+   revision rather than renaming or copying an existing diagnosis into a second ledger. Additional
+   review findings retain their own stable identities and links to related audit observations.
+   Group by structural cause. Name a concrete semantic
    failure or architectural consequence, owner, correction and closure evidence. Link the single
    location owning current status. Follow the template's decision rules.
 
@@ -131,22 +151,25 @@ revision even when outputs are currently correct. A deferral alone is not confor
 
 ## Evidence and calibration
 
+Assess execution fit qualitatively from relevant operations and growth/failure scenarios.
+Explain material tradeoffs in plain language. This design/review consideration does not
+require numerical estimates, cost models, estimators, runtime cost accounting, execution-planning
+machinery, instrumentation, formal cost proofs or additional proof artifacts. Introduce such
+mechanisms only for a separate concrete functional or operational requirement. Quantitative
+performance/capacity claims still require measurements; existing semantic correctness
+obligations remain.
+
 Read every citation at the grain used. Proposals remain Proposed; interface inspection is
 Interface-checked; code existence is Implemented. Tested/Measured claims name commands, cases,
 conditions and dates. Attribute historical receipts rather than reporting them as current runs.
-Qualitative assessment of relevant operations and scenarios can establish avoidable amplification
-before measurement. Explain material tradeoffs in plain language. No numerical estimates, cost
-models, estimators, runtime cost accounting, execution-planning machinery, instrumentation, formal
-cost proofs or additional proof artifacts are required by this consideration. Such mechanisms need
-a separate concrete functional or operational requirement; semantic correctness obligations remain.
-No speed claim is needed for an A4 defect; quantitative speed/capacity claims still require measurements. Do not
-narrow the workload to convenient fixtures or turn these lenses into a standing audit/checklist.
-Static review of documentation, source and types can be sufficient, including for library
-features and fit. The reviewing agent decides whether complexity, criticality or unresolved
-uncertainty warrants creating and running a probe. No review tier or kind requires probes or
-an evidence folder merely because it is a review. When probes are useful, follow repository
-storage conventions and acceptance timing. Implementation acceptance checks and the evidence
-needed for Tested/Measured claims still apply.
+Qualitative reasoning about structure can establish avoidable amplification before measurement. No speed claim
+is needed for an A4 defect; quantitative speed/capacity claims still require measurements. Do not
+narrow the workload to convenient fixtures or turn these lenses into an exhaustive checklist for ordinary edits.
+Static review of documentation, source and types can suffice, including for library fit. The
+reviewer judges whether complexity, criticality or unresolved uncertainty warrants a probe. No
+review tier or kind requires probes or an evidence folder solely because it is a review.
+Implementation acceptance checks and Tested/Measured evidence still apply; follow repository
+storage conventions and acceptance timing when probes help.
 
 Library-first means considering established implementations of the required capability. Both
 adoption and bespoke code can add excessive coupling, lifecycle or configuration. A planned
@@ -250,12 +273,19 @@ offers calibrated examples. These are authoring considerations, not additional m
 ## Deliver the review
 
 For a requested review, write the principal document at the binding's location using the template's
-content references and scoped profile additions. A read-only delegated reviewer returns the complete review text
-and intended path; the coordinator publishes it while preserving the reviewer's judgment.
-Focused design advice during plan creation can instead be incorporated in the plan; it does not
-replace a formal review due under the binding. A request to discuss or revise this process does not itself require
+content references and scoped profile additions. A read-only delegated reviewer returns complete review text and
+its intended path; the coordinator publishes it while preserving the judgment. Focused advice
+for plan creation can enter the plan and cannot replace a formal review due at the binding's
+cadence. A request to discuss or revise this process does not itself require
 an additional review artifact. Close with scope, A1–A4, gates, material findings, rule impacts, bounded decision,
 enclosing architectural status and path. Distinguish review acceptance from release qualification.
+
+When the operator requests a second assessment of recommendations before planning, use
+[design-review-audit](../design-review-audit/SKILL.md): publish a net-change companion and an
+integrated, newly attributed review at the same principal path, preserving the input in Git.
+This is a distinct deliberate assessment, not an automatic self-audit of every review. A delegated
+auditor's revised judgment is published as theirs rather than silently changing the first
+reviewer's opinion. Existing plans retain accepted scope and scheduled-finding ownership.
 
 ## Failure modes
 

@@ -7,7 +7,4 @@ unset VIRTUAL_ENV UV_NO_SYNC
 {% if with_python %}
 export UV_PROJECT_ENVIRONMENT=.venv
 uv sync --locked --inexact
-uv run --no-sync python scripts/library_skills.py
-{% else %}
-uv run --no-project --offline --no-python-downloads --python "$(cat .python-version)" python scripts/library_skills.py
 {% endif %}

@@ -1,7 +1,7 @@
 # {{ project_name }}
 
 Agent workflows and invocation examples are in the [process skills](.claude/skills/README.md),
-with [shared roles](.agents/roles/README.md) for both Codex and Claude.
+with [shared roles](.agents/roles/README.md) for Codex.
 
 {{ project_description }}
 
@@ -20,7 +20,7 @@ is implemented, run `just test-all` and `just hygiene` (the non-functional check
 regenerates at the end of a turn; `just ready` re-checks the environment after a change.
 
 After the scaffold lockfiles exist, run `bash scripts/setup-env` to prepare this checkout's
-tools and selected library-skill links. Installed toolchains follow the pin files; setup
+tools. Installed toolchains follow the pin files; setup
 does not install Rust. If using direnv, review `.envrc` and run `direnv allow` once in each
 checkout. Activation removes inherited Python environment paths and performs no installs,
 builds or service startup. Personal overrides belong in ignored `.envrc.local`.

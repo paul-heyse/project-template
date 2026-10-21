@@ -77,21 +77,31 @@ additional proof artifacts follow from this consideration; they need a separate 
 or operational requirement. Quantitative performance/capacity claims still need measurements, and
 semantic correctness obligations remain. No ordinary-implementation review follows.
 
-**Agent workflow — Implemented** (ADR-0006). [Shared role contracts](../../.agents/roles/README.md)
-define six reusable worker responsibilities, while native Codex and Claude adapters own model settings
+**Agent workflow — Implemented** (ADR-0006/0007). [Shared role contracts](../../.agents/roles/README.md)
+define six reusable worker responsibilities, while native Codex adapters own model settings
 only; no role file restricts tools or sandbox, so the contracts alone bound each role's effects. The coordinator owns design, integration and acceptance. Delegate when independent work, context isolation, distinct capabilities or independent judgment
 justify handoff and integration cost; small or tightly coupled tasks may remain with the root.
 Shared roles own task-specific context, concrete briefs and evidence-based escalation. Paired skills prepare and perform reviews, plan creation and
 execution. Plan creation includes focused assessment of foundations and schedules necessary
 improvements before dependent work. Existing plans own execution and scheduled finding disposition;
 planning companions ordinarily remain conversational. Resource savings remain Proposed.
+**Audit-led workflow — Implemented policy** (ADR-0007). A broad persisted
+[diagnostic audit](../design_review/audit/README.md) is refreshed before a new review engagement,
+using prior findings and source changes to focus investigation. The operator selects solution
+focus; methods and depth remain reviewer judgment. A requested recommendation audit publishes
+[net changes](../design_review/reviews/audits/README.md) and integrates a newly attributed review
+at its original path, preserving its input in Git. A completion audit reconstructs accepted scope
+and corrects the same owning plan. Reviews own reasoning, plans own scheduled disposition; ordinary
+implementation does not load the broad audit. Optional repo-agnostic library overviews and current
+documentation replace active central library skills. These are deliberate boundaries, without
+automatic per-slice audit gates or new agent roles.
 {% if with_docs_site %}
 **Documentation publication** (ADR-0003). Focused architecture pages retain stable section IDs;
 a moved live section leaves a relocation pointer. One resolver drives ADR references and the
 generated section directory. Publication derives navigation and search from sources; it does not
 prove implementation. [Publishing operations](../publishing.md) owns the commands.
 {% endif %}
-> Decision: ADR-0001, ADR-0002{% if with_docs_site %}, ADR-0003{% endif %}, ADR-0006
+> Decision: ADR-0001, ADR-0002{% if with_docs_site %}, ADR-0003{% endif %}, ADR-0006, ADR-0007
 
 
 No product binding decisions yet. Add each as `### §B1 <decision stated as a sentence>` with a

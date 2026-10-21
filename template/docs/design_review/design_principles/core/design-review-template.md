@@ -1,17 +1,28 @@
 # Design review template
 
-Read the [design principles](design-principles.md) and [efficient-architecture heuristics](efficient-architecture-heuristics.md) together. Use relevant heuristics early in
-consequential physical choices and alternatives; preserve every existing review slot and lens.
-The companion adds no exhaustive checklist, cost models or proof machinery.
-
 **Version 3.3 · 2026-10-05** · Core layer: repository- and domain-agnostic.
 Standard: [design principles](design-principles.md): FP-01–FP-07 organize architectural
 assessment; DP-01–DP-24 support it; A1–A4 and G1–G8 remain separate judgments.
 Profiles add domain constraints within the slots. The binding supplies local owners and cadence.
 
-Execution-fit assessment added 2026-10-05; existing slot identifiers and bounded review cadence remain.
+Execution-fit criteria remain core 3.3. Authoring guidance updated 2026-10-20 for audit inputs
+and operator-selected solution focus, including recommendation-audit revisions; existing slot
+identifiers and acceptance criteria remain.
+
+Assess execution fit qualitatively from relevant operations and growth/failure scenarios.
+Explain material tradeoffs in plain language. This design/review consideration does not
+require numerical estimates, cost models, estimators, runtime cost accounting, execution-planning
+machinery, instrumentation, formal cost proofs or additional proof artifacts. Introduce such
+mechanisms only for a separate concrete functional or operational requirement. Quantitative
+performance/capacity claims still require measurements; existing semantic correctness
+obligations remain.
 
 ## Part 1 — The review contract
+
+Apply the [principles](design-principles.md) together with the
+[heuristic companion](efficient-architecture-heuristics.md) within the selected scope, including
+material composition, alternatives and A4 questions. Keep existing slots and judgments; select
+relevant patterns qualitatively, without an exhaustive checklist, cost model or proof machinery.
 
 ### Tier and purpose
 
@@ -31,6 +42,34 @@ can state that ownership, contracts and extension behavior are unchanged and cit
 boundary. Do not narrow away an affected consumer to obtain acceptance.
 Use the least investigation sufficient for the scoped judgments. Flow tracing is optional when
 it resolves a concrete uncertainty; neither these slots nor A2 require a complete flow trace.
+
+### Audit input and solution focus
+
+Where the binding requires a diagnostic audit, identify its revision and audited source baseline.
+Use its observations as challengeable inputs to developing corrections and comparing alternatives.
+Inspect decisive current evidence and preserve useful existing guarantees. An audit's completeness
+is not assumed, and a remedy can reveal a better diagnosis or a further opportunity.
+
+Record the operator's holistic, library-targeted, principle-focused or combined selection, with
+named libraries/capabilities and principles/concerns where supplied. Clarify an unspecified focus.
+Tier and depth remain separate choices. Relevant guarantees constrain remedies without requiring
+a focused review to repeat an exhaustive broad assessment. Capture out-of-focus observations
+through the diagnostic owner without automatically expanding solution scope.
+
+### Recommendation audits and integrated revisions
+
+Where a recommendation audit is requested, inherit the selected focus and make every original
+recommendation identifiable for comparison. Recommendation references are distinct from finding
+identities: one diagnosis can support several remedies. Existing section references and short
+descriptions can suffice; a new numbering system is not required.
+
+The audit's net-change companion owns dispositions and critique of the earlier assessment. The
+integrated review presents the resulting design directly, with its synthesis, alternatives,
+judgments, dependencies and rule impacts reconciled. Briefly identify the input revision, audit
+date and author of the revised judgment and link the companion; do not imply that the original
+reviewer agreed. Keep original evidence dates and strength, stable finding/rule-impact identities
+and scheduled disposition ownership. The binding defines publication, recoverability and scope
+rules; this adds no acceptance criterion or automatic audit stage.
 
 ### What a claim can rest on
 
@@ -62,7 +101,7 @@ incorrect output occurs; semantic failure is not a prerequisite.
 
 | Field | Adequate when |
 |---|---|
-| ID | `F01`, `F02`, … stable within the review; consumers cite `review#F01`. Use an explicit anchor when needed for a resolvable link. |
+| ID | Preserve stable audit identities for consumed diagnoses and cite the audit revision/anchor. Additional findings use `F01`, `F02`, … stable within the review; consumers cite `review#F01`. Existing source IDs retain their meanings. Use explicit anchors where needed. |
 | Finding | A falsifiable defect in the architecture, contract or implementation. |
 | Principles · judgment/gate | Only FP/DP/profile IDs and A/G judgments used in the argument. |
 | Evidence or gap | Relevant owner, dependency, contract or executing expression; source path/line or design section, and what is missing. |
@@ -74,8 +113,8 @@ incorrect output occurs; semantic failure is not a prerequisite.
 ### Priority and decisions
 
 Prioritize correctness/fidelity failures and architectural choices that make a supported workload
-infeasible, unstable or operationally disproportionate. Qualitative assessment of relevant
-operations and scenarios can establish such a failure before measurement. Assess change barriers, repeated semantic ownership and other
+infeasible, unstable or operationally disproportionate. Qualitative structural reasoning can establish
+such a failure before measurement. Assess change barriers, repeated semantic ownership and other
 material complexity in the same functional context; prioritize by consequence rather than by
 whether the evidence is a benchmark. Resolving a defect may require changing a boundary.
 Library adoption and bespoke code both carry complexity. A concrete architectural violation is
@@ -181,9 +220,9 @@ from independent definitions. Ordinary domain functions can supply these contrac
 |---|---|---|---|---|---|---|
 
 Assess how primitives compose. Identify rules that orchestration reimplements, implicit
-ordering and special cases. Consider cardinality and material work qualitatively, along with
-identity mappings, representation loss and resource budgets where material. A graph projection states its universe and relationship semantics.
-Assess the complete physical operation: access paths, repeated work, crossings and intermediates,
+ordering and special cases. Consider cardinality, execution tradeoffs, identity mappings, representation loss and
+resource budgets where material. A graph projection states its universe and relationship semantics.
+Qualitatively assess the complete physical operation: access paths, repeated work, crossings and intermediates,
 optimizer visibility, reuse, enforcement frequency, transaction and recovery scope. Semantic
 composition need not create physical stages or materializations. Distinguish examined-work and
 output limits; safe refusal alone does not establish fitness for the workload.
@@ -205,11 +244,8 @@ credible; give a scope reason when either does not apply. A bounded review still
 relevant scenario. Assess semantic ownership and propagation, not a promise of inexpensive replacement.
 Select relevant growth, high-degree/skew, concurrency or failure cases as well. Explain why the
 physical route remains credible for the intended use; tiny fixtures cannot silently replace the
-product's workload premise. Qualitative reasoning may settle execution fit; quantitative
-performance/capacity claims require measurements. Explain material tradeoffs in plain language. These lenses require no numerical
-estimates, cost models, estimators, runtime cost accounting, execution-planning machinery,
-instrumentation, formal cost proofs or additional proof artifacts. Such mechanisms need a separate
-concrete functional or operational requirement; semantic correctness obligations remain.
+product's workload premise. Qualitative reasoning may settle structural tradeoffs; measured claims require
+measurements. These are lenses within existing slots, not a new campaign or checklist.
 
 ### 6. Correctness and fidelity gates
 
@@ -252,8 +288,10 @@ establishes a common cause. No mandatory dependency graph or additional analysis
 
 ### 8. Library fit and total complexity
 
-Relevant entries in docs/library-utilization.jsonl, where available, may offer particularly
-useful leads on established capabilities and integration patterns. Consulting them is optional.
+Available capability overviews can reveal functional families and advanced mechanisms worth
+investigating. Use the binding's documentation route to qualify consequential claims at the
+resolved version. Historical skill or utilization references, where retained, are optional leads;
+they do not establish current fit or require a catalog refresh.
 
 | Capability and owner | Consumer or planned scenario | Built-in/library/bespoke candidates | Resolved-version semantic fit and gaps | Coupling/lifecycle/test/replacement burden | Choice and reason |
 |---|---|---|---|---|---|
@@ -262,7 +300,7 @@ Inspect the resolved version's interfaces when making an API claim. A library's 
 agreed capability; availability alone is not a requirement. An intentional shared library data
 contract can be preferable to a forwarding abstraction. Compare composed capabilities, including
 optimizer/bulk interfaces, physical access, locality, preparation/reuse, working set and recovery.
-Consider generated objects and operator/developer obligations qualitatively alongside handwritten code.
+Consider generated objects and operator/developer obligations as well as handwritten code.
 A built-in must fit the semantic contract and total integration. This is a focused comparison,
 not a catalog.
 
@@ -290,11 +328,8 @@ unless explicitly requested.
 |---|---|---|---|---|
 
 A traced extension, removed competing authority or bounded test setup can close an architectural
-finding. Static review can suffice, including for library features and fit. The reviewing agent
-judges whether complexity, criticality or unresolved uncertainty warrants creating and running
-probes; this slot and the review tier do not require them or a separate evidence folder.
-Independent oracles, when used, must challenge production contracts. Follow the binding's
-integrated acceptance timing and retain the evidence required for Tested/Measured claims.
+finding. Independent oracles must challenge production contracts. Execute only checks that resolve
+material uncertainty; follow the binding's integrated acceptance timing.
 
 Distinguish unexamined breadth from a missing premise that could change the verdict or corrective
 direction. Connect consequential uncertainty to the decision it affects and suitable settling
@@ -307,8 +342,9 @@ qualify its remedy, and a refined remedy need not invalidate the diagnosis.
 |---|---|---|---|---|
 
 Accepted decisions, implemented changes and verified outcomes are different facts. Exception
-records follow principles §H. Current status belongs in one location; subsequent reviews link
-there. Preserve original findings and versioned evidence rather than rewriting history.
+records follow principles §H. Current execution status belongs in one location; subsequent reviews and the baseline audit link
+there. Reviews identify the audit revision they consumed so later diagnostic edits do not change
+their premises. Preserve original findings and versioned evidence rather than rewriting history.
 
 ### 12. Architectural judgment and decision
 
@@ -322,9 +358,9 @@ there. Preserve original findings and versioned evidence rather than rewriting h
 **Bounded change decision:** Accept / Accept scoped / Revise / Reject, with reason.
 **Enclosing architecture:** accepted for named scenarios / needs revision / unresolved / not
 assessed (scope reason). State the evidence strength; a passing local slice does not certify it.
-A4 needs a qualitative assessment of a credible physical route for the workload premise. Material
-unresolved execution fit prevents acceptance of that use; "performance unmeasured" does not excuse known amplification.
-Explain the retained benefit and material tradeoffs against a conforming alternative in plain language.
+A4 needs a credible physical route for the workload premise. Material unresolved execution fit
+prevents acceptance of that use; "performance unmeasured" does not excuse known amplification.
+Explain material tradeoffs and retained benefits against a conforming alternative in plain language.
 
 | Priority | Change and responsible component | Source findings | Closure evidence or revisit trigger |
 |---|---|---|---|

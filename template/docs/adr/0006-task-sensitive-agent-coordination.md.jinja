@@ -62,16 +62,11 @@ its general preference for parallel execution and previous evidence/review model
   testing. Delegate when independent coverage, context isolation, distinct capabilities or
   independent judgment justify handoff and integration cost. Parallelize ready independent work;
   small or tightly coupled tasks may remain with the coordinator. No fixed role sequence applies.
-- [Shared contracts](../../.agents/roles/README.md) own responsibilities. Native Codex and Claude
-  adapters own model settings; Claude's `implementer` adapts the executor role. Explicit
-  user/runtime settings retain authority. Native role files carry no tool lists or sandbox settings:
-  every role inherits the session's tools and sandbox, and the shared contracts alone bound its
-  effects. `library-research` may write the evidence locations AGENTS.md names and a shared
-  library skill its brief assigns, as its contract states. Codex implementation-reviewer uses gpt-6.1-sol/high
-  and library-research gpt-6.1-sol/medium; Claude code-mapper uses Sonnet/medium, library-research,
-  implementer, implementation-reviewer and test-agent use Opus/medium, and design-reviewer uses Opus/high.
-  Other allocations stay unchanged; the shared role table owns current routing. These are policy
-  defaults; model-quality improvements and resource savings remain unmeasured.
+- [Shared contracts](../../.agents/roles/README.md) own responsibilities. Native Codex adapters
+  own model settings, inheriting session permissions and tools. Explicit user/runtime settings
+  retain authority. Library researchers may write assigned evidence folders, not the central
+  library-skill store. The shared role table owns current routing; quality improvements and
+  resource savings remain unmeasured.
 - Workers use instructions already present and load missing applicable instructions, their common
   and assigned contracts and task-relevant skills once. Root orientation is task-specific; workers
   do not repeat the root tour. Permission, preservation and testing constraints remain universal,
@@ -83,7 +78,7 @@ its general preference for parallel execution and previous evidence/review model
   ownership/contract decisions or a second failed repair trigger coordinator reassessment. Narrow,
   inspect, check, handle directly or route stronger work as appropriate; do not automatically rerun.
   Shared roles document runtime-specific escalation without assuming custom Codex role overrides
-  or per-invocation Claude effort overrides work.
+  work.
 - Independent reviewers receive concrete criteria, affected consumers and relevant failure cases.
   Focused advice and formal review retain the binding's distinct requirements.
 - Three [skill pairs](../../.claude/skills/README.md) prepare and perform design review, plan

@@ -5,7 +5,7 @@ are used together by review, planning, execution and ADR workflows. Consider rel
 before physical choices become entrenched; reuse settled decisions during execution and address
 material open choices or revealed mismatches. No checklist, cost model or proof machinery is added.
 
-Two kinds live here. Both are visible to Codex through the `.agents/skills` symlink.
+Tracked process skills are visible to Codex through the `.agents/skills` symlink.
 
 ## Process skills (tracked in this repo)
 
@@ -13,6 +13,9 @@ Workflows for building this repository. A skill is added when a workflow has act
 
 | Skill | Use |
 |---|---|
+| [`design-principle-audit/`](design-principle-audit/SKILL.md) | Refresh the broad diagnostic account before a new design-review engagement |
+| [`design-review-audit/`](design-review-audit/SKILL.md) | Reassess recommendations and omissions, publish net changes and revise the principal review |
+| [`plan-completion-audit/`](plan-completion-audit/SKILL.md) | Assess claimed accepted scope and correct the same owning plan |
 | [`adr/`](adr/SKILL.md) | Record or supersede a decision; amend the owning architectural section in the same commit |
 | [`plan-design-review/`](plan-design-review/SKILL.md) | Plan an approach to the user's review goal, grounded in the local standard |
 | [`design-review/`](design-review/SKILL.md) | Review explicit domain models, ownership, contracts, change scenarios and qualitative workload execution fit against the layered design standard (`docs/design_review/design_principles/standard.toml`); cadence in the {{ project_name }} binding |
@@ -37,13 +40,18 @@ remain the durable owners of packages and receipts. All three pairs use the
 and acceptance. Delegate when the benefit justifies handoff and integration cost; small or tightly
 coupled tasks may remain with the root. Shared roles own briefs, context loading and escalation.
 
-## Library capability skills (gitignored — versioned outside this repo)
+A [living diagnostic audit](../../docs/design_review/audit/README.md) precedes a new solution-review
+engagement. The operator selects holistic, library-targeted, principle-focused or combined focus;
+reviewers choose methods and depth. Recommendation and completion audits are deliberate requested
+or explicitly planned assessments, not automatic slice checks. Reviews own reasoning, plans own
+scheduled disposition, and a completion audit corrects that same plan.
 
-Pinned, offline indexes of the libraries this project builds on. They exist because an agent
-writing against a fast-moving library otherwise writes the API it remembers. They are large and
-repo-agnostic, so this repo ignores them; list each one here when it is added, so agent-facing
-links to it resolve. Silence in an index is not evidence of absence. Check a skill's pinned
-profile against the locked version (`uv.lock`{% if with_rust %}/`Cargo.lock`{% endif %}) before transferring a claim.
+## Inactive central library-skill references
 
-| Repository | Indexes | Built from |
+Central library skills are no longer selected, synchronized, discovered or required here. Retained
+links in an existing project's index can identify historical references without an installed skill.
+Do not rewrite old plans merely for this transition. New capability research uses optional
+[library overviews](../../docs/libraries/README.md), Context7 and current primary sources.
+
+| Reference | Former indexes | Source |
 |---|---|---|

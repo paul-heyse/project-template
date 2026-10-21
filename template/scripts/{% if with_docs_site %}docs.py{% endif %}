@@ -254,11 +254,11 @@ def rewrite_links(
                 tag = re.sub(r"\s" + attr + r'="[^"]*"', "", tag, count=1)
                 tag = (
                     tag[:-1]
-                    + ' title="Local capability reference; available in the operator checkout" '
+                    + ' title="Inactive central library-skill reference; not installed or discovered here" '
                     'class="local-reference">'
                 )
                 if attr == "href":
-                    tag += '<span class="local-reference-label">[local reference] </span>'
+                    tag += '<span class="local-reference-label">[inactive reference] </span>'
                 continue
             exists_in_git = source.as_posix() in tracked or any(
                 name.startswith(source.as_posix().rstrip("/") + "/") for name in tracked

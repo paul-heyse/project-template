@@ -11,7 +11,7 @@ Every declared dependency is pinned exactly; the lockfiles hold the rest (AGENTS
   `cargo add pkg@=x.y.z` (a git dependency by its `rev`){% endif %}.
   Move a family together. Read the lock diff so that only what you meant moved, run the tests the
   move affects and name it in the commit.
-  Glance at the library-skill versions: when a skill's version differs from the locked one, a
+  Check overview and documentation versions: when a reference differs from the locked one, a
   transferred claim is unverified at the locked version.{% if with_rust %} `just deps` checks that every registry
   dependency is exact and declared families resolve to one version.{% endif %}
 {%- if with_docs_site %}

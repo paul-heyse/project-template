@@ -150,7 +150,7 @@ def test_images_copy_but_evidence_download_stays_remote(root, settings):
     assert not (root / "site/docs/evidence/raw.svg").exists()
 
 
-def test_clean_checkout_optional_skills_are_declared_and_ignored(root, settings):
+def test_clean_checkout_inactive_references_do_not_need_skill_installation(root, settings):
     subprocess.run(["git", "init", "-q", str(root)], check=True)
     skill = root / ".claude/skills"
     skill.mkdir(parents=True)
@@ -164,7 +164,7 @@ def test_clean_checkout_optional_skills_are_declared_and_ignored(root, settings)
     result = rewrite(
         root, settings, '<a href="../.claude/skills/example/SKILL.html">capability</a>'
     )
-    assert "[local reference]" in result and "href=" not in result
+    assert "[inactive reference]" in result and "href=" not in result
 
 
 @pytest.mark.parametrize("failure", ["missing", "wrong"])

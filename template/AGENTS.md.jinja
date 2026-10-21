@@ -46,13 +46,15 @@ permission, concurrent-work and testing constraints, and follow discovered depen
 | `docs/plans/` | The active plan only; a finished or superseded plan is removed once its obligations move |
 | `docs/adr/` | Current decision records (accepted and open proposals), a generated index, and `TEMPLATE.md` |
 | `docs/design_review/design_principles/` | The layered design standard, declared in `standard.toml`: seven foundations (FP-01–07), including an explicit domain model, scoped semantic authority and qualitative execution-fit assessment for the intended workload; independent architectural judgments A1–A4, supporting rules DP-01–24 and gates G1–G8{% if with_ci_profile %}, the code-intelligence profile{% endif %}, and the repository binding (ADR-0002) |
+| `docs/design_review/audit/` | Living diagnostic baseline; not ordinary implementation context |
+| `docs/libraries/` | Optional repo-agnostic library capability orientation and authoring guidance |
 | `docs/design_review/reviews/` | Review outputs: evidence, never authority; kept while a finding they supply is open |
 | `docs/design_review/evidence/` | Probes, spikes and investigations behind decisions, one `YYYY-MM-DD_<topic>/` folder each with a README; raw outputs and binaries through Git LFS; never venvs or `target/`. Put probes here, not in a session scratchpad |
 | `docs/pins.md` | Holds: pins that should not be bumped casually, with reason and revisit trigger |
 {% if with_rust -%}
 | `crates/` | The Rust workspace; `crates/{{ crate_name }}` is the starter crate |
 {% endif -%}
-| `scripts/` | `adr.py`, `design_sections.py`{% if with_docs_site %} and `docs.py`{% endif %} (documentation), `check_agents.py`, `library_skills.py`{% if with_rust %}, `check_pins.py`{% endif %} |
+| `scripts/` | `adr.py`, `design_sections.py`{% if with_docs_site %} and `docs.py`{% endif %} (documentation), `check_agents.py`{% if with_rust %}, `check_pins.py`{% endif %} |
 | `tests/scripts/` | Tests for the process scripts |
 {% if with_ast_grep -%}
 | `rules/`, `rule-tests/` | ast-grep rules. They grow only from design-review findings |
@@ -62,9 +64,9 @@ permission, concurrent-work and testing constraints, and follow discovered depen
 | When | Run |
 |---|---|
 | During a design/implementation phase | Compile checks and targeted tests or probes for the scope just implemented. No integrated gate after a slice or commit. |
-| After all functional scope in the plan is implemented | `just test-all`: the functional tests (`just check`). Then `just hygiene`, every non-functional check, once; fix what fails and re-run a single check with `just <id>`. Qualification cites both passing for the same tree |
+| After all functional scope in the plan is implemented | `just test-all`: the functional tests (`just check`). Then applicable `just hygiene` checks; fix what fails and re-run a single check with `just <id>`. Qualification cites both passing for the same tree |
 | End of a turn that changed files | The root agent runs `just turn-end` (ADR index, formatting with ruff's safe auto-fixes). Subagents don't |
-| After a dependency, toolchain or skill-selection change, or an environment-shaped failure | `just ready` (skills sync, tool check) |
+| After a dependency, toolchain or process-skill change, or an environment-shaped failure | `just ready` (tool check) |
 {% if with_rust -%}
 | Dependency policy | `just deps`, a `hygiene` check: every registry dependency is pinned exactly (`=x.y.z`) and every git dependency by its `rev`; each declared family (`[workspace.metadata.pins]` in `Cargo.toml`) resolves to one version, its members exact; cargo-deny checks bans and sources |
 {% endif -%}
@@ -72,9 +74,8 @@ permission, concurrent-work and testing constraints, and follow discovered depen
 {% if with_docs_site -%}
 | Documentation changes | `just docs-test` for publisher/resolver changes; `docs-check` (publication) runs within `just hygiene`. First run: `just bootstrap-docs`; preview: `just docs-serve`. No product gate solely for docs. |
 {% endif -%}
-| Select shared library skills | Edit `.config/library-skills.toml`; then run `just ready` (`just skills-check` to inspect). Skills live in `~/.local/share/library-skills` (`LIBRARY_SKILLS_ROOT` if moved); a library skill never cites this repository, so repo-specific wiring goes here and in `docs/pins.md` |
 | Tools present? | `just doctor`, or `just ready` |
-| Prepare a checkout | `bash scripts/setup-env` uses existing lockfiles and synchronizes selected library skills. Review `.envrc`, then `direnv allow` for activation; ignored `.envrc.local` holds personal overrides. Activation performs no installs, builds or service startup. |
+| Prepare a checkout | `bash scripts/setup-env` uses existing lockfiles. Review `.envrc`, then `direnv allow` for activation; ignored `.envrc.local` holds personal overrides. Activation performs no installs, builds or service startup. |
 | Template changes | `copier update --defaults`, then review the diff like any other change (`.copier-answers.yml` is never edited by hand) |
 
 {% if with_rust -%}
@@ -94,14 +95,14 @@ process scripts are stdlib-only and run without a project environment.
 
 ## Writing code against libraries
 
-- Library capability skills are pinned, offline indexes kept under `.claude/skills/` but
-  gitignored and versioned outside this repo. They are repo-agnostic: a skill never cites this
-  repository; the repository only picks libraries and pins. Use a matching skill **before**
-  writing against an API rather than relying on memory, and list it in
-  `.claude/skills/README.md`.
-- For a library no skill covers, **Context7 is the first stop**, then primary sources. Check a
-  skill's or document's version against the locked version (`uv.lock`{% if with_rust %}/`Cargo.lock`{% endif %}) before
-  transferring a claim. An empty search result is not evidence that a capability is absent.
+- Optional [library overviews](docs/libraries/README.md) provide repository-agnostic capability
+  orientation. They are not current-version API qualification.
+- **Context7 is the first documentation lookup**, followed by primary documentation, GitHub or
+  installed sources for consequential details. Check applicability against the relevant lockfile;
+  an empty search is not evidence of absence. Use probes only for real uncertainties.
+- [Central library-skill references](.claude/skills/README.md#inactive-central-library-skill-references)
+  are inactive historical context, no longer selected, synchronized, discovered or required.
+  Preserve old plan references until that plan is revisited.
 
 ### Dependencies
 
@@ -113,20 +114,23 @@ process scripts are stdlib-only and run without a project environment.
   run the tests it affects and name the move in the commit. No wholesale re-resolve (`uv lock --upgrade`{% if with_rust %},
   bare `cargo update`{% endif %}) unless the operator asks.
 - **Holds go in `docs/pins.md`.** A version that must not be bumped casually (a parity oracle, golden
-  output, a known breakage, a library skill's profile) gets a row with its reason and when to revisit it
+  output or a known breakage) gets a row with its reason and when to revisit it
   (the `pin-check` skill).
 
 ## Testing rules
 
-- **During implementation, only compile checks and targeted tests.** Validate each new piece of
-  scope with a compile check and the focused tests or probes that exercise it. Integrated tests
-  (`just check`, `just test-all`) wait until all functional scope in the plan is implemented;
-  repeat them only for a failure or a subsequent material change.
-- **No formatting mid-work; non-functional checks once, at scope end.** Run `just turn-end` as the
-  last step of a turn that changed files, not mid-work. Once all functional scope is implemented,
-  run `just hygiene` beside `just test-all` and fix what fails (`just <id>` re-runs one check).
-  Don't run hygiene checks during implementation: auto-fixes and findings mid-work move code you
-  are still reasoning about.
+- **During implementation, targeted functional checks.** Run relevant compile checks and focused
+  tests for the scope just implemented. Integrated qualification waits for complete functional scope.
+- **Substantial-task diagnostics.** Relevant typing/lint checks and repairs belong at a coherent
+  capability or integrated package endpoint, not per edit or turn. A narrow read-only diagnostic
+  may resolve a concrete defect.
+- **Final source before qualification.** The root runs `just turn-end` as the last maintenance
+  step of changed turns. At complete scope, applicable native functional/provider/nonfunctional
+  results must cover the declared required union; `just test-all` and `just hygiene` remain broad
+  routes. Account for selected scope and final source/context, not recipe labels or overlapping
+  counts. Preserve failed/interrupted records. Keep unavailable required obligations open, and
+  reassess affected evidence after source, harness, environment or shared configuration changes.
+  A bounded pass establishes only that scope, not complete qualification.
 - **Validators are shared.** Invariant validators are library code, used by both tests and the
   production path. Don't write test-only copies.
 {% if with_rust -%}
@@ -168,14 +172,22 @@ process scripts are stdlib-only and run without a project environment.
   appending history. When a plan, review, evidence folder or ADR loses its last current consumer,
   carry its surviving obligations forward and delete it; Git holds it
   ([historical recovery](docs/README.md#historical-recovery)).
-- **Design reviews** use `design-review` and its declared profiles{% if with_ci_profile %}
-  (`design-review-code-intelligence`){% endif %}, usually through the `design-reviewer` subagent. The binding's
-  **Reviews in this repository** section owns cadence and tier/purpose selection (ADR-0002).
-  Apply the principles and review skill within those bounded review periods; [DESIGN §2](docs/design/DESIGN.md#section-2)
-  owns the current decision.
-  Ordinary implementation does not initiate a domain-model review. Review depth follows impact
-  and uncertainty; flow tracing is optional when it resolves a concrete question.
-- **Findings** retain stable source-review IDs. The active plan's findings table owns current
+- **Design principle audits** use `design-principle-audit` before a new review engagement.
+  The [living audit](docs/design_review/audit/README.md) holds diagnosis at a stated source baseline;
+  it is not default context for ordinary production edits. The binding owns freshness.
+- **Design reviews** use `design-review`{% if with_ci_profile %} and `design-review-code-intelligence`{% endif %}.
+  The operator selects holistic, library-targeted, principle-focused or combined review focus;
+  clarify an unspecified choice. The binding owns cadence and tier; reviewers choose methods
+  and depth. Ordinary implementation and focused plan advice do not initiate a broad audit.
+- **Recommendation audits** use `design-review-audit` at requested or explicitly planned boundaries.
+  Publish [net changes](docs/design_review/reviews/audits/README.md), preserve the exact input in
+  Git, and revise the principal review in place with new attribution. Editorial dispositions
+  do not change execution status.
+- **Completion audits** use `plan-completion-audit` for accepted scope claimed complete. Reconstruct
+  obligations across implementation and consumers; correct that same plan's conclusions, package
+  state, findings and next work. Distinguish implementation, qualification and benefits. These
+  deliberate assessments are not recurring slice gates or authorization for production repairs.
+- **Findings** retain stable audit and source-review IDs. The active plan's findings table owns current
   disposition for scheduled work; unscheduled deferrals stay in the source review with a trigger
   (binding §4). Record the responsible component and closure evidence; link from follow-up
   reviews and STATUS. A decision being accepted does not establish implementation or verified
@@ -195,8 +207,7 @@ judgment justify the handoff and integration cost. Keep small or tightly coupled
 root when useful. Follow the [shared roles](.agents/roles/README.md), including model/effort routing,
 briefs and escalation. [DESIGN §2](docs/design/DESIGN.md#section-2) owns the current workflow decision.
 The root agent retains design, integration and acceptance; no fixed role sequence is required.
-`library-research` may write new dated folders under `docs/design_review/evidence/` and the shared
-library skill its brief assigns; [its contract](.agents/roles/library-research.md) bounds those writes.
+`library-research` may write assigned new dated folders under `docs/design_review/evidence/`; [its contract](.agents/roles/library-research.md) bounds those writes.
 
 ## Git
 
@@ -206,7 +217,7 @@ library skill its brief assigns; [its contract](.agents/roles/library-research.m
 - Commit to `main` in small commits. Each message names the slice and any ADR, and states the
   test outcome. Never push unless asked.
 - Never force-push or `reset --hard`.
-- `.claude/skills/*` is gitignored except the process skills: `adr`, `design-review`,
+- `.claude/skills/*` is gitignored except the process skills: `adr`, `design-review`, `design-principle-audit`, `design-review-audit`, `plan-completion-audit`,
   {% if with_ci_profile %}`design-review-code-intelligence`, {% endif %}`plan-design-review`,
   `plan-creation`, `create-plan`, `plan-execution`, `execute-plan`, `handoff`, `pin-check`.
 - At the end of a session that changed what's true, run the `handoff` skill.

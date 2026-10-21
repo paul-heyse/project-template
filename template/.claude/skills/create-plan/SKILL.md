@@ -5,11 +5,11 @@ description: Create or revise an implementation plan from a design review or exi
 
 # Create a plan
 
-Use the [design principles](../../../docs/design_review/design_principles/core/design-principles.md) and [efficient-architecture heuristics](../../../docs/design_review/design_principles/core/efficient-architecture-heuristics.md) together
-while preparing consequential choices and comparing alternatives. Consider relevant patterns
-before physical organization, interfaces, preparation, assurance and lifecycle mechanisms become
-entrenched. Keep the assessment qualitative and proportional; no exhaustive checklist, cost
-model or additional proof machinery is required.
+Use the [design principles](../../../docs/design_review/design_principles/core/design-principles.md) together with the
+[efficient architecture heuristics](../../../docs/design_review/design_principles/core/efficient-architecture-heuristics.md) before material physical choices become entrenched.
+Select relevant patterns for qualitative assessment of consequential choices and alternatives;
+no exhaustive checklist, cost model or additional proof machinery follows. The manifest declares
+the companion and the binding owns its local mapping.
 
 Develop a plan that gives an intelligent implementer a coherent understanding of the intended
 system, the reasoning behind its boundaries, and a credible path from the current state to
@@ -23,6 +23,18 @@ and discover the applicable principles, profiles and repository binding through 
 instructions and `standard.toml`. Preserve the reference material's relevant obligations while
 reconsidering assumptions when current evidence or the intended capabilities warrant a different
 approach. Distinguish the implemented baseline, accepted decisions and proposed changes.
+
+The refreshed design principle audit belongs to a new design-review engagement, not routine plan authoring or
+execution. Use the plan's source findings and relevant architectural owners; loading review
+criteria for a consequential question does not start a broad principle audit. Preserve audit/source-review
+identities and the one scheduled-disposition owner without copying the audit's account into
+another mutable ledger.
+
+If [design-review-audit](../design-review-audit/SKILL.md) has revised the reference review,
+consume the integrated principal and identify its revision. The companion explains changed
+recommendations and unresolved choices; it is not another progress ledger or a competing target.
+An audited recommendation remains a proposal, including its rule impacts. Existing accepted
+plans retain their scope until a change is authorized.
 
 ## Assess the foundations the plan will use
 
@@ -74,22 +86,23 @@ where an extension would be expressed, what it would reuse and what should remai
 These scenarios clarify the reason for a boundary; they need not expand implementation scope.
 
 Explain consequential decisions through their benefits, costs and assumptions. Consider library
-capabilities and alternatives where they affect the design, using the repository's capability
-skills and documentation routes. Preserve enough rationale for an implementer to recognize
+capabilities and alternatives where they affect the design, using the repository's overview, Context7 and primary-source
+research routes. Preserve enough rationale for an implementer to recognize
 evidence that would reopen a decision. Relate an expected benefit to its mechanism and workload
-or conditions, and qualitatively consider material integration, lifecycle and maintenance obligations.
+or conditions, and consider material integration, lifecycle and maintenance obligations qualitatively.
 Quantitative benefits need a baseline and measurement route; unmeasured benefits remain hypotheses.
 
-For material execution choices, state a workload premise grounded in functional intent and
-qualitatively assess a credible physical route: access paths, necessary/repeated work, crossings/intermediates, locality,
+For material execution choices, qualitatively assess a workload premise grounded in functional intent and a
+credible physical route: access paths, necessary/repeated work, crossings/intermediates, locality,
 preparation/reuse, admission/contention, assurance and transaction/recovery scope. Compare composed
 library capabilities and total runtime/operator machinery. Semantic ownership need not dictate
 layout or execution granularity. Carry known amplification corrections into the target and its
 dependencies; "performance unmeasured" does not justify an unsuitable route. Select relevant
 growth/failure scenarios and explain material tradeoffs in plain language. This consideration
 requires no numerical estimates, cost models, estimators, runtime cost accounting, execution-planning
-machinery, instrumentation, formal cost proofs or additional proof artifacts. Such mechanisms need
-a separate concrete functional or operational requirement; semantic correctness obligations remain.
+machinery, instrumentation, formal cost proofs or additional proof artifacts. Introduce such
+mechanisms only for a separate concrete functional or operational requirement. Quantitative
+performance/capacity claims still require measurements; semantic correctness obligations remain.
 
 Resolve choices that materially shape responsibilities, semantics, sequencing or acceptance.
 If uncertainty remains, state the question, the evidence needed and the dependent work it

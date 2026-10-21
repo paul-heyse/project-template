@@ -1,4 +1,4 @@
-"""Render and check environment setup for each layer without installs or native builds."""
+"""Render environment/workflow layers and verify protected updates without native builds."""
 
 import json
 import os
@@ -11,7 +11,10 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def run(*args, **kwargs):
-    return subprocess.run(args, check=True, capture_output=True, text=True, **kwargs)
+    result = subprocess.run(args, check=False, capture_output=True, text=True, **kwargs)
+    if result.returncode:
+        raise RuntimeError(f"{args}:\n{result.stdout}\n{result.stderr}")
+    return result
 
 
 def main():
@@ -90,7 +93,12 @@ def main():
             uv = tools / "uv"
             uv.write_text('#!/bin/sh\nprintf "%s\\n" "$*" >> "$CALL_LOG"\n')
             uv.chmod(0o755)
-            env = {**os.environ, "PATH": f"{tools}:/usr/bin:/bin", "CALL_LOG": str(log)}
+            env = {
+                **os.environ,
+                "PATH": f"{tools}:/usr/bin:/bin",
+                "CALL_LOG": str(log),
+                "LIBRARY_SKILLS_ROOT": str(base / "absent-store"),
+            }
             env.pop("BASH_ENV", None)
             invalid = subprocess.run(
                 ["bash", str(scripts[1]), "invalid"],
@@ -102,12 +110,67 @@ def main():
                 "Invalid setup must have no effects"
             )
             run("bash", str(scripts[1]), cwd=base, env=env)
-            calls = log.read_text().splitlines()
+            calls = log.read_text().splitlines() if log.exists() else []
             if python:
                 assert calls[0] == "sync --locked --inexact", calls
             else:
                 assert not any(call.startswith("sync ") for call in calls), calls
+            assert calls == (["sync --locked --inexact"] if python else []), calls
+            assert not (dest / "scripts/library_skills.py").exists()
+            assert not (dest / ".config/library-skills.toml").exists()
+            assert not (dest / ".claude/agents").exists()
+            run("git", "init", "-q", "-b", "main", cwd=dest)
+            run("git", "add", "-A", cwd=dest)
+            for script in ["scripts/check_agents.py", "scripts/adr.py"]:
+                args = ["lint"] if script.endswith("adr.py") else []
+                run("uv", "run", "--no-project", "python", script, *args, cwd=dest)
             results.append({"layer": combo, "passed": True, "copier": expected_pin})
+        # Existing project content survives managed template changes, including new topic pages.
+        dest = base / "core"
+        protected = {
+            "docs/design_review/audit/README.md": "# Authored diagnosis\n\nSource baseline and finding DA-001.\n",
+            "docs/design_review/audit/semantic-model.md": "# Authored observations\n\nDA-001 remains project-owned.\n",
+            "docs/libraries/README.md": "# Project library index\n\n[Local overview](local.md)\n",
+        }
+        for relative, content in protected.items():
+            (dest / relative).write_text(content)
+        run("git", "add", "-A", cwd=dest)
+        commit_args = [
+            "git",
+            "-c",
+            "user.name=Template fixture",
+            "-c",
+            "user.email=fixture@example.invalid",
+            "-c",
+            "commit.gpgsign=false",
+            "-c",
+            "core.hooksPath=/dev/null",
+            "commit",
+            "-qm",
+        ]
+        run(*commit_args, "Authored project content", cwd=dest)
+        # New template versions may edit both scaffold and managed guidance.
+        (source / "template/docs/design_review/audit/README.md.jinja").write_text(
+            "Replacement scaffold\n"
+        )
+        (source / "template/docs/design_review/audit/semantic-model.md").write_text(
+            "Replacement topic scaffold\n"
+        )
+        (source / "template/docs/libraries/README.md").write_text(
+            "Replacement library index\n"
+        )
+        guide = source / "template/docs/libraries/authoring-guide.md"
+        guide.write_text(guide.read_text() + "\nManaged update fixture.\n")
+        run("git", "add", "-A", cwd=source)
+        run(*commit_args, "Managed template update", cwd=source)
+        run("copier", "update", "--defaults", "--quiet", "--vcs-ref", "HEAD", cwd=dest)
+        for relative, content in protected.items():
+            assert (dest / relative).read_text() == content, relative
+        assert (
+            dest / "docs/libraries/authoring-guide.md"
+        ).read_text() == guide.read_text()
+        assert not list(dest.rglob("*.rej")), "Copier update conflicts"
+        results.append({"update_preservation": "passed"})
     print(json.dumps(results, indent=2))
 
 

@@ -1,4 +1,4 @@
-"""Check that agent instructions and skills resolve, for Claude Code and Codex alike.
+"""Check that active Codex instructions, shared roles and skills resolve.
 
 - `.agents/skills` (Codex discovery) is a symlink to `.claude/skills`.
 - Every skill's frontmatter `name` matches its directory.
@@ -39,8 +39,12 @@ def ignored(root: Path, paths: list[str]) -> set[str]:
 
 
 def process_skills(root: Path) -> list[str]:
-    """Skills the repository tracks; ignored ones are optional local capability indexes."""
-    names = sorted(p.parent.name for p in (root / ".claude" / "skills").glob("*/SKILL.md"))
+    """Skills the repository tracks; ignored entries may identify retained inactive central references."""
+    names = sorted(
+        p.parent.name
+        for p in (root / ".claude" / "skills").glob("*/SKILL.md")
+        if not p.parent.is_symlink()
+    )
     skip = ignored(root, [f".claude/skills/{n}/SKILL.md" for n in names])
     return [n for n in names if f".claude/skills/{n}/SKILL.md" not in skip]
 
@@ -53,10 +57,12 @@ def path_roots(root: Path) -> tuple[str, ...]:
 
 
 def documents(root: Path) -> list[Path]:
-    docs = [root / "AGENTS.md", root / "CLAUDE.md", root / ".claude" / "skills" / "README.md"]
+    docs = [root / "AGENTS.md", root / ".claude" / "skills" / "README.md"]
     docs += [root / ".claude" / "skills" / s / "SKILL.md" for s in process_skills(root)]
-    docs += sorted((root / ".claude" / "agents").glob("*.md"))
     docs += sorted((root / ".agents" / "roles").glob("*.md"))
+    docs += sorted((root / ".codex" / "agents").glob("*.toml"))
+    for skill in process_skills(root):
+        docs += sorted((root / ".claude" / "skills" / skill / "references").glob("*.md"))
     return docs
 
 

@@ -6,7 +6,7 @@ Technical design may need several subject-specific documents, while a small plan
 most of the outline into a few paragraphs and a work table. Choose content for the understanding
 it gives the reader; the same explanation need not appear under multiple headings.
 
-Identify the reference review or parent plan, inspected baseline and date, and the plan's
+Identify the reference review or parent plan, any consumed audit revision, inspected baseline and date, and the plan's
 evidence status near the beginning. Explain which document owns architecture, sequencing or
 finding disposition where those responsibilities are split. An approved design remains distinct
 from implemented or verified behavior.
@@ -15,7 +15,7 @@ from implemented or verified behavior.
 |---|---|
 | Purpose, scope and basis | Intended outcome, completion boundary, reference material, governing architecture and credible changes the target should accommodate |
 | Current baseline and affected foundations | What exists, relevant evidence limits, reusable components, and conclusions from the focused dependency assessment |
-| Target design and contracts | Responsibilities, semantic owners, interactions, preserved guarantees, support limits and physical execution fit for a brief workload premise |
+| Target design and contracts | Responsibilities, semantic owners, interactions, preserved guarantees, support limits and qualitative execution-fit assessment for a brief workload premise |
 | Choices and alternatives | Material decisions, composed library/optimizer capabilities, necessary work, locality, reuse, assurance/lifecycle scope, total machinery, assumptions and reconsideration conditions |
 | Execution sequence | Coherent work packages, specific prerequisites, affected owners, available capabilities and completion evidence |
 | Migration and adoption | Consumer changes, preservation and retirement, intermediate states and operational transitions where relevant |
@@ -115,7 +115,8 @@ Similarly, connect benefit claims to their conditions and costs:
 > Preparing an index once removes repeated parsing and dependency resolution for requests over
 > stable source revisions. It introduces retained memory and invalidation responsibilities. If
 > inputs change on every request, reassess the preparation lifecycle before extending the cache.
-> Evaluate the benefit with representative revision reuse and end-to-end resource measurements.
+> Assess the tradeoff qualitatively for representative revision reuse. Use end-to-end resource
+> measurements when making a quantitative performance/capacity claim.
 
 Keep such reasoning with the decision it explains. An unresolved premise should identify the
 work it constrains and the evidence that would settle it. Avoid a separate register when a short
@@ -134,10 +135,13 @@ journeys and measurements by what they establish and when they are needed. Follo
 policy for execution timing and evidence reporting. Optional or deferred measurements should have
 a clear purpose and trigger, without obscuring required completion evidence. Relevant growth,
 skew, concurrency and failure scenarios can establish execution fit by qualitative assessment.
-Explain material tradeoffs in plain language; cost models, estimators, accounting, planning
-machinery, instrumentation and proof artifacts need a separate concrete requirement. Bounded output
-or honest refusal does not settle whether the intended workload has a credible physical route;
-quantitative performance/capacity claims still require measurement.
+
+Assess execution fit qualitatively and explain material tradeoffs in plain language. This
+consideration requires no numerical estimates, cost models, estimators, runtime cost accounting,
+execution-planning machinery, instrumentation, formal cost proofs or additional proof artifacts.
+Introduce them only for a separate concrete functional or operational requirement. Quantitative
+performance/capacity claims still require measurements; semantic correctness obligations remain. Bounded output or honest refusal does not settle whether
+the intended workload has a credible physical route.
 
 As execution proceeds, maintain concise state, decisions and next steps at their declared owner.
 If a package consumes an early slice of another plan, record which contract and consumers are
@@ -145,3 +149,17 @@ complete, link the evidence owner, and state the enclosing package's remaining w
 completion does not automatically close a finding shared with other packages or establish full
 system qualification. Update affected links and dependency descriptions when the design changes,
 and move enduring meaning to its established owner before retiring the plan under local policy.
+
+## Completion audit and current claims
+
+When a dedicated [completion audit](../../plan-completion-audit/SKILL.md) is performed, maintain
+its current conclusion in this same plan, with date, inspected source baseline, claimed scope and
+evidence limits. Explain what is functionally delivered, what required qualification remains and
+what benefit measurements are required or deliberately deferred. Connect gaps to their existing
+package/finding owners and actionable next scope, preserving stable identities.
+
+Reconcile completion summaries, package state and finding disposition rather than leaving a
+new audit section to contradict earlier “complete” claims. For a series, the coordinator owns
+the combined conclusion and affected supporting plans hold local details. Keep receipts dated
+and immutable; Git retains earlier accounts. This section is created when an audit is performed,
+not as a mandatory placeholder or another register in every plan.

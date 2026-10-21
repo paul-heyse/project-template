@@ -5,11 +5,11 @@ description: Plan how to create an implementation-plan document from a design re
 
 # Plan the creation of a plan
 
-Use the [design principles](../../../docs/design_review/design_principles/core/design-principles.md) and [efficient-architecture heuristics](../../../docs/design_review/design_principles/core/efficient-architecture-heuristics.md) together
-while preparing consequential choices and comparing alternatives. Consider relevant patterns
-before physical organization, interfaces, preparation, assurance and lifecycle mechanisms become
-entrenched. Keep the assessment qualitative and proportional; no exhaustive checklist, cost
-model or additional proof machinery is required.
+Use the [design principles](../../../docs/design_review/design_principles/core/design-principles.md) together with the
+[efficient architecture heuristics](../../../docs/design_review/design_principles/core/efficient-architecture-heuristics.md) before material physical choices become entrenched.
+Select relevant patterns for qualitative assessment of consequential choices and alternatives;
+no exhaustive checklist, cost model or additional proof machinery follows. The manifest declares
+the companion and the binding owns its local mapping.
 
 Prepare the investigation and decision-making needed to produce a coherent, implementable
 proposal. Build on the user's intended outcome and any approach already supplied. Choose the
@@ -21,6 +21,17 @@ to the applicable design-review skills, principles and repository binding. Ident
 reference review or existing plan and explore enough current code and architectural context
 to make the approach specific. The considerations below guide attention, not required stages
 or an exhaustive investigation sequence.
+
+The refreshed design principle audit belongs to a new design-review engagement, not routine plan authoring or
+execution. Use the plan's source findings and relevant architectural owners; loading review
+criteria for a consequential question does not start a broad principle audit. Preserve audit/source-review
+identities and the one scheduled-disposition owner without copying the audit's account into
+another mutable ledger.
+
+When a recommendation audit has revised the source review, use its integrated principal as the
+planning input and record the consumed revision. Consult the net-change companion for a material
+rationale or unresolved issue; it is not a second set of recommendations to reconcile. Do not
+silently expand an accepted plan because a newer review proposes a different target.
 
 ## Separate obligations from open design choices
 
@@ -45,11 +56,14 @@ Execution-fit questions may also shape the target: access paths, optimizer visib
 movement, working set, reuse/invalidation, assurance placement and publication/recovery scope for
 the intended workload. Examine composed library routes before fixing a backend-neutral interface.
 Keep necessary whole-universe work distinct from avoidable repeated work, and output limits from
-examined-work limits. Assess these choices qualitatively and explain material tradeoffs in plain language. Numerical
-estimates, cost models, estimators, runtime cost accounting, execution-planning machinery,
-instrumentation and formal cost proofs or additional proof artifacts need a separate concrete
-functional or operational requirement. Quantitative performance/capacity claims still require
-measurements; semantic correctness obligations remain.
+examined-work limits.
+
+Assess execution fit qualitatively and explain material tradeoffs in plain language. This
+consideration requires no numerical estimates, cost models, estimators, runtime cost accounting,
+execution-planning machinery, instrumentation, formal cost proofs or additional proof artifacts.
+Introduce them only for a separate concrete functional or operational requirement. Quantitative
+performance/capacity claims still require measurements; semantic correctness obligations remain.
+
 Investigate such questions early enough to avoid developing substantial detail around an
 unstable premise. Explain what a result would enable or change in the proposed design.
 
