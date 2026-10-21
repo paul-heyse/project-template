@@ -108,11 +108,19 @@ updates so existing projects allocate their own next ADR; accepted decisions sta
 
 The default workflow uses shared responsibilities in `.agents/roles`, Codex settings in
 `.codex/agents`, and tracked process skills in `.claude/skills` exposed through `.agents/skills`.
-A broad persisted principle audit precedes a new solution-review engagement. The operator selects
+A broad persisted principle audit precedes a new diagnostic solution-review engagement. The operator selects
 holistic, library-targeted, principle-focused or combined focus; reviewers choose methods and depth.
 Requested recommendation audits publish net changes and revise the principal review with attribution
 and recoverable input. Requested completion audits correct the same owning plan. Neither becomes
 automatic per-slice review. Existing plans and reviews are not migrated by this template change.
+
+Functional enhancement uses `plan-functional-extension-review` / `functional-extension-review`
+to explore useful product, developer, operator or research capabilities within an operator-selected
+outcome, workflow, subsystem or ecosystem. No diagnostic audit, principle violation or existing
+caller is required. Design principles shape realizations; concrete enabling mechanisms and sources
+remain with opportunities. `docs/functional_reviews/` holds principal reviews and audit companions.
+Recommendation auditing preserves the functional-value lens; selected opportunities enter existing
+plans with stable source references, and completion auditing assesses the delivered workflow.
 
 `docs/design_review/audit/` begins as an explicitly unperformed scaffold and is protected from
 Copier updates once authored. `docs/design_review/reviews/audits/` holds companion conventions.

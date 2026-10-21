@@ -179,10 +179,17 @@ process scripts are stdlib-only and run without a project environment.
   The operator selects holistic, library-targeted, principle-focused or combined review focus;
   clarify an unspecified choice. The binding owns cadence and tier; reviewers choose methods
   and depth. Ordinary implementation and focused plan advice do not initiate a broad audit.
+- **Functional enhancement reviews** use `plan-functional-extension-review` / `functional-extension-review`
+  to explore useful product, developer, operator or research capabilities within the operator's
+  chosen scope. Publish [opportunity reviews](docs/functional_reviews/README.md); no diagnostic audit
+  or principle violation is required. Design principles shape proposed realizations. Selected
+  opportunities proceed through existing planning without automatic scope approval.
 - **Recommendation audits** use `design-review-audit` at requested or explicitly planned boundaries.
   Publish [net changes](docs/design_review/reviews/audits/README.md), preserve the exact input in
   Git, and revise the principal review in place with new attribution. Editorial dispositions
   do not change execution status.
+  Functional reviews preserve their value/opportunity lens and use their
+  [companion route](docs/functional_reviews/audits/README.md), without a diagnostic audit prerequisite.
 - **Completion audits** use `plan-completion-audit` for accepted scope claimed complete. Reconstruct
   obligations across implementation and consumers; correct that same plan's conclusions, package
   state, findings and next work. Distinguish implementation, qualification and benefits. These
@@ -218,6 +225,7 @@ The root agent retains design, integration and acceptance; no fixed role sequenc
   test outcome. Never push unless asked.
 - Never force-push or `reset --hard`.
 - `.claude/skills/*` is gitignored except the process skills: `adr`, `design-review`, `design-principle-audit`, `design-review-audit`, `plan-completion-audit`,
+  `functional-extension-review`, `plan-functional-extension-review`,
   {% if with_ci_profile %}`design-review-code-intelligence`, {% endif %}`plan-design-review`,
   `plan-creation`, `create-plan`, `plan-execution`, `execute-plan`, `handoff`, `pin-check`.
 - At the end of a session that changed what's true, run the `handoff` skill.

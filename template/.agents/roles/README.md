@@ -84,6 +84,7 @@ This is qualitative guidance, not an exhaustive checklist, cost model or proof r
 |---|---|
 | Design principle audit | Bounded evidence and diagnostic contributions inform one coordinator-published baseline account |
 | Review planning and design review | The refreshed audit informs solution inquiry; a fresh reviewer assesses alternatives within the operator's selected focus |
+| Functional-extension review preparation and review | A reviewer explores useful capabilities within the operator's chosen scope and compares realizations; no diagnostic audit prerequisite |
 | Design-review recommendation audit | A fresh design reviewer assesses recommendations and omissions; the coordinator publishes net changes and the attributed integrated revision |
 | Plan preparation and creation | Evidence workers inform options and the integral foundation assessment; focused design advice addresses consequential questions; one author assembles the document |
 | Execution planning and execution | The coordinator orders ready packages; executors implement; implementation reviewers and test agents assess stable work; design review follows the binding's cadence |
@@ -91,8 +92,9 @@ This is qualitative guidance, not an exhaustive checklist, cost model or proof r
 
 The [process skills](../../.claude/skills/README.md) own each workflow. Planning companions produce
 an adaptable conversational approach and can use the available planning interface. Skills do not
-switch the runtime into Plan mode. A broad audit precedes a new review engagement; ordinary
-implementation and focused plan advice do not initiate it. No extra planning artifact or hook is required.
+switch the runtime into Plan mode. A broad audit precedes a new diagnostic design-review engagement;
+functional-extension review, ordinary implementation and focused plan advice do not initiate it.
+No extra planning artifact or hook is required.
 Recommendation and completion audits are deliberate requested or explicitly planned boundaries,
 not recurring slice reviews or automatic handoff steps. They reuse these roles without new adapters;
 their skills own publication and the difference between editorial and execution disposition.
