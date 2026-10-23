@@ -92,7 +92,7 @@ This is qualitative guidance, not an exhaustive checklist, cost model or proof r
 
 The [process skills](../../.claude/skills/README.md) own each workflow. Planning companions produce
 an adaptable conversational approach and can use the available planning interface. Skills do not
-switch the runtime into Plan mode. A broad audit precedes a new diagnostic design-review engagement;
+switch the runtime into Plan mode. The applicable broad or test-scope audit precedes a new diagnostic design-review engagement under the binding;
 functional-extension review, ordinary implementation and focused plan advice do not initiate it.
 No extra planning artifact or hook is required.
 Recommendation and completion audits are deliberate requested or explicitly planned boundaries,

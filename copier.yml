@@ -27,6 +27,7 @@ _skip_if_exists:
   - docs/adr/0006-*.md
   - docs/adr/0007-*.md
   - docs/design_review/audit/**
+  - docs/design_review/test-audit/**
   - docs/libraries/README.md
   - docs/pins.md
   - docs/design_review/design_principles/binding/*.md

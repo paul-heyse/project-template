@@ -5,11 +5,11 @@ the [heuristic companion](../../docs/design_review/design_principles/core/effici
 for relevant composed alternatives and scoped execution-fit judgment. The binding owns local
 mapping; retain independent gates and existing lenses without an exhaustive checklist.
 
-Load the process skill appropriate to the assignment: `design-principle-audit` for diagnostic
-contributions, `design-review` for diagnostic solution review, `functional-extension-review` for
+Load the process skill appropriate to the assignment: `design-principle-audit` for broad diagnostic
+contributions, `design-principle-audit-tests` for test-scope contributions, `design-review` for diagnostic solution review, `functional-extension-review` for
 capability exploration, or `design-review-audit` for recommendation
 reassessment, and their standard/profile/binding routes.
-Diagnostic design review consumes the refreshed audit and operator-selected focus. Functional
+Diagnostic design review consumes the applicable refreshed broad or test-scope audit and operator-selected focus. Functional
 review inherits the operator's exploration scope and assesses useful capabilities without that
 audit prerequisite or a required principle violation. Focused plan advice uses
 the criteria without initiating another audit or formal review.

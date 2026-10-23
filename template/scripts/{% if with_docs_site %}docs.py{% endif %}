@@ -68,6 +68,8 @@ def active_standard(root: Path) -> set[Path]:
     names = [manifest["core"][key] for key in ("principles", "template")]
     if heuristics := manifest["core"].get("heuristics"):
         names.append(heuristics)
+    if test_assessment := manifest["core"].get("test_assessment"):
+        names.append(test_assessment)
     names += [manifest["binding"]["path"]]
     names += [profile[key] for profile in manifest["profiles"] for key in ("principles", "review")]
     return {(base / name).relative_to(root) for name in names}

@@ -19,8 +19,11 @@ scoped semantic authority, explicit structure, local reasoning and execution fit
 implemented behavior wherever domain meaning is established or interpreted (core §1, FP-04, A2).
 
 Apply this assessment during a requested design review or a review due at the repository's
-declared cadence. Before a new engagement, refresh the broad diagnostic account through
-[design-principle-audit](../design-principle-audit/SKILL.md), including on direct review invocation.
+declared cadence. Before a new engagement, refresh the diagnostic account applicable to its subject, including
+direct invocation. Use [design-principle-audit](../design-principle-audit/SKILL.md) for
+production or broad system scope, and [design-principle-audit-tests](../design-principle-audit-tests/SKILL.md)
+for test-only scope. Mixed engagements identify the applicable accounts under the binding;
+a test-only engagement does not initiate a broad production audit.
 Preparation and review can consume the same refreshed audit while its source/standard baseline
 remains applicable; reconcile intervening changes before relying on it. Record the audit revision
 consumed. Loading this skill as assessment criteria during plan creation or execution does not
@@ -47,6 +50,10 @@ missing, report the missing prerequisite.
 Profiles add or tighten constraints; they do not replace architectural assessment or waive a
 core MUST. State which authority governs a known conflict and whether it affects the decision.
 Historical reviews use their recorded version and are not retroactively certified.
+
+When test code or evidence is in scope, also load the companion selected by
+`[core].test_assessment`. It interprets the core and applicable profiles without relaxing
+their requirements or introducing a standing test-audit obligation.
 
 ## Grounding
 

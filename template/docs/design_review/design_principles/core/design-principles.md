@@ -16,6 +16,11 @@ checklist, gate, cost model or proof machinery.
 
 ## 0. How to use this document
 
+For test code and its evidence, use the [test-assessment companion](test-assessment.md),
+selected by `[core].test_assessment`. It interprets FP-01–FP-07 for independent oracles,
+reuse, shared support, assertions and test lifecycles without new principles, gates or
+routine audit obligations. Applicable domain profiles retain their correctness requirements.
+
 **Layers.** This is the core of a layered standard:
 
 | Layer | Holds | May reference |

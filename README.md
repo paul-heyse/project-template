@@ -108,11 +108,30 @@ updates so existing projects allocate their own next ADR; accepted decisions sta
 
 The default workflow uses shared responsibilities in `.agents/roles`, Codex settings in
 `.codex/agents`, and tracked process skills in `.claude/skills` exposed through `.agents/skills`.
-A broad persisted principle audit precedes a new diagnostic solution-review engagement. The operator selects
+A broad persisted principle audit precedes a diagnostic review of production or broad system scope. The operator selects
 holistic, library-targeted, principle-focused or combined focus; reviewers choose methods and depth.
 Requested recommendation audits publish net changes and revise the principal review with attribution
 and recoverable input. Requested completion audits correct the same owning plan. Neither becomes
 automatic per-slice review. Existing plans and reviews are not migrated by this template change.
+
+Test-only diagnostic engagements use `design-principle-audit-tests` and the separate living
+account at `docs/design_review/test-audit/`. Mixed scope identifies applicable accounts under
+the project binding; each retains its own baseline and findings one primary home. The
+`core/test-assessment.md` companion interprets the same Core 3.3 foundations for test evidence,
+reuse and shared support without new gates or an automatic test campaign. `standard.toml`
+selects it through `core.test_assessment`; docs-enabled projects publish it as active guidance.
+The companion is available in every layer combination, independently of optional profiles.
+
+Test-only review does not initiate a broad production audit. Both collections begin as explicitly
+unperformed scaffolds; installing them establishes no suite quality or product qualification.
+
+Existing projects adopt the new skill, companion and manifest selection as managed guidance,
+then reconcile their protected binding, DESIGN and checkpoint with the test-scope route and
+clarified validator/oracle distinction. Allocate a local ADR for this additive process change;
+do not copy the template seed over accepted project decisions. Copier preserves the complete
+test-audit subtree once authored, including nested topic pages, while managed skill and companion
+updates continue. The focused `just test-env` exercises discovery, publication selection and
+update preservation without product builds or health suites.
 
 Functional enhancement uses `plan-functional-extension-review` / `functional-extension-review`
 to explore useful product, developer, operator or research capabilities within an operator-selected

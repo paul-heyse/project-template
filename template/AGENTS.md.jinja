@@ -131,8 +131,11 @@ process scripts are stdlib-only and run without a project environment.
   counts. Preserve failed/interrupted records. Keep unavailable required obligations open, and
   reassess affected evidence after source, harness, environment or shared configuration changes.
   A bounded pass establishes only that scope, not complete qualification.
-- **Validators are shared.** Invariant validators are library code, used by both tests and the
-  production path. Don't write test-only copies.
+- **Validators are shared.** Reuse production invariant validators for enforcement and when
+  testing their consumers. Tests assessing a validator or semantic result retain independent
+  expectations; calling the same validator for both actual and expected cannot establish its
+  correctness. Preserve deliberate invalid inputs and independent reference data. This does
+  not authorize a duplicate production-validation framework; use the test-assessment companion.
 {% if with_rust -%}
 - Rust tests run under nextest in the release profile, so repeated runs reuse cached optimized
   code. Test data may be fresh, existing, or empty according to the test's purpose.
@@ -172,9 +175,13 @@ process scripts are stdlib-only and run without a project environment.
   appending history. When a plan, review, evidence folder or ADR loses its last current consumer,
   carry its surviving obligations forward and delete it; Git holds it
   ([historical recovery](docs/README.md#historical-recovery)).
-- **Design principle audits** use `design-principle-audit` before a new review engagement.
-  The [living audit](docs/design_review/audit/README.md) holds diagnosis at a stated source baseline;
-  it is not default context for ordinary production edits. The binding owns freshness.
+- **Design principle audits** use `design-principle-audit` before a diagnostic review of
+  production or broad system scope. Test-only scope uses `design-principle-audit-tests` and
+  the [separate test account](docs/design_review/test-audit/README.md), with the
+  [test-assessment companion](docs/design_review/design_principles/core/test-assessment.md)
+  selected through `[core].test_assessment`. The binding owns mixed-scope applicability and
+  freshness. Accounts retain independent baselines and findings one primary home. Ordinary
+  implementation or test maintenance initiates neither audit nor a full test campaign.
 - **Design reviews** use `design-review`{% if with_ci_profile %} and `design-review-code-intelligence`{% endif %}.
   The operator selects holistic, library-targeted, principle-focused or combined review focus;
   clarify an unspecified choice. The binding owns cadence and tier; reviewers choose methods
@@ -224,7 +231,7 @@ The root agent retains design, integration and acceptance; no fixed role sequenc
 - Commit to `main` in small commits. Each message names the slice and any ADR, and states the
   test outcome. Never push unless asked.
 - Never force-push or `reset --hard`.
-- `.claude/skills/*` is gitignored except the process skills: `adr`, `design-review`, `design-principle-audit`, `design-review-audit`, `plan-completion-audit`,
+- `.claude/skills/*` is gitignored except the process skills: `adr`, `design-review`, `design-principle-audit`, `design-principle-audit-tests`, `design-review-audit`, `plan-completion-audit`,
   `functional-extension-review`, `plan-functional-extension-review`,
   {% if with_ci_profile %}`design-review-code-intelligence`, {% endif %}`plan-design-review`,
   `plan-creation`, `create-plan`, `plan-execution`, `execute-plan`, `handoff`, `pin-check`.

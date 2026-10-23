@@ -286,3 +286,20 @@ def test_architecture_frontmatter_preserves_stable_anchor_destinations(root, set
     body = (candidate / "src/docs/design/DESIGN.md").read_text()
     assert '<a id="section-1"></a>\n\n## §1 First' in body
     assert '<a id="section-2"></a>\n\n## §2 Second' in body
+
+
+@pytest.mark.parametrize("selected", [False, True])
+def test_test_assessment_publication_scope(root, settings, selected):
+    base = root / "docs/design_review/design_principles"
+    companion = base / "test-assessment.md"
+    companion.write_text("# Test assessment\n")
+    manifest = base / "standard.toml"
+    if selected:
+        manifest.write_text(
+            manifest.read_text().replace(
+                "[binding]", 'test_assessment="test-assessment.md"\n[binding]'
+            )
+        )
+    pages = docs.discover(root, settings)
+    page = next(page for page in pages if page.path == companion.relative_to(root))
+    assert page.scope == ("Current" if selected else "Reference")

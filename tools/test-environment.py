@@ -5,6 +5,7 @@ import os
 import shutil
 import subprocess
 import tempfile
+import tomllib
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -121,18 +122,41 @@ def main():
             assert not (dest / ".claude/agents").exists()
             run("git", "init", "-q", "-b", "main", cwd=dest)
             run("git", "add", "-A", cwd=dest)
+            skill = ".claude/skills/design-principle-audit-tests/SKILL.md"
+            companion = "docs/design_review/design_principles/core/test-assessment.md"
+            audit = "docs/design_review/test-audit/README.md"
+            run("git", "ls-files", "--error-unmatch", skill, companion, audit, cwd=dest)
+            discovered = dest / ".agents/skills/design-principle-audit-tests/SKILL.md"
+            assert discovered.resolve() == (dest / skill).resolve()
+            standard_root = dest / "docs/design_review/design_principles"
+            standard = tomllib.loads((standard_root / "standard.toml").read_text())
+            assert standard["core"]["version"] == "3.3"
+            selected = standard_root / standard["core"]["test_assessment"]
+            assert selected == dest / companion
+            assert "No test audit has been performed" in (dest / audit).read_text()
             for script in ["scripts/check_agents.py", "scripts/adr.py"]:
                 args = ["lint"] if script.endswith("adr.py") else []
                 run("uv", "run", "--no-project", "python", script, *args, cwd=dest)
+            if combo == "full":
+                run(
+                    "uv", "run", "--no-project", "--offline", "--no-python-downloads",
+                    "--python", (dest / ".python-version").read_text().strip(),
+                    "--with", "pytest", "pytest", "-q", "tests/scripts/test_docs.py",
+                    "-k", "test_assessment_publication_scope",
+                    "--basetemp", str(base / "publisher-tests"), cwd=dest,
+                )
             results.append({"layer": combo, "passed": True, "copier": expected_pin})
         # Existing project content survives managed template changes, including new topic pages.
         dest = base / "core"
         protected = {
             "docs/design_review/audit/README.md": "# Authored diagnosis\n\nSource baseline and finding DA-001.\n",
             "docs/design_review/audit/semantic-model.md": "# Authored observations\n\nDA-001 remains project-owned.\n",
+            "docs/design_review/test-audit/README.md": "# Authored test diagnosis\n\nIndependent baseline and DTA-001.\n",
+            "docs/design_review/test-audit/support/helpers.md": "# Authored helper observations\n\nDTA-001 remains project-owned.\n",
             "docs/libraries/README.md": "# Project library index\n\n[Local overview](local.md)\n",
         }
         for relative, content in protected.items():
+            (dest / relative).parent.mkdir(parents=True, exist_ok=True)
             (dest / relative).write_text(content)
         run("git", "add", "-A", cwd=dest)
         commit_args = [
@@ -159,6 +183,16 @@ def main():
         (source / "template/docs/libraries/README.md").write_text(
             "Replacement library index\n"
         )
+        (source / "template/docs/design_review/test-audit/README.md.jinja").write_text(
+            "Replacement test-audit scaffold\n"
+        )
+        collision = source / "template/docs/design_review/test-audit/support/helpers.md"
+        collision.parent.mkdir(parents=True, exist_ok=True)
+        collision.write_text("New template helper topic colliding with authored content\n")
+        managed_skill = source / "template/.claude/skills/design-principle-audit-tests/SKILL.md.jinja"
+        managed_skill.write_text(managed_skill.read_text() + "\nManaged test-audit skill update.\n")
+        managed_companion = source / "template/docs/design_review/design_principles/core/test-assessment.md"
+        managed_companion.write_text(managed_companion.read_text() + "\nManaged test-assessment update.\n")
         guide = source / "template/docs/libraries/authoring-guide.md"
         guide.write_text(guide.read_text() + "\nManaged update fixture.\n")
         run("git", "add", "-A", cwd=source)
@@ -166,6 +200,10 @@ def main():
         run("copier", "update", "--defaults", "--quiet", "--vcs-ref", "HEAD", cwd=dest)
         for relative, content in protected.items():
             assert (dest / relative).read_text() == content, relative
+        updated_skill = dest / ".claude/skills/design-principle-audit-tests/SKILL.md"
+        assert "Managed test-audit skill update." in updated_skill.read_text()
+        updated_companion = dest / "docs/design_review/design_principles/core/test-assessment.md"
+        assert updated_companion.read_text() == managed_companion.read_text()
         assert (
             dest / "docs/libraries/authoring-guide.md"
         ).read_text() == guide.read_text()

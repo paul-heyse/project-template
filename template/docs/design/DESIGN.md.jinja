@@ -85,8 +85,8 @@ Shared roles own task-specific context, concrete briefs and evidence-based escal
 execution. Plan creation includes focused assessment of foundations and schedules necessary
 improvements before dependent work. Existing plans own execution and scheduled finding disposition;
 planning companions ordinarily remain conversational. Resource savings remain Proposed.
-**Audit-led workflow — Implemented policy** (ADR-0007). A broad persisted
-[diagnostic audit](../design_review/audit/README.md) is refreshed before a new review engagement,
+**Audit-led workflow — Implemented policy** (ADR-0007). Before a new diagnostic review of
+production or broad system scope, the [diagnostic audit](../design_review/audit/README.md) is refreshed,
 using prior findings and source changes to focus investigation. The operator selects solution
 focus; methods and depth remain reviewer judgment. A requested recommendation audit publishes
 [net changes](../design_review/reviews/audits/README.md) and integrates a newly attributed review
@@ -95,6 +95,12 @@ and corrects the same owning plan. Reviews own reasoning, plans own scheduled di
 implementation does not load the broad audit. Optional repo-agnostic library overviews and current
 documentation replace active central library skills. These are deliberate boundaries, without
 automatic per-slice audit gates or new agent roles.
+
+Test-only diagnostic engagements use [the test audit](../design_review/test-audit/README.md)
+and the [test-assessment companion](../design_review/design_principles/core/test-assessment.md).
+The binding selects applicable accounts for mixed scope. Each retains its own baseline,
+and findings one primary home; installing the process performs no audit.
+
 {% if with_docs_site %}
 **Documentation publication** (ADR-0003). Focused architecture pages retain stable section IDs;
 a moved live section leaves a relocation pointer. One resolver drives ADR references and the

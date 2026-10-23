@@ -13,7 +13,8 @@ Workflows for building this repository. A skill is added when a workflow has act
 
 | Skill | Use |
 |---|---|
-| [`design-principle-audit/`](design-principle-audit/SKILL.md) | Refresh the broad diagnostic account before a new design-review engagement |
+| [`design-principle-audit/`](design-principle-audit/SKILL.md) | Refresh the broad diagnostic account for production or broad system review |
+| [design-principle-audit-tests](design-principle-audit-tests/SKILL.md) | Audit test code, evidence and support in a separate living account |
 | [`design-review-audit/`](design-review-audit/SKILL.md) | Reassess recommendations and omissions, publish net changes and revise the principal review |
 | [`plan-completion-audit/`](plan-completion-audit/SKILL.md) | Assess claimed accepted scope and correct the same owning plan |
 | [`adr/`](adr/SKILL.md) | Record or supersede a decision; amend the owning architectural section in the same commit |
@@ -43,7 +44,7 @@ and acceptance. Delegate when the benefit justifies handoff and integration cost
 coupled tasks may remain with the root. Shared roles own briefs, context loading and escalation.
 
 A [living diagnostic audit](../../docs/design_review/audit/README.md) precedes a new diagnostic solution-review
-engagement. The operator selects holistic, library-targeted, principle-focused or combined focus;
+engagement about production or broad system scope. The operator selects holistic, library-targeted, principle-focused or combined focus;
 reviewers choose methods and depth. Recommendation and completion audits are deliberate requested
 or explicitly planned assessments, not automatic slice checks. Reviews own reasoning, plans own
 scheduled disposition, and a completion audit corrects that same plan.
@@ -65,3 +66,9 @@ Do not rewrite old plans merely for this transition. New capability research use
 
 | Reference | Former indexes | Source |
 |---|---|---|
+
+Test-only diagnostic reviews use the [test account](../../docs/design_review/test-audit/README.md);
+mixed scope identifies applicable accounts under the binding. Load the selected
+[test-assessment companion](../../docs/design_review/design_principles/core/test-assessment.md)
+when tests or their evidence are in scope. Neither installation nor ordinary test editing
+initiates an audit, and each finding retains one primary home.
