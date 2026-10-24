@@ -28,6 +28,7 @@ Workflows for building this repository. A skill is added when a workflow has act
 | [`plan-creation/`](plan-creation/SKILL.md) | Plan the authoring approach from a review or existing plan, including focused assessment of foundations |
 | [`create-plan/`](create-plan/SKILL.md) | Write the design and execution plan, including foundation improvements and an adaptable structure |
 | [`plan-execution/`](plan-execution/SKILL.md) | Develop the approach to carrying out an existing plan |
+| [`plan-improvement-review/`](plan-improvement-review/SKILL.md) | Review the remaining change footprint for design-principle alignment, general enhancements and execution improvements that fit coherently into the plan |
 | [`execute-plan/`](execute-plan/SKILL.md) | Carry authorized scope through implementation, review, functional verification and handoff |
 | [`handoff/`](handoff/SKILL.md) | Rewrite STATUS.md from the actual tree at session end |
 | [`pin-check/`](pin-check/SKILL.md) | Add, bump, hold or release a dependency pin |
@@ -56,6 +57,14 @@ need no diagnostic finding or existing caller. Design principles shape their rea
 execution workflow. Recommendation auditing preserves their value lens and publishes a
 [functional companion](../../docs/functional_reviews/audits/README.md) plus the integrated review,
 without importing the diagnostic audit prerequisite.
+
+Plan improvement uses `plan-improvement-review` at a requested or explicitly planned boundary.
+Its scope is the remaining change footprint, including components substantially modified to
+accommodate the plan. It actively assesses design-principle alignment and general enhancements
+on their own merits, with recommendations judged for coherent integration. Publish a standalone
+[plan-improvement review](../../docs/plan_improvement_reviews/README.md); updating the plan from
+it is separately instructed. It has no broad audit prerequisite and does not replace a formal
+review due under the binding or automatically change accepted scope.
 
 ## Inactive central library-skill references
 

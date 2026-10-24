@@ -48,6 +48,7 @@ permission, concurrent-work and testing constraints, and follow discovered depen
 | `docs/design_review/design_principles/` | The layered design standard, declared in `standard.toml`: seven foundations (FP-01–07), including an explicit domain model, scoped semantic authority and qualitative execution-fit assessment for the intended workload; independent architectural judgments A1–A4, supporting rules DP-01–24 and gates G1–G8{% if with_ci_profile %}, the code-intelligence profile{% endif %}, and the repository binding (ADR-0002) |
 | `docs/design_review/audit/` | Living diagnostic baseline; not ordinary implementation context |
 | `docs/libraries/` | Optional repo-agnostic library capability orientation and authoring guidance |
+| `docs/plan_improvement_reviews/` | Standalone remaining-change-footprint reviews; plan revision is separately instructed |
 | `docs/design_review/reviews/` | Review outputs: evidence, never authority; kept while a finding they supply is open |
 | `docs/design_review/evidence/` | Probes, spikes and investigations behind decisions, one `YYYY-MM-DD_<topic>/` folder each with a README; raw outputs and binaries through Git LFS; never venvs or `target/`. Put probes here, not in a session scratchpad |
 | `docs/pins.md` | Holds: pins that should not be bumped casually, with reason and revisit trigger |
@@ -201,6 +202,14 @@ process scripts are stdlib-only and run without a project environment.
   obligations across implementation and consumers; correct that same plan's conclusions, package
   state, findings and next work. Distinguish implementation, qualification and benefits. These
   deliberate assessments are not recurring slice gates or authorization for production repairs.
+- **Plan-improvement reviews** use `plan-improvement-review` at requested or explicitly planned
+  boundaries. Review the remaining change footprint, including substantially affected supporting
+  components, for design-principle alignment, general enhancements and execution improvements.
+  Judge recommendations for coherent integration and total burden; their value can extend beyond
+  the plan's functional target. Publish a standalone
+  [plan-improvement review](docs/plan_improvement_reviews/README.md); plan revision from it is
+  separately instructed. No broad audit prerequisite or automatic adoption follows; formal
+  review cadence remains unchanged.
 - **Findings** retain stable audit and source-review IDs. The active plan's findings table owns current
   disposition for scheduled work; unscheduled deferrals stay in the source review with a trigger
   (binding §4). Record the responsible component and closure evidence; link from follow-up
@@ -234,5 +243,5 @@ The root agent retains design, integration and acceptance; no fixed role sequenc
 - `.claude/skills/*` is gitignored except the process skills: `adr`, `design-review`, `design-principle-audit`, `design-principle-audit-tests`, `design-review-audit`, `plan-completion-audit`,
   `functional-extension-review`, `plan-functional-extension-review`,
   {% if with_ci_profile %}`design-review-code-intelligence`, {% endif %}`plan-design-review`,
-  `plan-creation`, `create-plan`, `plan-execution`, `execute-plan`, `handoff`, `pin-check`.
+  `plan-creation`, `create-plan`, `plan-execution`, `plan-improvement-review`, `execute-plan`, `handoff`, `pin-check`.
 - At the end of a session that changed what's true, run the `handoff` skill.

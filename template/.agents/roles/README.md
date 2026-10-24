@@ -88,12 +88,13 @@ This is qualitative guidance, not an exhaustive checklist, cost model or proof r
 | Design-review recommendation audit | A fresh design reviewer assesses recommendations and omissions; the coordinator publishes net changes and the attributed integrated revision |
 | Plan preparation and creation | Evidence workers inform options and the integral foundation assessment; focused design advice addresses consequential questions; one author assembles the document |
 | Execution planning and execution | The coordinator orders ready packages; executors implement; implementation reviewers and test agents assess stable work; design review follows the binding's cadence |
+| Plan-improvement review | A reviewer assesses alignment, general enhancements and execution improvements across the remaining change footprint; the coordinator publishes a standalone review, with plan revision separately instructed |
 | Plan-completion audit | A fresh implementation reviewer examines claimed accepted scope across consumers and packages; the coordinator corrects the same plan's current account |
 
 The [process skills](../../.claude/skills/README.md) own each workflow. Planning companions produce
 an adaptable conversational approach and can use the available planning interface. Skills do not
 switch the runtime into Plan mode. The applicable broad or test-scope audit precedes a new diagnostic design-review engagement under the binding;
-functional-extension review, ordinary implementation and focused plan advice do not initiate it.
+functional-extension review, plan-improvement review, ordinary implementation and focused plan advice do not initiate it.
 No extra planning artifact or hook is required.
 Recommendation and completion audits are deliberate requested or explicitly planned boundaries,
 not recurring slice reviews or automatic handoff steps. They reuse these roles without new adapters;

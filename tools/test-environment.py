@@ -126,6 +126,11 @@ def main():
             companion = "docs/design_review/design_principles/core/test-assessment.md"
             audit = "docs/design_review/test-audit/README.md"
             run("git", "ls-files", "--error-unmatch", skill, companion, audit, cwd=dest)
+            improvement_skill = ".claude/skills/plan-improvement-review/SKILL.md"
+            review_collection = "docs/plan_improvement_reviews/README.md"
+            run("git", "ls-files", "--error-unmatch", improvement_skill, review_collection, cwd=dest)
+            improvement_discovery = dest / ".agents/skills/plan-improvement-review/SKILL.md"
+            assert improvement_discovery.resolve() == (dest / improvement_skill).resolve()
             discovered = dest / ".agents/skills/design-principle-audit-tests/SKILL.md"
             assert discovered.resolve() == (dest / skill).resolve()
             standard_root = dest / "docs/design_review/design_principles"
@@ -138,6 +143,19 @@ def main():
                 args = ["lint"] if script.endswith("adr.py") else []
                 run("uv", "run", "--no-project", "python", script, *args, cwd=dest)
             if combo == "full":
+                # Exercise publication discovery on the actual rendered configuration,
+                # including an authored review rather than only the collection guide.
+                review = dest / "docs/plan_improvement_reviews/render-check_2026-10-24.md"
+                review.write_text("# Authored plan improvement review\n\nProposed amendment I01.\n")
+                run(
+                    "uv", "run", "--no-project", "python", "-c",
+                    "import sys; sys.path.insert(0, 'scripts'); import docs; "
+                    "pages = {str(p.path): p.scope for p in docs.discover(docs.ROOT, docs.config(docs.ROOT))}; "
+                    "assert pages['.claude/skills/plan-improvement-review/SKILL.md'] == 'Current'; "
+                    "assert pages['docs/plan_improvement_reviews/README.md'] == 'Reference'; "
+                    "assert pages['docs/plan_improvement_reviews/render-check_2026-10-24.md'] == 'Reference'",
+                    cwd=dest,
+                )
                 run(
                     "uv", "run", "--no-project", "--offline", "--no-python-downloads",
                     "--python", (dest / ".python-version").read_text().strip(),
@@ -149,6 +167,7 @@ def main():
         # Existing project content survives managed template changes, including new topic pages.
         dest = base / "core"
         protected = {
+            "docs/plan_improvement_reviews/authored-review_2026-10-24.md": "# Authored plan improvement review\n\nI01 remains a proposal; the plan is unchanged.\n",
             "docs/design_review/audit/README.md": "# Authored diagnosis\n\nSource baseline and finding DA-001.\n",
             "docs/design_review/audit/semantic-model.md": "# Authored observations\n\nDA-001 remains project-owned.\n",
             "docs/design_review/test-audit/README.md": "# Authored test diagnosis\n\nIndependent baseline and DTA-001.\n",
@@ -191,6 +210,8 @@ def main():
         collision.write_text("New template helper topic colliding with authored content\n")
         managed_skill = source / "template/.claude/skills/design-principle-audit-tests/SKILL.md.jinja"
         managed_skill.write_text(managed_skill.read_text() + "\nManaged test-audit skill update.\n")
+        managed_improvement = source / "template/.claude/skills/plan-improvement-review/SKILL.md"
+        managed_improvement.write_text(managed_improvement.read_text() + "\nManaged improvement-review skill update.\n")
         managed_companion = source / "template/docs/design_review/design_principles/core/test-assessment.md"
         managed_companion.write_text(managed_companion.read_text() + "\nManaged test-assessment update.\n")
         guide = source / "template/docs/libraries/authoring-guide.md"
@@ -202,6 +223,8 @@ def main():
             assert (dest / relative).read_text() == content, relative
         updated_skill = dest / ".claude/skills/design-principle-audit-tests/SKILL.md"
         assert "Managed test-audit skill update." in updated_skill.read_text()
+        updated_improvement = dest / ".claude/skills/plan-improvement-review/SKILL.md"
+        assert updated_improvement.read_text() == managed_improvement.read_text()
         updated_companion = dest / "docs/design_review/design_principles/core/test-assessment.md"
         assert updated_companion.read_text() == managed_companion.read_text()
         assert (

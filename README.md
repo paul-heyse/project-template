@@ -141,6 +141,17 @@ remain with opportunities. `docs/functional_reviews/` holds principal reviews an
 Recommendation auditing preserves the functional-value lens; selected opportunities enter existing
 plans with stable source references, and completion auditing assesses the delivered workflow.
 
+Plan improvement uses `plan-improvement-review` to examine the remaining change footprint of
+an implementation plan or coordinated series. It actively seeks design-principle alignment,
+general enhancements and execution improvements across materially affected components, including
+supporting code whose value extends beyond the functional target. Recommendations are judged
+for coherent integration and total burden. `docs/plan_improvement_reviews/` holds standalone
+assessments; updating a plan from one is separately instructed, using the existing planning and
+decision routes. There is no separate update skill or broad audit prerequisite, and formal
+review cadence remains unchanged. Every layer combination receives the skill and collection;
+docs-enabled projects publish both. Existing projects reconcile their protected binding with
+this route by hand after updating managed guidance. Authored reviews remain project-owned.
+
 `docs/design_review/audit/` begins as an explicitly unperformed scaffold and is protected from
 Copier updates once authored. `docs/design_review/reviews/audits/` holds companion conventions.
 `docs/libraries/` supplies a repository-agnostic capability-overview guide and project-owned index.
