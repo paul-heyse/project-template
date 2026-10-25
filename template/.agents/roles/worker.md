@@ -18,7 +18,10 @@ the native discovery routes. The coordinator owns assembled acceptance and hando
 
 Preserve concurrent work. Do not commit, push or delegate further unless assigned. Report a missing
 prerequisite, conflicting contract or material discovery beyond scope to the coordinator; continue
-independent in-scope work where useful. Make ordinary local decisions within the brief yourself.
+independent in-scope work where useful. Exercise delegated judgment within the accepted outcome
+and contracts.
+Reconcile changes to shared assumptions or another assignment's consumed contract before dependent
+work relies on them.
 
 Return the result with precise source locations or artifact pointers, the baseline examined,
 material uncertainties and anything unfinished. For consequential negative claims, state the search

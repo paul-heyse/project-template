@@ -21,8 +21,9 @@ Every generated project gets the **core**:
   bounded design reviews; ordinary implementation does not initiate a modeling exercise (ADR-0006);
 - six shared worker roles with native Codex adapters, and paired skills for preparing
   and performing design reviews, plan creation and plan execution. The coordinator retains design,
-  integration and acceptance. Delegation depends on task independence, context or capability needs,
-  and whether its benefit justifies handoff and integration cost;
+  integration and acceptance. Contributions follow useful outcomes, shared decisions and readiness
+  for the requested result. Delegation can provide progress, earlier learning or independent judgment,
+  including serial work. Shared principles guide decomposition; local operating rules govern effects;
 - `docs/plans/`; a dependency policy where every declared dependency is pinned exactly
   (`uv add` writes `==` through `add-bounds = "exact"`, `cargo add name@=x.y.z`), committed
   lockfiles hold the rest, versions change deliberately on the agent's judgment, and

@@ -225,11 +225,13 @@ require measurements; semantic correctness obligations remain.
 
 ## Agent coordination
 
-Use subagents when independent work, context isolation, distinct capabilities or independent
-judgment justify the handoff and integration cost. Keep small or tightly coupled tasks with the
-root when useful. Follow the [shared roles](.agents/roles/README.md), including model/effort routing,
+Use subagents when another context, capability or perspective supplies useful progress, learning
+or independent judgment worth briefing and integration. Shape assignments around coherent outcomes,
+available inputs and shared decisions; components and role names are possible organizing aids.
+Follow the [shared roles](.agents/roles/README.md), including model/effort routing,
 briefs and escalation. [DESIGN §2](docs/design/DESIGN.md#section-2) owns the current workflow decision.
-The root agent retains design, integration and acceptance; no fixed role sequence is required.
+The root remains accountable for design coherence, integration and acceptance; workers exercise
+delegated judgment within accepted outcomes and contracts. No fixed role sequence is required.
 `library-research` may write assigned new dated folders under `docs/design_review/evidence/`; [its contract](.agents/roles/library-research.md) bounds those writes.
 
 ## Git
