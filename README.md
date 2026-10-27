@@ -28,6 +28,9 @@ Every generated project gets the **core**:
   (`uv add` writes `==` through `add-bounds = "exact"`, `cargo add name@=x.y.z`), committed
   lockfiles hold the rest, versions change deliberately on the agent's judgment, and
   `docs/pins.md` lists only holds, each with its reason, through the `pin-check` skill;
+- three library-leverage skills and `docs/library_leverage/`: codebase-first opportunity
+  identification, focused library applicability with reusable types, and comparative option
+  review. The codebase, libraries and reviews folders physically exist with unassessed entry pages;
 - `.claude/settings.json` (permissions), `.agents/skills` for Codex, and
   `scripts/check_agents.py` (`just lint-agents`: every agent-facing path, link and recipe
   resolves);
@@ -163,6 +166,22 @@ Existing projects must reconcile owned bindings, DESIGN and checkpoints with the
 owners and research routes, preserving local criteria, profiles, accepted scope and historical
 receipts. Copier's protection is intentional; it does not silently upgrade those project-owned
 documents. Shared skills and role guidance update without overwriting them.
+
+Library leverage is available in every layer combination. `leverage-codebase-audit` identifies
+concrete opportunities; `leverage-library-assessment` researches focused capabilities and their
+contextual fit; `leverage-opportunity-review` compares complete options and bounded targets.
+All stages use the base patterns and useful additional patterns authored in output
+`docs/library_leverage/assessment-patterns.md`; promotion into base guidance is manual.
+Reusable library types and additional patterns survive retirement of their current matches.
+Installation performs no opportunity audit and establishes no library qualification.
+
+Copier protects the project's leverage index and framework binding, all three assessment subtrees
+and its additional-pattern output, including authored topics that collide with later template
+content. Skill instructions, shared writing guidance and base pattern guidance remain managed.
+Fresh projects receive ADR-0008; updates exclude that seed so existing projects allocate a local
+decision and reconcile protected DESIGN, binding and STATUS themselves. `just test-env` exercises
+skill discovery, real output folders, docs publication and update preservation across layers
+without product builds.
 
 An existing repository that was not generated can adopt the template: run `copier copy` into its
 working tree, review the diff, and commit `.copier-answers.yml`; `copier update` works from then on.

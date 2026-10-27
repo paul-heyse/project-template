@@ -11,6 +11,7 @@ _exclude:
   - "{% if _copier_operation == 'update' %}docs/adr/0005-bounded-review-and-agent-workflows.md{% endif %}"
   - "{% if _copier_operation == 'update' %}docs/adr/0006-task-sensitive-agent-coordination.md{% endif %}"
   - "{% if _copier_operation == 'update' %}docs/adr/0007-audit-led-review-and-completion.md{% endif %}"
+  - "{% if _copier_operation == 'update' %}docs/adr/0008-codebase-first-library-leverage.md{% endif %}"
 # Seeds the project owns after generation: `copier update` never touches them. Accepted ADRs
 # must stay immutable, and the checkpoint, design, pins and indexes are project content.
 _skip_if_exists:
@@ -26,9 +27,16 @@ _skip_if_exists:
   - docs/adr/0005-*.md
   - docs/adr/0006-*.md
   - docs/adr/0007-*.md
+  - docs/adr/0008-*.md
   - docs/design_review/audit/**
   - docs/design_review/test-audit/**
   - docs/libraries/README.md
+  - docs/library_leverage/README.md
+  - docs/library_leverage/library-leverage-framework.md
+  - docs/library_leverage/assessment-patterns.md
+  - docs/library_leverage/codebase/**
+  - docs/library_leverage/libraries/**
+  - docs/library_leverage/reviews/**
   - docs/pins.md
   - docs/design_review/design_principles/binding/*.md
   - docs/design_review/evidence/README.md

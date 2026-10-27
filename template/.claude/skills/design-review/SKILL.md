@@ -146,6 +146,12 @@ question about ownership, behavior or change remains unresolved; no complete flo
    recommendation so planning can carry it forward without repeating broad capability discovery.
    Scale detail to the dependency; ordinary API usage needs no inventory or fixed format.
 
+   Existing [library-leverage accounts](../../../docs/library_leverage/README.md) can supply
+   concrete opportunities, focused applicability and comparative reasoning. Consume relevant
+   revisions as challengeable evidence, reconciling source and library changes; these accounts
+   do not replace the applicable refreshed diagnostic audit or determine the selected remedy.
+
+
 5. **Independent judgments.** Settle A1–A4 from scenario evidence, G1–G8 and profile gates from
    their own evidence, and applicable foundation/supporting-rule verdicts. A2 requires both an
    adequate domain model and behavior governed by its authorities. A4 needs a credible execution

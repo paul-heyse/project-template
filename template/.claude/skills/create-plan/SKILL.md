@@ -1,6 +1,6 @@
 ---
 name: create-plan
-description: Create or revise an implementation plan from a design or functional-extension review, or an existing plan, grounded in current code and the applicable design standard.
+description: Create or revise an implementation plan from a design, functional-extension or library-leverage review, or an existing plan, grounded in current code and the applicable design standard.
 ---
 
 # Create a plan
@@ -44,6 +44,13 @@ Use the same owning plan for scheduled disposition without relabeling opportunit
 Functional-review inputs require no broad diagnostic audit; the focused foundation assessment below
 still applies. The plan makes proposed functional-target and rule changes explicit through existing
 authorization routes rather than treating the source review as approval.
+
+A [library-leverage opportunity review](../leverage-opportunity-review/SKILL.md) is another
+planning input. Carry selected `CBO` identities, comparative rationale, concrete mechanisms,
+semantic conditions and unresolved choices into the target and packages. Reconcile the source
+and library baselines; preserve reusable types and pattern definitions in their owning accounts.
+The accepted plan owns scheduled disposition. The source review recommends a target without
+approving scope or replacing a formal review due under the binding.
 
 ## Assess the foundations the plan will use
 

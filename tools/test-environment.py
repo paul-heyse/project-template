@@ -131,6 +131,23 @@ def main():
             run("git", "ls-files", "--error-unmatch", improvement_skill, review_collection, cwd=dest)
             improvement_discovery = dest / ".agents/skills/plan-improvement-review/SKILL.md"
             assert improvement_discovery.resolve() == (dest / improvement_skill).resolve()
+            leverage_names = (
+                "leverage-codebase-audit",
+                "leverage-library-assessment",
+                "leverage-opportunity-review",
+            )
+            for skill_name in leverage_names:
+                skill_path = f".claude/skills/{skill_name}/SKILL.md"
+                run("git", "ls-files", "--error-unmatch", skill_path, cwd=dest)
+                assert (dest / ".agents/skills" / skill_name / "SKILL.md").resolve() == (
+                    dest / skill_path
+                ).resolve()
+            for collection in ("codebase", "libraries", "reviews"):
+                entry = f"docs/library_leverage/{collection}/README.md"
+                run("git", "ls-files", "--error-unmatch", entry, cwd=dest)
+                assert "not yet assessed" in (dest / entry).read_text()
+            assert not (dest / "docs/library_leverage/assessment-patterns.md").exists()
+            assert not list((dest / "docs/library_leverage").rglob("*0247*"))
             discovered = dest / ".agents/skills/design-principle-audit-tests/SKILL.md"
             assert discovered.resolve() == (dest / skill).resolve()
             standard_root = dest / "docs/design_review/design_principles"
@@ -147,13 +164,24 @@ def main():
                 # including an authored review rather than only the collection guide.
                 review = dest / "docs/plan_improvement_reviews/render-check_2026-10-24.md"
                 review.write_text("# Authored plan improvement review\n\nProposed amendment I01.\n")
+                leverage_review = dest / "docs/library_leverage/reviews/render-check.md"
+                leverage_review.write_text("# Authored leverage review\n\nCBO-001 remains Proposed.\n")
+                extra_patterns = dest / "docs/library_leverage/assessment-patterns.md"
+                extra_patterns.write_text("# Assessment patterns\n\nLOP-X001: authored framing.\n")
                 run(
                     "uv", "run", "--no-project", "python", "-c",
                     "import sys; sys.path.insert(0, 'scripts'); import docs; "
                     "pages = {str(p.path): p.scope for p in docs.discover(docs.ROOT, docs.config(docs.ROOT))}; "
                     "assert pages['.claude/skills/plan-improvement-review/SKILL.md'] == 'Current'; "
                     "assert pages['docs/plan_improvement_reviews/README.md'] == 'Reference'; "
-                    "assert pages['docs/plan_improvement_reviews/render-check_2026-10-24.md'] == 'Reference'",
+                    "assert pages['docs/plan_improvement_reviews/render-check_2026-10-24.md'] == 'Reference'; "
+                    "assert all(pages[f'.claude/skills/{name}/SKILL.md'] == 'Current' for name in "
+                    "('leverage-codebase-audit', 'leverage-library-assessment', 'leverage-opportunity-review')); "
+                    "assert pages['docs/library_leverage/README.md'] == 'Current'; "
+                    "assert pages['docs/library_leverage/codebase/README.md'] == 'Reference'; "
+                    "assert pages['docs/library_leverage/libraries/README.md'] == 'Reference'; "
+                    "assert pages['docs/library_leverage/reviews/render-check.md'] == 'Reference'; "
+                    "assert pages['docs/library_leverage/assessment-patterns.md'] == 'Reference'",
                     cwd=dest,
                 )
                 run(
@@ -173,6 +201,19 @@ def main():
             "docs/design_review/test-audit/README.md": "# Authored test diagnosis\n\nIndependent baseline and DTA-001.\n",
             "docs/design_review/test-audit/support/helpers.md": "# Authored helper observations\n\nDTA-001 remains project-owned.\n",
             "docs/libraries/README.md": "# Project library index\n\n[Local overview](local.md)\n",
+            "docs/library_leverage/README.md": "# Project leverage index\n\nCurrent opportunity routes.\n",
+            "docs/library_leverage/library-leverage-framework.md": "# Project leverage binding\n\nLocal consumers and retention.\n",
+            "docs/library_leverage/codebase/README.md": "# Authored opportunities\n\nSource baseline and CBO-001.\n",
+            "docs/library_leverage/codebase/selection.md": "# Authored codebase topic\n\nCBO-001 has independent source evidence.\n",
+            "docs/library_leverage/libraries/README.md": "# Assessed libraries\n\nRetained types need no current match.\n",
+            "docs/library_leverage/libraries/example/selective-access.md": "# Reusable selective access\n\nKeep after CBO-001 retires.\n",
+            "docs/library_leverage/libraries/example/applicability.md": "# Contextual fit\n\nCBO-001 remains conditional.\n",
+            "docs/library_leverage/reviews/README.md": "# Current comparative judgments\n\nThe plan owns progress.\n",
+            "docs/library_leverage/reviews/selection.md": "# Selection alternatives\n\nThe recommendation is Proposed.\n",
+            "docs/library_leverage/assessment-patterns.md": "# Additional patterns\n\nLOP-X001 remains usable before manual promotion.\n",
+            "docs/adr/0008-codebase-first-library-leverage.md": (
+                dest / "docs/adr/0008-codebase-first-library-leverage.md"
+            ).read_text(),
         }
         for relative, content in protected.items():
             (dest / relative).parent.mkdir(parents=True, exist_ok=True)
@@ -208,6 +249,16 @@ def main():
         collision = source / "template/docs/design_review/test-audit/support/helpers.md"
         collision.parent.mkdir(parents=True, exist_ok=True)
         collision.write_text("New template helper topic colliding with authored content\n")
+        for relative in protected:
+            if relative.startswith("docs/library_leverage/"):
+                collision = source / "template" / relative
+                collision.parent.mkdir(parents=True, exist_ok=True)
+                collision.write_text("New template content colliding with authored leverage output\n")
+        managed_leverage = source / "template/.claude/skills/leverage-library-assessment/SKILL.md"
+        managed_leverage.write_text(managed_leverage.read_text() + "\nManaged leverage skill update.\n")
+        (source / "template/docs/adr/0008-codebase-first-library-leverage.md.jinja").write_text(
+            "Changed seed for new projects only\n"
+        )
         managed_skill = source / "template/.claude/skills/design-principle-audit-tests/SKILL.md.jinja"
         managed_skill.write_text(managed_skill.read_text() + "\nManaged test-audit skill update.\n")
         managed_improvement = source / "template/.claude/skills/plan-improvement-review/SKILL.md"
@@ -225,6 +276,8 @@ def main():
         assert "Managed test-audit skill update." in updated_skill.read_text()
         updated_improvement = dest / ".claude/skills/plan-improvement-review/SKILL.md"
         assert updated_improvement.read_text() == managed_improvement.read_text()
+        updated_leverage = dest / ".claude/skills/leverage-library-assessment/SKILL.md"
+        assert updated_leverage.read_text() == managed_leverage.read_text()
         updated_companion = dest / "docs/design_review/design_principles/core/test-assessment.md"
         assert updated_companion.read_text() == managed_companion.read_text()
         assert (

@@ -47,6 +47,11 @@ promising mechanisms beyond familiar basic usage. Organize the inquiry around wh
 catalog presence alone does not justify adoption. Several tools may serve one opportunity, and
 one composed mechanism may enable several workflows.
 
+Relevant [library-leverage accounts](../../../docs/library_leverage/README.md) can supply scoped
+opportunity and capability research. Reconcile their source/library baselines, preserve useful
+mechanisms and assess the functional proposition independently; a leverage recommendation does
+not establish accepted demand or scope.
+
 ## Develop the functional proposition and its realization
 
 For a consequential opportunity, explain who would use it, what they could accomplish, how the

@@ -105,6 +105,7 @@ This is qualitative guidance, not an exhaustive checklist, cost model or proof r
 | Design principle audit | Bounded evidence and diagnostic contributions inform one coordinator-published baseline account |
 | Review planning and design review | The refreshed audit informs solution inquiry; a fresh reviewer assesses alternatives within the operator's selected focus |
 | Functional-extension review preparation and review | A reviewer explores useful capabilities within the operator's chosen scope and compares realizations; no diagnostic audit prerequisite |
+| Library leverage | Mappers identify concrete opportunities, library researchers assess focused mechanisms, and a reviewer compares complete options; the coordinator publishes evergreen accounts and shared additional patterns under the three leverage skills |
 | Design-review recommendation audit | A fresh design reviewer assesses recommendations and omissions; the coordinator publishes net changes and the attributed integrated revision |
 | Plan preparation and creation | Evidence workers inform options and the integral foundation assessment; focused design advice addresses consequential questions; one author assembles the document |
 | Execution planning and execution | The coordinator orders ready packages; executors implement; implementation reviewers and test agents assess stable work; design review follows the binding's cadence |

@@ -12,7 +12,7 @@ pagefind = "1.5.2"
 lychee = "0.24.2"
 
 [publication]
-entrypoints = ["README.md", "docs/README.md", "docs/design/README.md", "STATUS.md", "AGENTS.md", "docs/publishing.md"]
+entrypoints = ["README.md", "docs/README.md", "docs/design/README.md", "STATUS.md", "AGENTS.md", "docs/publishing.md", "docs/library_leverage/README.md", "docs/library_leverage/library-leverage-framework.md", "docs/library_leverage/patterns.md"]
 # The active plan, once written, e.g. ["docs/plans/<topic>_<YYYY-MM-DD>.md"]
 current_work = []
 exclude = []
@@ -52,7 +52,7 @@ include = ["docs/design_review/evidence/**/README.md"]
 scope = "Reference"
 [[collections]]
 title = "Process"
-include = [".agents/roles/*.md", ".claude/skills/README.md", ".claude/skills/adr/*.md", ".claude/skills/design-review/*.md", ".claude/skills/design-principle-audit/**/*.md", ".claude/skills/design-review-audit/*.md", ".claude/skills/plan-completion-audit/*.md", ".claude/skills/plan-design-review/*.md", ".claude/skills/functional-extension-review/*.md", ".claude/skills/plan-functional-extension-review/*.md", ".claude/skills/plan-creation/*.md", ".claude/skills/create-plan/**/*.md", ".claude/skills/plan-execution/*.md", ".claude/skills/plan-improvement-review/*.md", ".claude/skills/execute-plan/*.md",{% if with_ci_profile %} ".claude/skills/design-review-code-intelligence/*.md",{% endif %} ".claude/skills/handoff/*.md", ".claude/skills/pin-check/*.md"]
+include = [".agents/roles/*.md", ".claude/skills/README.md", ".claude/skills/adr/*.md", ".claude/skills/design-review/*.md", ".claude/skills/design-principle-audit/**/*.md", ".claude/skills/design-review-audit/*.md", ".claude/skills/plan-completion-audit/*.md", ".claude/skills/plan-design-review/*.md", ".claude/skills/functional-extension-review/*.md", ".claude/skills/plan-functional-extension-review/*.md", ".claude/skills/leverage-codebase-audit/**/*.md", ".claude/skills/leverage-library-assessment/*.md", ".claude/skills/leverage-opportunity-review/*.md", ".claude/skills/plan-creation/*.md", ".claude/skills/create-plan/**/*.md", ".claude/skills/plan-execution/*.md", ".claude/skills/plan-improvement-review/*.md", ".claude/skills/execute-plan/*.md",{% if with_ci_profile %} ".claude/skills/design-review-code-intelligence/*.md",{% endif %} ".claude/skills/handoff/*.md", ".claude/skills/pin-check/*.md"]
 scope = "Current"
 
 [[collections]]
@@ -62,4 +62,9 @@ scope = "Reference"
 [[collections]]
 title = "Library overviews"
 include = ["docs/libraries/**/*.md"]
+scope = "Reference"
+
+[[collections]]
+title = "Library leverage"
+include = ["docs/library_leverage/**/*.md"]
 scope = "Reference"

@@ -20,6 +20,7 @@ contradiction or dependency requires it; the whole corpus is not the default rea
 | Explore functional enhancements | [Preparation](../.claude/skills/plan-functional-extension-review/SKILL.md) → [functional-extension review](../.claude/skills/functional-extension-review/SKILL.md) → [opportunity review](functional_reviews/README.md), without a diagnostic audit prerequisite |
 | Improve remaining plan scope | [Plan-improvement review](../.claude/skills/plan-improvement-review/SKILL.md) → [published assessment](plan_improvement_reviews/README.md) of the remaining change footprint; plan revision is separately instructed |
 | Research a library capability | [Library overviews](libraries/README.md) → Context7, then primary sources |
+| Discover and assess library leverage | [Framework and skills](library_leverage/README.md) → concrete codebase opportunities → focused library applicability → comparative option review |
 | Understand why a decision was made | Owner section's `> Decision:` line → [ADR index](adr/README.md) |
 {% if with_docs_site -%}
 | Maintain this site | [Publishing operations](publishing.md) |
@@ -35,6 +36,11 @@ under `audits/`. Selected opportunities retain their source references in the ow
 proposals and editorial dispositions do not approve implementation or change plan progress.
 Standalone plan-improvement assessments live in `docs/plan_improvement_reviews/`; revising the
 plan from a review is separately instructed.
+
+The [library-leverage collections](library_leverage/README.md) separate current opportunities,
+reusable library types and contextual fit, and comparative judgments. Shared additional patterns
+are collected in outputs and used alongside the base set; manual promotion is separate. Plans
+retain execution disposition. Collection entry pages begin explicitly unassessed.
 {% if with_docs_site %}
 The site derives navigation and search from the retained working set. **Current** is the default:
 architecture, entry pages, the active standard and process, accepted decisions and selected work.

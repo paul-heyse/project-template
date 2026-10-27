@@ -1,6 +1,6 @@
 ---
 name: plan-creation
-description: Plan how to create an implementation-plan document from a design or functional-extension review, or an existing plan, including the investigations and design questions that matter.
+description: Plan how to create an implementation-plan document from a design, functional-extension or library-leverage review, or an existing plan, including the investigations and design questions that matter.
 ---
 
 # Plan the creation of a plan
@@ -37,6 +37,11 @@ A functional-extension review supplies opportunities and a functional-value argu
 design proposals. Identify which opportunities are selected for planning and preserve their
 references and enabling mechanisms. No diagnostic audit is needed for this input; preparation
 still identifies consequential foundation and integration questions under create-plan.
+
+A library-leverage opportunity review supplies comparative choices and bounded targets. Identify
+selected `CBO` opportunities, concrete mechanisms and unresolved conditions; retain source
+revisions and reusable knowledge. Follow create-plan's foundation and review-cadence routes
+without turning assessment accounts into execution ledgers.
 
 ## Separate obligations from open design choices
 

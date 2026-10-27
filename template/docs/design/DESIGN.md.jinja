@@ -106,13 +106,21 @@ and the [test-assessment companion](../design_review/design_principles/core/test
 The binding selects applicable accounts for mixed scope. Each retains its own baseline,
 and findings one primary home; installing the process performs no audit.
 
+**Library leverage — Implemented guidance** (ADR-0008). The
+[framework](../library_leverage/README.md) separates codebase opportunity identification,
+focused library applicability and comparative review of complete options. Each has a distinct
+evergreen output location. Useful library types and additional output patterns persist after
+current matches retire; all stages use base and output patterns together, and promotion into
+base guidance is manual. Plans retain execution disposition and existing review cadence remains.
+The collection entry pages are unassessed; discovery/design-quality benefits remain Proposed.
+
 {% if with_docs_site %}
 **Documentation publication** (ADR-0003). Focused architecture pages retain stable section IDs;
 a moved live section leaves a relocation pointer. One resolver drives ADR references and the
 generated section directory. Publication derives navigation and search from sources; it does not
 prove implementation. [Publishing operations](../publishing.md) owns the commands.
 {% endif %}
-> Decision: ADR-0001, ADR-0002{% if with_docs_site %}, ADR-0003{% endif %}, ADR-0006, ADR-0007
+> Decision: ADR-0001, ADR-0002{% if with_docs_site %}, ADR-0003{% endif %}, ADR-0006, ADR-0007, ADR-0008
 
 
 No product binding decisions yet. Add each as `### §B1 <decision stated as a sentence>` with a
