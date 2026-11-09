@@ -159,7 +159,8 @@ this route by hand after updating managed guidance. Authored reviews remain proj
 `docs/design_review/audit/` begins as an explicitly unperformed scaffold and is protected from
 Copier updates once authored. `docs/design_review/reviews/audits/` holds companion conventions.
 `docs/libraries/` supplies a repository-agnostic capability-overview guide and project-owned index.
-Optional overviews orient current Context7/primary-source research; active central library-skill
+Optional overviews orient capability discovery; AGENTS.md guides source selection by the question
+and uncertainty being resolved; active central library-skill
 selection and synchronization are removed. Existing indexes can retain inactive historical links.
 
 Existing projects must reconcile owned bindings, DESIGN and checkpoints with these workflow
