@@ -81,6 +81,29 @@ def main():
             assert (dest / ".python-version").read_text().strip(), (
                 "Missing interpreter pin"
             )
+            codex = tomllib.loads((dest / ".codex/config.toml").read_text())
+            assert codex["allow_login_shell"] is False
+            assert codex["features"]["shell_snapshot"] is False
+            assert "daemon_auto_start" not in codex["features"]
+            shell_settings = codex["shell_environment_policy"]["set"]
+            assert shell_settings["UV_LOCKED"] == "1"
+            # Exercise Bash's expansion of the literal HOME reference with an alternate
+            # home. No workstation-specific helper or absolute checkout path is required.
+            home = base / f"{combo}-home"
+            bridge = home / ".config/codex/bash-env.bash"
+            bridge.parent.mkdir(parents=True)
+            bridge.write_text("export TEMPLATE_ENV_BRIDGE=loaded\nunset BASH_ENV\n")
+            probe_env = {**os.environ, **shell_settings, "HOME": str(home)}
+            probe = run(
+                "/bin/bash",
+                "--noprofile",
+                "--norc",
+                "-c",
+                'test "$TEMPLATE_ENV_BRIDGE" = loaded && test -z "${BASH_ENV-}"',
+                env=probe_env,
+                cwd=dest,
+            )
+            assert not probe.stdout and not probe.stderr
             scripts = [dest / ".envrc", dest / "scripts/setup-env"]
             for script in scripts:
                 assert "/home/paul" not in script.read_text(), script

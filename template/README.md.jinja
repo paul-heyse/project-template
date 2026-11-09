@@ -24,6 +24,13 @@ tools. Installed toolchains follow the pin files; setup
 does not install Rust. If using direnv, review `.envrc` and run `direnv allow` once in each
 checkout. Activation removes inherited Python environment paths and performs no installs,
 builds or service startup. Personal overrides belong in ignored `.envrc.local`.
+
+Codex keeps its shared daemon and refreshes the command directory's approved direnv settings
+through the workstation helper `~/.config/codex/bash-env.bash`. That helper must already be
+installed on the workstation; it is not supplied by this repository. Project `.codex/config.toml`
+selects it through a home-relative `BASH_ENV`, disables login shells and shell snapshots, and
+sets `UV_LOCKED=1`. Review and allow `.envrc` before use. Exit and resume existing Codex sessions
+after changing these settings; restarting the shared daemon is unnecessary.
 {% if with_docs_site %}
 ## Documentation locally
 

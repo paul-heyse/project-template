@@ -3,6 +3,18 @@ model = "gpt-6-astra"
 model_reasoning_effort = "high"
 plan_mode_reasoning_effort = "high"
 
+# Refresh approved direnv settings per command while keeping the shared daemon.
+# Machine prerequisite: ~/.config/codex/bash-env.bash (see the generated README).
+allow_login_shell = false
+
+[features]
+shell_snapshot = false
+
+[shell_environment_policy.set]
+# Bash expands HOME when reading BASH_ENV; Codex passes this value literally.
+BASH_ENV = "${HOME}/.config/codex/bash-env.bash"
+UV_LOCKED = "1"
+
 [agents]
 enabled = true
 default_subagent_model = "gpt-6.1-sol"

@@ -209,8 +209,20 @@ Generated projects include `.envrc` and `scripts/setup-env`. After scaffold lock
 `bash scripts/setup-env` prepares the enabled Python layer.
 Directory activation remains separate: review `.envrc`, then `direnv allow` in each checkout.
 It removes foreign Python environment paths and performs no installation or native build.
-Personal overrides use ignored `.envrc.local`; machine-specific Codex configuration stays
-outside the template. The installed Rust toolchain follows the generated pin file.
+Personal overrides use ignored `.envrc.local`. Generated `.codex/config.toml` keeps the shared
+daemon, disables login shells and shell snapshots, sets `UV_LOCKED=1`, and selects the existing
+workstation direnv bridge using `BASH_ENV = "${HOME}/.config/codex/bash-env.bash"`. Bash expands
+`HOME` when loading that file; no operator or checkout path is embedded in generated settings.
+The bridge refreshes approved settings for the actual command directory, including commands
+launched through a daemon that inherited another project's environment.
+
+Machine setup must already provide `~/.config/codex/bash-env.bash` and its machine-environment
+helper, plus `direnv`. Check that the bridge is readable with
+`test -r "$HOME/.config/codex/bash-env.bash"` before using Codex; Bash silently ignores a missing
+`BASH_ENV` file. The template selects the existing bridge rather than maintaining a second copy
+of workstation initialization. After applying these settings to an existing repository, exit
+and resume its Codex session; the daemon and other sessions can remain running.
+The installed Rust toolchain follows the generated pin file.
 `just test-env` checks environment/workflow generation for all four layer combinations, including
 store-free setup, skill and ADR validation, and preservation of project-owned audit/index content
 during a scratch Copier update, without installing product dependencies or building native code.
