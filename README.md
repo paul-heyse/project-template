@@ -187,6 +187,21 @@ without product builds.
 An existing repository that was not generated can adopt the template: run `copier copy` into its
 working tree, review the diff, and commit `.copier-answers.yml`; `copier update` works from then on.
 
+## Validation and design-stage guidance
+
+The v0.6.1 guidance favors engineering judgment for expected improvements and coherent target
+designs during development. Benchmarking and profiling address serious regression concerns;
+expected gains need no routine measurement task or deferred obligation. Functional and numerical
+correctness checks retain their purpose. Completed replacements include affected consumers and
+removal of superseded machinery, preserving required behavior and useful independent verification.
+
+Fresh projects receive these defaults in AGENTS.md, skills, shared roles and the layered design
+standard. Existing projects receive managed guidance through Copier; reconcile project-owned
+bindings, DESIGN and checkpoints locally. Keep their accepted decisions, authored content and
+historical evidence intact. Core 3.3, code-intelligence 1.4 and Copier's preservation rules remain
+unchanged. This release also includes the library-reference selection guidance and the existing
+Codex environment-settings update.
+
 ## Change the template
 
 1. Edit files under `template/` (`.jinja` files are rendered; everything else is copied
