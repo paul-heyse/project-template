@@ -28,9 +28,9 @@ Every generated project gets the **core**:
   (`uv add` writes `==` through `add-bounds = "exact"`, `cargo add name@=x.y.z`), committed
   lockfiles hold the rest, versions change deliberately on the agent's judgment, and
   `docs/pins.md` lists only holds, each with its reason, through the `pin-check` skill;
-- three library-leverage skills and `docs/library_leverage/`: codebase-first opportunity
-  identification, focused library applicability with reusable types, and comparative option
-  review. The codebase, libraries and reviews folders physically exist with unassessed entry pages;
+- library-led discovery and three assessment skills, with `docs/library_leverage/` holding
+  contextual briefings, codebase opportunities, library applicability with reusable types and
+  comparative option reviews. The collection folders exist with unassessed entry pages;
 - `.claude/settings.json` (permissions), `.agents/skills` for Codex, and
   `scripts/check_agents.py` (`just lint-agents`: every agent-facing path, link and recipe
   resolves);
@@ -168,17 +168,27 @@ owners and research routes, preserving local criteria, profiles, accepted scope 
 receipts. Copier's protection is intentional; it does not silently upgrade those project-owned
 documents. Shared skills and role guidance update without overwriting them.
 
-Library leverage is available in every layer combination. `leverage-codebase-audit` identifies
+Library leverage is available in every layer combination. `leverage-library-discovery` relates
+a library family's capabilities to local usage and proposes research priorities without requiring
+a concrete opportunity. Its shared evidence guide supplies portable Rust and Python inspection
+examples; agents use the relevant language sections and receiving project conventions. Discovery
+may use one complete briefing or a summary with focused briefings under `briefings/`; agents choose
+organization and sufficient detail. No brevity requirement or fixed segmentation scheme applies.
+`leverage-codebase-audit` identifies
 concrete opportunities; `leverage-library-assessment` researches focused capabilities and their
 contextual fit; `leverage-opportunity-review` compares complete options and bounded targets.
 All stages use the base patterns and useful additional patterns authored in output
 `docs/library_leverage/assessment-patterns.md`; promotion into base guidance is manual.
 Reusable library types and additional patterns survive retirement of their current matches.
-Installation performs no opportunity audit and establishes no library qualification.
+Installation performs no discovery or opportunity audit and establishes no library qualification.
 
 Copier protects the project's leverage index and framework binding, all three assessment subtrees
 and its additional-pattern output, including authored topics that collide with later template
-content. Skill instructions, shared writing guidance and base pattern guidance remain managed.
+content, including authored summaries and nested focused discovery briefings. Skill instructions,
+the discovery/evidence guide, shared writing guidance and base pattern guidance remain managed.
+After updating an existing project, manually reconcile protected leverage indexes and the framework
+with the optional discovery entry; Copier intentionally preserves their authored content. Accepted
+project decisions remain unchanged. No native analysis host or executable discovery helper is installed.
 Fresh projects receive ADR-0008; updates exclude that seed so existing projects allocate a local
 decision and reconcile protected DESIGN, binding and STATUS themselves. `just test-env` exercises
 skill discovery, real output folders, docs publication and update preservation across layers

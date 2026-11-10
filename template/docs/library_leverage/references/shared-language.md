@@ -98,7 +98,8 @@ library has no other suitable capability.
 
 ## Ownership and retention
 
-- The codebase audit owns current opportunities. The library assessment owns reusable types and
+- Discovery owns contextual usage interpretation and proposed research priorities.
+  The codebase audit owns current opportunities. The library assessment owns reusable types and
   contextual fit. The review owns comparative choices. Accepted plans own scheduled work and
   closure evidence; link to them without copying mutable execution status.
 - Codebase opportunities retire when their underlying relevance ends on evidence. Rejected
@@ -106,8 +107,8 @@ library has no other suitable capability.
 - Library types accumulate useful knowledge. Keep a sound type when it has no current match.
   Correct or merge misleading/duplicate analysis; retire obsolete content deliberately, preserving
   meaningful supported-version distinctions and useful lessons.
-- Useful additional patterns likewise survive retirement of their original occurrences. Any of
-  the three skills can discover or refine them in the shared output. Maintain one definition,
+- Useful additional patterns likewise survive retirement of their original occurrences.
+  Discovery and the assessment stages can discover or refine them in the shared output. Maintain one definition,
   reconcile related patterns and preserve references when correcting, merging or promoting them.
 - Contextual matches retire with their relevance. Reconcile incoming links before removing an
   opportunity. Preserve useful provenance through its publication revision, original path and
