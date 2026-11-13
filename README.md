@@ -212,6 +212,17 @@ historical evidence intact. Core 3.3, code-intelligence 1.4 and Copier's preserv
 unchanged. This release also includes the library-reference selection guidance and the existing
 Codex environment-settings update.
 
+## Library implementation guidance
+
+The v0.6.2 guidance presents Context7 as an optional way to discover implementation approaches,
+examples, related APIs and useful options, including when a workable approach is already familiar.
+AGENTS.md describes useful situations, query framing and version checks; it adds no mandatory
+lookup sequence or research artifact. Direct primary documentation remains an equally appropriate
+route. The guidance applies to every generated layer combination and reaches existing projects
+through Copier's managed AGENTS.md update.
+
+This revision also includes the portable library-discovery guide and its existing runnable examples.
+
 ## Change the template
 
 1. Edit files under `template/` (`.jinja` files are rendered; everything else is copied
